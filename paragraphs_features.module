@@ -1,0 +1,49 @@
+<?php
+
+/**
+ * @file
+ * Contains hooks for Paragraphs Feature module.
+ */
+
+use Drupal\Component\Utility\Html;
+use Drupal\Core\Field\FieldDefinitionInterface;
+use Drupal\Core\Field\WidgetInterface;
+use Drupal\Core\Form\FormStateInterface;
+
+/**
+ * Implements hook_field_widget_multivalue_WIDGET_TYPE_form_alter().
+ */
+function paragraphs_features_field_widget_multivalue_paragraphs_form_alter(array &$elements, FormStateInterface $form_state, array $context) {
+  /** @var \Drupal\paragraphs\Plugin\Field\FieldWidget\ParagraphsWidget $widget */
+  $widget = $context['widget'];
+  if ($widget->getSetting('add_mode') === 'modal' && $widget->getThirdPartySetting('paragraphs_features', 'add_in_between')) {
+    // Logic for getting field wrapper ID is taken from Paragraphs module.
+    $fieldWrapperId = Html::getId(implode('-', array_merge($context['form']['#parents'], [$elements['#field_name']])) . '-add-more-wrapper');
+
+    $elements['add_more']['#attached']['library'][] = 'paragraphs_features/drupal.paragraphs_features.add_in_between';
+    $elements['add_more']['#attached']['drupalSettings']['paragraphs_features']['add_in_between'][$fieldWrapperId] = TRUE;
+  }
+}
+
+/**
+ * Implements hook_field_widget_third_party_settings_form().
+ */
+function paragraphs_features_field_widget_third_party_settings_form(WidgetInterface $plugin, FieldDefinitionInterface $field_definition, $form_mode, $form, FormStateInterface $form_state) {
+  $element = [];
+
+  if ($plugin->getPluginId() === 'paragraphs') {
+    $element['add_in_between'] = [
+      '#type' => 'checkbox',
+      '#title' => t('Enable add in between buttons'),
+      '#default_value' => $plugin->getThirdPartySetting('paragraphs_features', 'add_in_between'),
+      '#attributes' => ['class' => ['paragraphs-features__add-in-between__option']],
+      '#attached' => [
+        'library' => [
+          'paragraphs_features/drupal.paragraphs_features.add_in_between.form_display_settings',
+        ],
+      ],
+    ];
+  }
+
+  return $element;
+}
