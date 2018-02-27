@@ -64,45 +64,8 @@ class ParagraphsFeaturesAddInBetweenTest extends JavascriptTestBase {
       "create $content_type content",
     ]);
 
-    // Set the add mode on the content type to modal form widget.
-    $this->drupalGet("admin/structure/types/manage/$content_type/form-display");
-    $page = $this->getSession()->getPage();
-    $page->pressButton('field_paragraphs_settings_edit');
-    $this->assertSession()->assertWaitOnAjaxRequest();
-
-    $session = $this->getSession();
-
-    $is_option_visible = $session->evaluateScript("jQuery('.paragraphs-features__add-in-between__option:visible').length === 0");
-    $this->assertEquals(TRUE, $is_option_visible, 'By default "add in between" option should not be visible.');
-
-    $page->selectFieldOption('fields[field_paragraphs][settings_edit_form][settings][add_mode]', 'modal');
-    $session->executeScript("jQuery('[name=\"fields[field_paragraphs][settings_edit_form][settings][add_mode]\"]').trigger('change');");
-    $this->assertSession()->assertWaitOnAjaxRequest();
-
-    $is_option_visible = $session->evaluateScript("jQuery('.paragraphs-features__add-in-between__option:visible').length === 1");
-    $this->assertEquals(TRUE, $is_option_visible, 'After modal add mode is selected, "add in between" option should be available.');
-
-    $page->selectFieldOption('fields[field_paragraphs][settings_edit_form][settings][add_mode]', 'dropdown');
-    $session->executeScript("jQuery('[name=\"fields[field_paragraphs][settings_edit_form][settings][add_mode]\"]').trigger('change');");
-    $this->assertSession()->assertWaitOnAjaxRequest();
-
-    $is_option_visible = $session->evaluateScript("jQuery('.paragraphs-features__add-in-between__option:visible').length === 0");
-    $this->assertEquals(TRUE, $is_option_visible, 'After add mode is change to non modal, "add in between" option should not be visible.');
-
-    $page->selectFieldOption('fields[field_paragraphs][settings_edit_form][settings][add_mode]', 'modal');
-    $session->executeScript("jQuery('[name=\"fields[field_paragraphs][settings_edit_form][settings][add_mode]\"]').trigger('change');");
-    $this->assertSession()->assertWaitOnAjaxRequest();
-
-    $page->checkField('fields[field_paragraphs][settings_edit_form][third_party_settings][paragraphs_features][add_in_between]');
-
-    $this->drupalPostForm(NULL, [], 'Update');
-    $this->assertSession()->assertWaitOnAjaxRequest();
-    $this->drupalPostForm(NULL, [], t('Save'));
-
     // Add a Paragraph types.
     $this->addParagraphsType('test_1');
-
-    // Add a text field to the text_paragraph type.
     static::fieldUIAddNewField('admin/structure/paragraphs_type/test_1', 'text_1', 'Text', 'text_long', [], []);
 
     // Create paragraph type Nested test.
@@ -126,12 +89,105 @@ class ParagraphsFeaturesAddInBetweenTest extends JavascriptTestBase {
       ->setComponent('field_paragraphs', $component)
       ->save();
 
+    // Set the add mode on the content type to modal form widget.
+    $this->drupalGet("admin/structure/types/manage/$content_type/form-display");
+    $session = $this->getSession();
+    $page = $session->getPage();
+    $driver = $session->getDriver();
+
+    $page->pressButton('field_paragraphs_settings_edit');
+    $this->assertSession()->assertWaitOnAjaxRequest();
+
+    $is_option_visible = $session->evaluateScript("jQuery('.paragraphs-features__add-in-between__option:visible').length === 0");
+    $this->assertEquals(TRUE, $is_option_visible, 'By default "add in between" option should not be visible.');
+
+    $page->selectFieldOption('fields[field_paragraphs][settings_edit_form][settings][add_mode]', 'modal');
+    $session->executeScript("jQuery('[name=\"fields[field_paragraphs][settings_edit_form][settings][add_mode]\"]').trigger('change');");
+    $this->assertSession()->assertWaitOnAjaxRequest();
+
+    $is_option_visible = $session->evaluateScript("jQuery('.paragraphs-features__add-in-between__option:visible').length === 1");
+    $this->assertEquals(TRUE, $is_option_visible, 'After modal add mode is selected, "add in between" option should be available.');
+    $session->executeScript("jQuery('.paragraphs-features__add-in-between__option').prop('checked', true);");
+    $is_checked = $session->evaluateScript("jQuery('.paragraphs-features__add-in-between__option').is(':checked')");
+    $this->assertEquals(TRUE, $is_checked, 'Checkbox should be checked.');
+
+    $page->selectFieldOption('fields[field_paragraphs][settings_edit_form][settings][add_mode]', 'dropdown');
+    $session->executeScript("jQuery('[name=\"fields[field_paragraphs][settings_edit_form][settings][add_mode]\"]').trigger('change');");
+    $this->assertSession()->assertWaitOnAjaxRequest();
+
+    $is_option_visible = $session->evaluateScript("jQuery('.paragraphs-features__add-in-between__option:visible').length === 0");
+    $this->assertEquals(TRUE, $is_option_visible, 'After add mode is change to non modal, "add in between" option should not be visible.');
+    $is_checked = $session->evaluateScript("jQuery('.paragraphs-features__add-in-between__option').is(':checked')");
+    $this->assertEquals(FALSE, $is_checked, 'After add mode is change to non modal, "add in between" option should be checked out.');
+
+    $page->selectFieldOption('fields[field_paragraphs][settings_edit_form][settings][add_mode]', 'modal');
+    $session->executeScript("jQuery('[name=\"fields[field_paragraphs][settings_edit_form][settings][add_mode]\"]').trigger('change');");
+    $this->assertSession()->assertWaitOnAjaxRequest();
+
+    $this->drupalPostForm(NULL, [], 'Update');
+    $this->assertSession()->assertWaitOnAjaxRequest();
+    $this->drupalPostForm(NULL, [], t('Save'));
+
     // Add a paragraphed test.
     $this->drupalGet("node/add/$content_type");
 
-    $driver = $this->getSession()->getDriver();
-    $this->assertEquals(TRUE, $driver->isVisible('//input[contains(@class, "paragraphs-features__add-in-between__button")]'), 'New add in between button is visible.');
-    $this->assertEquals(FALSE, $driver->isVisible('//*[@name="button_add_modal"]'), 'Default add new paragraph button is hidden.');
+    $this->assertEquals(TRUE, $driver->isVisible('//*[@name="button_add_modal"]'), 'Default "Add Paragraph" button should be visible.');
+    $this->assertSession()->elementNotExists('xpath', '//input[contains(@class, "paragraphs-features__add-in-between__button")]');
+
+    // Set the add mode on the content type to modal form widget.
+    $this->drupalGet("admin/structure/types/manage/$content_type/form-display");
+    $page->pressButton('field_paragraphs_settings_edit');
+    $this->assertSession()->assertWaitOnAjaxRequest();
+
+    $page->checkField('fields[field_paragraphs][settings_edit_form][third_party_settings][paragraphs_features][add_in_between]');
+
+    $this->drupalPostForm(NULL, [], 'Update');
+    $this->assertSession()->assertWaitOnAjaxRequest();
+    $this->drupalPostForm(NULL, [], t('Save'));
+
+    // Add a paragraphed test.
+    $this->drupalGet("node/add/$content_type");
+    $page->fillField('title[0][value]', 'Test modal add widget delta');
+
+    $this->assertEquals(FALSE, $driver->isVisible('//*[@name="button_add_modal"]'), 'Default "Add Paragraph" button should be hidden.');
+    $this->assertEquals(TRUE, $driver->isVisible('//input[contains(@class, "paragraphs-features__add-in-between__button")]'), 'New add in between button should be visible.');
+
+    // Add a nested paragraph with the add widget - use negative delta.
+    $session->executeScript("jQuery('.paragraphs-features__add-in-between__button').trigger('click')");
+    $this->assertSession()->assertWaitOnAjaxRequest();
+    $page->find('xpath', '//*[contains(@class, "paragraphs-add-dialog") and contains(@class, "ui-dialog-content")]//*[contains(@name, "test_nested")]')->click();
+    $this->assertSession()->assertWaitOnAjaxRequest();
+
+    $base_buttons = $page->findAll('xpath', '//*[contains(@class, "paragraphs-features__add-in-between__button") and not(ancestor::div[contains(@class, "paragraphs-nested")])]');
+    $this->assertEquals(2, count($base_buttons), "There should be 2 add in between buttons for base paragraphs.");
+    $base_default_button = $page->findAll('xpath', '//*[contains(@class, "paragraph-type-add-modal-button") and not(ancestor::div[contains(@class, "paragraphs-nested")]) and not(ancestor::div[contains(@style,"display: none;")])]');
+    $this->assertEquals(0, count($base_default_button), "There should be no default button for base paragraphs.");
+
+    $nested_buttons = $page->findAll('xpath', '//*[contains(@class, "paragraphs-features__add-in-between__button") and ancestor::div[contains(@class, "paragraphs-nested")]]');
+    $this->assertEquals(0, count($nested_buttons), "There should be no add in between buttons for nested paragraph.");
+    $nested_default_button = $page->findAll('xpath', '//*[contains(@class, "paragraph-type-add-modal-button") and ancestor::div[contains(@class, "paragraphs-nested")] and not(ancestor::div[contains(@style,"display: none;")])]');
+    $this->assertEquals(1, count($nested_default_button), "There should be a default button in nested paragraph.");
+
+    // Check click on first add in between button.
+    $page->find('xpath', '(//*[contains(@class, "paragraphs-features__add-in-between__button")])[1]')->click();
+    $this->assertSession()->assertWaitOnAjaxRequest();
+    $this->assertSession()->hiddenFieldValueEquals('field_paragraphs[add_more][add_modal_form_area][add_more_delta]', '0');
+    $page->find('xpath', '//*[contains(@class, "paragraphs-add-dialog") and contains(@class, "ui-dialog-content")]//*[contains(@name, "test_1")]')->click();
+    $this->assertSession()->assertWaitOnAjaxRequest();
+
+    // Check click on last add in between button.
+    $page->find('xpath', '(//*[contains(@class, "paragraphs-features__add-in-between__button")])[last()]')->click();
+    $this->assertSession()->assertWaitOnAjaxRequest();
+    $this->assertSession()->hiddenFieldValueEquals('field_paragraphs[add_more][add_modal_form_area][add_more_delta]', '2');
+    $page->find('xpath', '//*[contains(@class, "paragraphs-add-dialog") and contains(@class, "ui-dialog-content")]//*[contains(@name, "test_1")]')->click();
+    $this->assertSession()->assertWaitOnAjaxRequest();
+
+    // Check click on some add in between button.
+    $page->find('xpath', '(//*[contains(@class, "paragraphs-features__add-in-between__button")])[2]')->click();
+    $this->assertSession()->assertWaitOnAjaxRequest();
+    $this->assertSession()->hiddenFieldValueEquals('field_paragraphs[add_more][add_modal_form_area][add_more_delta]', '1');
+    $page->find('xpath', '//*[contains(@class, "paragraphs-add-dialog") and contains(@class, "ui-dialog-content")]//*[contains(@name, "test_1")]')->click();
+    $this->assertSession()->assertWaitOnAjaxRequest();
   }
 
 }
