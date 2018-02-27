@@ -128,6 +128,7 @@ install:
   - export PATH=$HOME/travis-phantomjs/phantomjs-1.9.8-linux-x86_64/bin/:$PATH
 
 before_script:
+  - drupal-ti --include ./scripts/travis/drupal-ti-before-script.sh
   - drupal-ti before_script
   - phantomjs --ssl-protocol=any --ignore-ssl-errors=true ../drupal-8/drupal/vendor/jcalderonzumba/gastonjs/src/Client/main.js 8510 1024 768 2>&1 >> /dev/null &
   - nc -zvv localhost 8510; out=$?; while [[ $out -ne 0 ]]; do echo "Retry hit port 8510..."; nc -zvv localhost 8510; out=$?; sleep 1; done
