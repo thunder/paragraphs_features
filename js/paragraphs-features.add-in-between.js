@@ -72,6 +72,12 @@
       }
       $tableBody.append($.parseHTML(rowMarkup));
 
+      // Adding of a new paragraph can be disabled for some reason.
+      if ($addModalButton.is(':disabled')) {
+        $tableBody.find('.paragraphs-features__add-in-between__button')
+          .prop('disabled', 'disabled').addClass('is-disabled');
+      }
+
       // Trigger attaching of behaviours for added buttons.
       Drupal.behaviors.paragraphsFeaturesAddInBetweenRegister.attach($table);
     });
