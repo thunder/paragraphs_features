@@ -7,11 +7,3 @@ drupal.paragraphs_features.add_in_between:
       css/paragraphs-features.add-in-between.css: {}
   dependencies:
     - paragraphs/drupal.paragraphs.modal
-
-drupal.paragraphs_features.add_in_between.form_display_settings:
-  js:
-    js/paragraphs-features.add-in-between.form-display-settings.js: {}
-  dependencies:
-    - core/jquery
-    - core/jquery.once
-    - core/drupal

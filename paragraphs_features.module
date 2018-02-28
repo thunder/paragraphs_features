@@ -32,15 +32,21 @@ function paragraphs_features_field_widget_third_party_settings_form(WidgetInterf
   $element = [];
 
   if ($plugin->getPluginId() === 'paragraphs') {
+    // Define rule for enabling/disabling "add in between" option.
+    $display_add_in_between_option_rule = [
+      ':input[name="fields[' . $field_definition->getName() . '][settings_edit_form][settings][add_mode]"]' => [
+        'value' => 'modal',
+      ],
+    ];
+
     $element['add_in_between'] = [
       '#type' => 'checkbox',
       '#title' => t('Enable add in between buttons'),
       '#default_value' => $plugin->getThirdPartySetting('paragraphs_features', 'add_in_between'),
       '#attributes' => ['class' => ['paragraphs-features__add-in-between__option']],
-      '#attached' => [
-        'library' => [
-          'paragraphs_features/drupal.paragraphs_features.add_in_between.form_display_settings',
-        ],
+      '#states' => [
+        'enabled' => $display_add_in_between_option_rule,
+        'visible' => $display_add_in_between_option_rule,
       ],
     ];
   }

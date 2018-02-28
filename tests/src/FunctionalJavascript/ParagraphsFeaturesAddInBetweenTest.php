@@ -132,7 +132,7 @@ class ParagraphsFeaturesAddInBetweenTest extends JavascriptTestBase {
 
     $is_option_visible = $session->evaluateScript("jQuery('.paragraphs-features__add-in-between__option:visible').length === 1");
     $this->assertEquals(TRUE, $is_option_visible, 'After modal add mode is selected, "add in between" option should be available.');
-    $session->executeScript("jQuery('.paragraphs-features__add-in-between__option').prop('checked', true);");
+    $page->checkField('fields[field_paragraphs][settings_edit_form][third_party_settings][paragraphs_features][add_in_between]');
     $is_checked = $session->evaluateScript("jQuery('.paragraphs-features__add-in-between__option').is(':checked')");
     $this->assertEquals(TRUE, $is_checked, 'Checkbox should be checked.');
 
@@ -143,12 +143,14 @@ class ParagraphsFeaturesAddInBetweenTest extends JavascriptTestBase {
 
     $is_option_visible = $session->evaluateScript("jQuery('.paragraphs-features__add-in-between__option:visible').length === 0");
     $this->assertEquals(TRUE, $is_option_visible, 'After add mode is change to non modal, "add in between" option should not be visible.');
-    $is_checked = $session->evaluateScript("jQuery('.paragraphs-features__add-in-between__option').is(':checked')");
-    $this->assertEquals(FALSE, $is_checked, 'After add mode is change to non modal, "add in between" option should be checked out.');
+    $is_disabled = $session->evaluateScript("jQuery('.paragraphs-features__add-in-between__option').is(':disabled')");
+    $this->assertEquals(TRUE, $is_disabled, 'After add mode is change to non modal, "add in between" option should be disabled.');
 
     // Set modal add mode without add in between option.
     $page->selectFieldOption('fields[field_paragraphs][settings_edit_form][settings][add_mode]', 'modal');
     $session->executeScript("jQuery('[name=\"fields[field_paragraphs][settings_edit_form][settings][add_mode]\"]').trigger('change');");
+    $this->assertSession()->assertWaitOnAjaxRequest();
+    $page->uncheckField('fields[field_paragraphs][settings_edit_form][third_party_settings][paragraphs_features][add_in_between]');
     $this->assertSession()->assertWaitOnAjaxRequest();
 
     $this->drupalPostForm(NULL, [], 'Update');
