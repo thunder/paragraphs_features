@@ -83,7 +83,8 @@ class ParagraphsFeaturesAddInBetweenTest extends JavascriptTestBase {
     $this->addParagraphsType('test_nested');
     static::fieldUIAddNewField('admin/structure/paragraphs_type/test_nested', 'paragraphs', 'Paragraphs', 'entity_reference_revisions', [
       'settings[target_type]' => 'paragraph',
-      'cardinality' => '-1',
+      'cardinality' => 'number',
+      'cardinality_number' => '4',
     ], []);
 
     // Set the settings for the field in the nested paragraph.
@@ -132,7 +133,7 @@ class ParagraphsFeaturesAddInBetweenTest extends JavascriptTestBase {
 
     $is_option_visible = $session->evaluateScript("jQuery('.paragraphs-features__add-in-between__option:visible').length === 1");
     $this->assertEquals(TRUE, $is_option_visible, 'After modal add mode is selected, "add in between" option should be available.');
-    $session->executeScript("jQuery('.paragraphs-features__add-in-between__option').prop('checked', true);");
+    $page->checkField('fields[field_paragraphs][settings_edit_form][third_party_settings][paragraphs_features][add_in_between]');
     $is_checked = $session->evaluateScript("jQuery('.paragraphs-features__add-in-between__option').is(':checked')");
     $this->assertEquals(TRUE, $is_checked, 'Checkbox should be checked.');
 
@@ -143,12 +144,14 @@ class ParagraphsFeaturesAddInBetweenTest extends JavascriptTestBase {
 
     $is_option_visible = $session->evaluateScript("jQuery('.paragraphs-features__add-in-between__option:visible').length === 0");
     $this->assertEquals(TRUE, $is_option_visible, 'After add mode is change to non modal, "add in between" option should not be visible.');
-    $is_checked = $session->evaluateScript("jQuery('.paragraphs-features__add-in-between__option').is(':checked')");
-    $this->assertEquals(FALSE, $is_checked, 'After add mode is change to non modal, "add in between" option should be checked out.');
+    $is_disabled = $session->evaluateScript("jQuery('.paragraphs-features__add-in-between__option').is(':disabled')");
+    $this->assertEquals(TRUE, $is_disabled, 'After add mode is change to non modal, "add in between" option should be disabled.');
 
     // Set modal add mode without add in between option.
     $page->selectFieldOption('fields[field_paragraphs][settings_edit_form][settings][add_mode]', 'modal');
     $session->executeScript("jQuery('[name=\"fields[field_paragraphs][settings_edit_form][settings][add_mode]\"]').trigger('change');");
+    $this->assertSession()->assertWaitOnAjaxRequest();
+    $page->uncheckField('fields[field_paragraphs][settings_edit_form][third_party_settings][paragraphs_features][add_in_between]');
     $this->assertSession()->assertWaitOnAjaxRequest();
 
     $this->drupalPostForm(NULL, [], 'Update');
@@ -293,6 +296,22 @@ class ParagraphsFeaturesAddInBetweenTest extends JavascriptTestBase {
     $nested_buttons = $page->findAll('xpath', '//*[contains(@class, "paragraphs-features__add-in-between__button") and ancestor::div[contains(@class, "paragraphs-nested")]]');
     $this->assertEquals(4, count($nested_buttons), "There should be 4 add in between buttons for nested paragraph.");
     $nested_default_button = $page->findAll('xpath', '//*[contains(@class, "paragraph-type-add-modal-button") and ancestor::div[contains(@class, "paragraphs-nested")] and not(ancestor::div[contains(@style,"display: none;")])]');
+    $this->assertEquals(0, count($nested_default_button), "There should be no default button for nested paragraph.");
+
+    // Check status after cardinality is exceeded.
+    $page->find('xpath', '(//*[contains(@class, "paragraphs-features__add-in-between__button")])[2]')->click();
+    $this->assertSession()->assertWaitOnAjaxRequest();
+    $page->find('xpath', '//*[contains(@class, "paragraphs-add-dialog") and contains(@class, "ui-dialog-content")]//*[contains(@name, "test_1")]')->click();
+    $this->assertSession()->assertWaitOnAjaxRequest();
+
+    $base_buttons = $page->findAll('xpath', '//*[contains(@class, "paragraphs-features__add-in-between__button") and not(ancestor::div[contains(@class, "paragraphs-nested")])]');
+    $this->assertEquals(0, count($base_buttons), "There should be no add in between button for base paragraphs.");
+    $base_default_button = $page->findAll('xpath', '//*[contains(@class, "paragraph-type-add-modal-button") and not(ancestor::div[contains(@class, "paragraphs-nested")]) and not(ancestor::div[contains(@style,"display: none;")])]');
+    $this->assertEquals(1, count($base_default_button), "There should be a default button for base paragraphs.");
+
+    $nested_buttons = $page->findAll('xpath', '//*[contains(@class, "paragraphs-features__add-in-between__button") and ancestor::div[contains(@class, "paragraphs-nested")]]');
+    $this->assertEquals(0, count($nested_buttons), "There should be no add in between button for nested paragraph.");
+    $nested_default_button = $page->findAll('xpath', '//*[contains(@class, "paragraph-type-add-modal-button") and ancestor::div[contains(@class, "paragraphs-nested")]]');
     $this->assertEquals(0, count($nested_default_button), "There should be no default button for nested paragraph.");
   }
 

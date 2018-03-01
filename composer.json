@@ -1,0 +1,12 @@
+{
+    "name": "drupal/paragraphs_features",
+    "description": "Paragraphs features for extending paragraphs widget functionality.",
+    "type": "drupal-module",
+    "license": "GPL-2.0-or-later",
+    "authors": [
+        {
+            "name": "Mladen Todorovic",
+            "email": "mladen.todorovic@burda.com"
+        }
+    ]
+}

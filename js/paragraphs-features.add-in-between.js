@@ -21,6 +21,26 @@
   Drupal.paragraphs_features.add_in_between = {};
 
   /**
+   * Define add in between row template.
+   *
+   * @param {object} config
+   *   Configuration options for add in between row template.
+   *
+   * @return {string}
+   *   Returns markup string for add in between row.
+   */
+  Drupal.theme.paragraphsFeaturesAddInBetweenRow = function (config) {
+    return '' +
+      '<tr class="paragraphs-features__add-in-between__row">' +
+      '  <td colspan="100%">' +
+      '    <div class="paragraphs-features__add-in-between__wrapper">' +
+      '      <input class="paragraphs-features__add-in-between__button button--small js-show button js-form-submit form-submit" type="submit" value="' + config.text + '">' +
+      '    </div>' +
+      '  </td>' +
+      '</tr>';
+  };
+
+  /**
    * Init add in between buttons for paragraphs table.
    *
    * @type {Object}
@@ -56,12 +76,12 @@
       // A new button for adding at the end of the list is used.
       $addModalBlock.hide();
 
-      var rowMarkup = Drupal.paragraphs_features.add_in_between.getInBetweenRowMarkup();
+      var rowMarkup = Drupal.theme('paragraphsFeaturesAddInBetweenRow', {text: Drupal.t('+ Add')});
 
       // Add buttons and adjust drag-drop functionality.
       var $tableBody = $table.find('> tbody');
       $tableBody.find('> tr').each(function (index, rowElement) {
-        $($.parseHTML(rowMarkup)).insertBefore(rowElement);
+        $(rowMarkup).insertBefore(rowElement);
       });
 
       // Add a new button for adding a new paragraph to the end of the list.
@@ -70,7 +90,7 @@
 
         $tableBody = $table.find('> tbody');
       }
-      $tableBody.append($.parseHTML(rowMarkup));
+      $tableBody.append(rowMarkup);
 
       // Adding of a new paragraph can be disabled for some reason.
       if ($addModalButton.is(':disabled')) {
@@ -81,26 +101,6 @@
       // Trigger attaching of behaviours for added buttons.
       Drupal.behaviors.paragraphsFeaturesAddInBetweenRegister.attach($table);
     });
-  };
-
-  /**
-   * Get add in between row markup.
-   *
-   * @return {string}
-   *   Returns markup string for add in between row.
-   */
-  Drupal.paragraphs_features.add_in_between.getInBetweenRowMarkup = function () {
-    // Create row with add in between button.
-    var str = '' +
-      '<tr class="paragraphs-features__add-in-between__row">' +
-      '  <td colspan="100%">' +
-      '    <div class="paragraphs-features__add-in-between__wrapper">' +
-      '      <input class="paragraphs-features__add-in-between__button button--small js-show button js-form-submit form-submit" type="submit" value="' + Drupal.t('+ Add') + '">' +
-      '    </div>' +
-      '  </td>' +
-      '</tr>';
-
-    return str;
   };
 
   /**
