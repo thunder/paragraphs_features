@@ -23,10 +23,13 @@
   /**
    * Define add in between row template.
    *
+   * @param {object} config
+   *   Configuration options for add in between row template.
+   *
    * @return {string}
    *   Returns markup string for add in between row.
    */
-  Drupal.theme.paragraphsFeaturesAddInBetweenRowMarkup = function (config) {
+  Drupal.theme.paragraphsFeaturesAddInBetweenRow = function (config) {
     return '' +
       '<tr class="paragraphs-features__add-in-between__row">' +
       '  <td colspan="100%">' +
@@ -73,7 +76,7 @@
       // A new button for adding at the end of the list is used.
       $addModalBlock.hide();
 
-      var rowMarkup = Drupal.theme('paragraphsFeaturesAddInBetweenRowMarkup', {'text': Drupal.t('+ Add')});
+      var rowMarkup = Drupal.theme('paragraphsFeaturesAddInBetweenRow', {text: Drupal.t('+ Add')});
 
       // Add buttons and adjust drag-drop functionality.
       var $tableBody = $table.find('> tbody');
