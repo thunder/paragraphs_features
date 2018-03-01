@@ -8,5 +8,9 @@
             "name": "Mladen Todorovic",
             "email": "mladen.todorovic@burda.com"
         }
-    ]
+    ],
+    "require": {
+        "drupal/core": "^8.5",
+        "drupal/paragraphs": "dev-1.x"
+    }
 }
