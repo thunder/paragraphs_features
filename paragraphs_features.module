@@ -20,6 +20,7 @@ function paragraphs_features_field_widget_multivalue_form_alter(array &$elements
   if (!($widget instanceof ParagraphsWidget)) {
     return;
   }
+
   if ($widget->getSetting('add_mode') === 'modal' && $widget->getThirdPartySetting('paragraphs_features', 'add_in_between')) {
     // Logic for getting field wrapper ID is taken from Paragraphs module.
     $fieldWrapperId = Html::getId(implode('-', array_merge($context['form']['#parents'], [$elements['#field_name']])) . '-add-more-wrapper');
