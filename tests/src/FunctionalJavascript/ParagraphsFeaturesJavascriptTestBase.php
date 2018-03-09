@@ -14,7 +14,7 @@ use Drupal\Tests\paragraphs\FunctionalJavascript\ParagraphsTestBaseTrait;
  *
  * @package Drupal\Tests\paragraphs_features\FunctionalJavascript
  */
-class ParagraphsFeaturesJavascriptTestBase extends JavascriptTestBase {
+abstract class ParagraphsFeaturesJavascriptTestBase extends JavascriptTestBase {
 
   use LoginAdminTrait;
   use FieldUiTestTrait;
