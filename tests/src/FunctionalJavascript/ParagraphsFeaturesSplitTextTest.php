@@ -17,17 +17,8 @@ class ParagraphsFeaturesSplitTextTest extends ParagraphsFeaturesJavascriptTestBa
    *
    * @var array
    */
-  public static $modules = [
-    'block',
-    'field',
-    'field_ui',
-    'link',
-    'node',
+  protected static $modules = [
     'ckeditor',
-    'paragraphs',
-    'paragraphs_test',
-    'paragraphs_features',
-    'paragraphs_features_test',
   ];
 
   /**

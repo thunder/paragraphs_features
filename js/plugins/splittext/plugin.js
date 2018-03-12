@@ -1,5 +1,7 @@
 /**
- * @file thunder-paragraph-features.split-text.js
+ * CKEditor plugin for split text feature for Paragraphs text fields.
+ *
+ * @file plugin.js
  */
 
 (function ($, Drupal, drupalSettings, CKEDITOR) {

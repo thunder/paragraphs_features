@@ -26,7 +26,7 @@ abstract class ParagraphsFeaturesJavascriptTestBase extends JavascriptTestBase {
    *
    * @var array
    */
-  public static $modules = [
+  protected static $modules = [
     'block',
     'field',
     'field_ui',
