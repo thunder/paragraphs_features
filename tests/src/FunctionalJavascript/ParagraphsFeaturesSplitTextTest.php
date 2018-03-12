@@ -103,7 +103,7 @@ class ParagraphsFeaturesSplitTextTest extends ParagraphsFeaturesJavascriptTestBa
    *   Index of CKEditor field in paragraphs.
    */
   protected function clickParagraphSplitButton($ck_editor_index) {
-    $this->getSession()->executeScript("jQuery('.cke_button__splittext')[$ck_editor_index].click();");
+    $this->getSession()->executeScript("jQuery('.cke_button__splittext:nth($ck_editor_index)').trigger('click');");
     $this->assertSession()->assertWaitOnAjaxRequest();
   }
 
