@@ -2,12 +2,11 @@
 
 namespace Drupal\Tests\paragraphs_features\FunctionalJavascript;
 
-use Behat\Mink\Element\DocumentElement;
 use Drupal\editor\Entity\Editor;
 use Drupal\filter\Entity\FilterFormat;
 
 /**
- * Tests the paragraph split module integration.
+ * Tests the paragraph text split feature.
  *
  * @group paragraphs_features
  */
@@ -32,7 +31,7 @@ class ParagraphsFeaturesSplitTextTest extends ParagraphsFeaturesJavascriptTestBa
   ];
 
   /**
-   * Create CKEditor for integration test.
+   * Create CKEditor for testing of CKEditor integration.
    */
   protected function createEditor() {
     // Create a text format and associate CKEditor.
@@ -55,6 +54,49 @@ class ParagraphsFeaturesSplitTextTest extends ParagraphsFeaturesJavascriptTestBa
   }
 
   /**
+   * Get CKEditor ID, that can be used to get CKEditor objects in JavaScript.
+   *
+   * @param int $paragraph_index
+   *   Text paragraph index.
+   *
+   * @return string
+   *   Returns Id for CKEditor.
+   */
+  protected function getCkEditorId($paragraph_index) {
+    return $this->getSession()->getPage()->find('xpath', '//*[@data-drupal-selector="edit-field-paragraphs-' . $paragraph_index . '"]//textarea')->getAttribute('id');
+  }
+
+  /**
+   * Create new text paragraph to end of paragraphs list.
+   *
+   * @param int $index
+   *   Index of new paragraph.
+   * @param string $text
+   *   Text that will be filled to text field with CKEditor.
+   *
+   * @return string
+   *   Returns CKEditor ID.
+   *
+   * @throws \Behat\Mink\Exception\DriverException
+   * @throws \Behat\Mink\Exception\UnsupportedDriverActionException
+   */
+  protected function createNewTextParagraph($index, $text) {
+    $session = $this->getSession();
+    $page = $session->getPage();
+    $driver = $session->getDriver();
+
+    $page->find('xpath', '(//*[contains(@class, "paragraph-type-add-modal-button")])[1]')->click();
+    $this->assertSession()->assertWaitOnAjaxRequest();
+    $page->find('xpath', '//*[contains(@class, "paragraphs-add-dialog") and contains(@class, "ui-dialog-content")]//*[contains(@name, "test_1")]')->click();
+    $this->assertSession()->assertWaitOnAjaxRequest();
+
+    $ck_editor_id = $this->getCkEditorId($index);
+    $driver->executeScript("CKEDITOR.instances['$ck_editor_id'].insertHtml('$text');");
+
+    return $ck_editor_id;
+  }
+
+  /**
    * Click on split text button for paragraphs text field.
    *
    * @param int $ck_editor_index
@@ -66,27 +108,12 @@ class ParagraphsFeaturesSplitTextTest extends ParagraphsFeaturesJavascriptTestBa
   }
 
   /**
-   * Get CKEditor ID, that can be used to get CKEditor objects in JavaScript.
-   *
-   * @param \Behat\Mink\Element\DocumentElement $page
-   *   Site page object.
-   * @param int $paragraph_index
-   *   Text paragraph index.
-   *
-   * @return string
-   *   Returns Id for CKEditor.
+   * Test split text feature.
    */
-  protected function getCkEditorId(DocumentElement $page, $paragraph_index) {
-    return $page->find('xpath', '//*[@data-drupal-selector="edit-field-paragraphs-' . $paragraph_index . '"]//textarea')->getAttribute('id');
-  }
-
-  /**
-   * Test split of paragraph before a selection.
-   */
-  public function testParagraphSplitBefore() {
+  public function testSplitTextFeature() {
     // Create paragraph types and content types with required configuration for
-    // testing of add in between feature.
-    $content_type = 'test_modal_delta';
+    // testing of split text feature.
+    $content_type = 'test_split_text';
 
     // Create nested paragraph with addition of one text test paragraph.
     $this->createTestConfiguration($content_type, 1);
@@ -98,59 +125,110 @@ class ParagraphsFeaturesSplitTextTest extends ParagraphsFeaturesJavascriptTestBa
     $page = $session->getPage();
     $driver = $session->getDriver();
 
-    $page->selectFieldOption('fields[field_paragraphs][type]', 'extended_test_paragraphs');
-    $this->assertSession()->assertWaitOnAjaxRequest();
-
+    // Edit form display settings.
     $page->pressButton('field_paragraphs_settings_edit');
     $this->assertSession()->assertWaitOnAjaxRequest();
 
     // By default a non modal add mode should be selected.
     $is_option_visible = $session->evaluateScript("jQuery('.paragraphs-features__split-text__option:visible').length === 0");
-    $this->assertEquals(TRUE, $is_option_visible, 'By default "add in between" option should not be visible.');
+    $this->assertEquals(TRUE, $is_option_visible, 'By default "split text" option should not be visible.');
 
-    // Check that add in between option is available for modal add mode.
+    // Check that split text option is available for modal add mode.
     $page->selectFieldOption('fields[field_paragraphs][settings_edit_form][settings][add_mode]', 'modal');
     $session->executeScript("jQuery('[name=\"fields[field_paragraphs][settings_edit_form][settings][add_mode]\"]').trigger('change');");
     $this->assertSession()->assertWaitOnAjaxRequest();
 
     $is_option_visible = $session->evaluateScript("jQuery('.paragraphs-features__split-text__option:visible').length === 1");
-    $this->assertEquals(TRUE, $is_option_visible, 'After modal add mode is selected, "add in between" option should be available.');
+    $this->assertEquals(TRUE, $is_option_visible, 'After modal add mode is selected, "split text" option should be available.');
     $page->checkField('fields[field_paragraphs][settings_edit_form][third_party_settings][paragraphs_features][split_text]');
     $is_checked = $session->evaluateScript("jQuery('.paragraphs-features__split-text__option').is(':checked')");
     $this->assertEquals(TRUE, $is_checked, 'Checkbox should be checked.');
 
     $this->drupalPostForm(NULL, [], 'Update');
     $this->assertSession()->assertWaitOnAjaxRequest();
-
     $this->drupalPostForm(NULL, [], t('Save'));
 
-    // Check that add in between functionality is used.
-    $this->drupalGet("node/add/$content_type");
-
-    // Check first add in between button.
-    $page->find('xpath', '(//*[contains(@class, "paragraph-type-add-modal-button")])[1]')->click();
-    $this->assertSession()->assertWaitOnAjaxRequest();
-    $page->find('xpath', '//*[contains(@class, "paragraphs-add-dialog") and contains(@class, "ui-dialog-content")]//*[contains(@name, "test_1")]')->click();
-    $this->assertSession()->assertWaitOnAjaxRequest();
-
-    // Fill text field with text.
+    // Case 1 - simple text split.
     $paragraph_content_0 = '<p>Content that will be in the first paragraph after the split.</p>';
     $paragraph_content_1 = '<p>Content that will be in the second paragraph after the split.</p>';
 
-    $text = $paragraph_content_0 . $paragraph_content_1;
-    $ck_editor_id = $this->getCkEditorId($page, 0);
-    $driver->executeScript("CKEDITOR.instances['$ck_editor_id'].insertHtml('$text');");
+    // Check that split text functionality is used.
+    $this->drupalGet("node/add/$content_type");
+    $ck_editor_id = $this->createNewTextParagraph(0, $paragraph_content_0 . $paragraph_content_1);
+
+    // Make split of created text paragraph.
     $driver->executeScript("var selection = CKEDITOR.instances['$ck_editor_id'].getSelection(); selection.selectElement(selection.root.getChild(1));");
     $this->clickParagraphSplitButton(0);
 
     // Validate split results.
-    $ck_editor_id_0 = $this->getCkEditorId($page, 0);
-    $ck_editor_id_1 = $this->getCkEditorId($page, 1);
+    $ck_editor_id_0 = $this->getCkEditorId(0);
+    $ck_editor_id_1 = $this->getCkEditorId(1);
+    static::assertEquals(
+      $paragraph_content_0 . PHP_EOL . PHP_EOL . '<p>&nbsp;</p>' . PHP_EOL,
+      $driver->evaluateScript("CKEDITOR.instances['$ck_editor_id_0'].getData();")
+    );
+    static::assertEquals(
+      $paragraph_content_1 . PHP_EOL,
+      $driver->evaluateScript("CKEDITOR.instances['$ck_editor_id_1'].getData();")
+    );
+
+    // Case 2 - split text works after removal of paragraph.
+    $this->drupalGet("node/add/$content_type");
+    $this->createNewTextParagraph(0, '');
+
+    // Remove the paragraph.
+    $driver->executeScript("jQuery('[name=\"field_paragraphs_0_remove\"]').trigger('mousedown');");
+    $this->assertSession()->assertWaitOnAjaxRequest();
+
+    // Create new text paragraph.
+    $ck_editor_id = $this->createNewTextParagraph(1, $paragraph_content_0 . $paragraph_content_1);
+
+    // Make split of text paragraph.
+    $driver->executeScript("var selection = CKEDITOR.instances['$ck_editor_id'].getSelection(); selection.selectElement(selection.root.getChild(1));");
+    $this->clickParagraphSplitButton(0);
+
+    // Validate split results.
+    $ck_editor_id_0 = $this->getCkEditorId(1);
+    $ck_editor_id_1 = $this->getCkEditorId(2);
+    static::assertEquals(
+      $paragraph_content_0 . PHP_EOL . PHP_EOL . '<p>&nbsp;</p>' . PHP_EOL,
+      $driver->evaluateScript("CKEDITOR.instances['$ck_editor_id_0'].getData();")
+    );
+    static::assertEquals(
+      $paragraph_content_1 . PHP_EOL,
+      $driver->evaluateScript("CKEDITOR.instances['$ck_editor_id_1'].getData();")
+    );
+
+    // Case 3 - add of new paragraph after text split.
+    $this->drupalGet("node/add/$content_type");
+    $ck_editor_id = $this->createNewTextParagraph(0, $paragraph_content_0 . $paragraph_content_1);
+
+    // Make split of text paragraph.
+    $driver->executeScript("var selection = CKEDITOR.instances['$ck_editor_id'].getSelection(); selection.selectElement(selection.root.getChild(1));");
+    $this->clickParagraphSplitButton(0);
+
+    // Set new data to both split paragraphs.
+    $paragraph_content_0_new = '<p>Content that will be placed into the first paragraph after split.</p>';
+    $paragraph_content_1_new = '<p>Content that will be placed into the second paragraph after split.</p>';
+    $ck_editor_id_0 = $this->getCkEditorId(0);
+    $ck_editor_id_1 = $this->getCkEditorId(1);
+    $driver->executeScript("CKEDITOR.instances[\"$ck_editor_id_0\"].setData(\"$paragraph_content_0_new\");");
+    $driver->executeScript("CKEDITOR.instances[\"$ck_editor_id_1\"].setData(\"$paragraph_content_1_new\");");
+
+    // Add new text paragraph.
+    $this->createNewTextParagraph(2, '');
+
+    // Test if all texts are in the correct paragraph.
+    $ck_editor_id_0 = $this->getCkEditorId(0);
+    $ck_editor_id_1 = $this->getCkEditorId(1);
+    $ck_editor_id_2 = $this->getCkEditorId(2);
     $ck_editor_content_0 = $driver->evaluateScript("CKEDITOR.instances['$ck_editor_id_0'].getData();");
     $ck_editor_content_1 = $driver->evaluateScript("CKEDITOR.instances['$ck_editor_id_1'].getData();");
+    $ck_editor_content_2 = $driver->evaluateScript("CKEDITOR.instances['$ck_editor_id_2'].getData();");
 
-    static::assertEquals($paragraph_content_0 . PHP_EOL . PHP_EOL . '<p>&nbsp;</p>' . PHP_EOL, $ck_editor_content_0);
-    static::assertEquals($paragraph_content_1 . PHP_EOL, $ck_editor_content_1);
+    static::assertEquals($paragraph_content_0_new . PHP_EOL, $ck_editor_content_0);
+    static::assertEquals($paragraph_content_1_new . PHP_EOL, $ck_editor_content_1);
+    static::assertEquals('', $ck_editor_content_2);
   }
 
 }

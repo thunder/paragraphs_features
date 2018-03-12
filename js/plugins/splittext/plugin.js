@@ -196,7 +196,11 @@
     var $newEditor = $($newRow.find('.paragraphs-subform > div')[fieldIndex]).find('textarea');
     stNs.updateEditor($newEditor.attr('id'), stNs._tmp.newContent);
 
+    // Cleanup states.
     stNs._tmp.split_trigger = false;
+
+    // Delta field has to be cleaned up for proper working of add button.
+    $originalRow.closest('table').siblings('.clearfix').find('input.paragraph-type-add-modal-delta').val('');
   };
 
   /**
