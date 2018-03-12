@@ -243,6 +243,11 @@
     // Split text namespace.
     var stNs = Drupal.paragraphs_features.split_text;
 
+    // There shuld be only one split request at a time.
+    if (stNs._tmp.split_trigger) {
+      return;
+    }
+
     // After ajax response correct values should be placed in text editors.
     $(document).once('ajax-paragraph').ajaxComplete(stNs.onAjaxSplit);
 
