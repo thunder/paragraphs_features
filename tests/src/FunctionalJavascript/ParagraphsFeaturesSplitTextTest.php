@@ -209,7 +209,7 @@ class ParagraphsFeaturesSplitTextTest extends ParagraphsFeaturesJavascriptTestBa
     // Add new text paragraph.
     $this->createNewTextParagraph(2, '');
 
-    // Test if all texts are in the correct paragraph.
+    // Check if all texts are in the correct paragraph.
     $ck_editor_id_0 = $this->getCkEditorId(0);
     $ck_editor_id_1 = $this->getCkEditorId(1);
     $ck_editor_id_2 = $this->getCkEditorId(2);
@@ -220,6 +220,38 @@ class ParagraphsFeaturesSplitTextTest extends ParagraphsFeaturesJavascriptTestBa
     static::assertEquals($paragraph_content_0_new . PHP_EOL, $ck_editor_content_0);
     static::assertEquals($paragraph_content_1_new . PHP_EOL, $ck_editor_content_1);
     static::assertEquals('', $ck_editor_content_2);
+
+    // Case 4 - test split in middle of formatted text.
+    $text = '<p>Text start</p><ol><li>line 1</li><li>line 2 with some <strong>bold text</strong> and back to normal</li><li>line 3</li></ol><p>Text end after indexed list</p>';
+    $this->drupalGet("node/add/$content_type");
+    $ck_editor_id = $this->createNewTextParagraph(0, $text);
+
+    // Set selection between "bold" and "text".
+    $driver->executeScript("var selection = CKEDITOR.instances['$ck_editor_id'].getSelection(); selection.selectElement(selection.document.findOne('strong').getChild(0)); var ranges = selection.getRanges(); ranges[0].setStart(ranges[0].getBoundaryNodes().startNode, 4); selection.selectRanges(ranges);");
+    $this->clickParagraphSplitButton(0);
+
+    // Check if all texts are correct.
+    $ck_editor_id_0 = $this->getCkEditorId(0);
+    $ck_editor_id_1 = $this->getCkEditorId(1);
+    $ck_editor_content_0 = $driver->evaluateScript("CKEDITOR.instances['$ck_editor_id_0'].getData();");
+    $ck_editor_content_1 = $driver->evaluateScript("CKEDITOR.instances['$ck_editor_id_1'].getData();");
+
+    $expected_content_0 =
+      '<p>Text start</p>' . PHP_EOL . PHP_EOL .
+      '<ol>' . PHP_EOL .
+      "\t" . '<li>line 1</li>' . PHP_EOL .
+      "\t" . '<li>line 2 with some <strong>bold</strong></li>' . PHP_EOL .
+      '</ol>' . PHP_EOL;
+
+    $expected_content_1 =
+      '<ol>' . PHP_EOL .
+      "\t" . '<li><strong>text</strong> and back to normal</li>' . PHP_EOL .
+      "\t" . '<li>line 3</li>' . PHP_EOL .
+      '</ol>' . PHP_EOL . PHP_EOL .
+      '<p>Text end after indexed list</p>' . PHP_EOL;
+
+    static::assertEquals($expected_content_0, $ck_editor_content_0);
+    static::assertEquals($expected_content_1, $ck_editor_content_1);
   }
 
 }

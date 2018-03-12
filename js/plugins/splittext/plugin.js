@@ -76,6 +76,12 @@
   /**
    * Create new paragraph with same type after one where editor is placed.
    *
+   * -------------------------------------------------------------------------*
+   * Important Note:
+   * This could be provided in future as option where split text could work
+   * without any add mode, not just modal.
+   * -------------------------------------------------------------------------*
+   *
    * @param {object} editor
    *   CKEditor object.
    */
@@ -201,7 +207,8 @@
     // Cleanup states.
     stNs._tmp.split_trigger = false;
 
-    // Delta field has to be cleaned up for proper working of add button.
+    // Delta field has to be cleaned up for proper working of add button. It
+    // will not make any impact on non modal add mode.
     $originalRow.closest('table').siblings('.clearfix').find('input.paragraph-type-add-modal-delta').val('');
   };
 
