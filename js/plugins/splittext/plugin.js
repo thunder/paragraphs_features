@@ -93,7 +93,7 @@
   var createNewParagraphOverModal = function (editor) {
     var $paragraphRow = $('#' + editor.name).closest('.paragraphs-subform').closest('tr');
     var paragraphType = $paragraphRow.find('[data-paragraphs-split-text-type]').attr('data-paragraphs-split-text-type');
-    var $deltaField = $paragraphRow.closest('table').siblings('.clearfix').find('input.paragraph-type-add-modal-delta');
+    var $deltaField = $paragraphRow.closest('table').siblings().find('input.paragraph-type-add-modal-delta');
 
     // Stop splitting functionality if add button is disabled or not available.
     var $addButton = $deltaField.siblings('.paragraph-type-add-modal-button');
@@ -187,7 +187,7 @@
 
     // Delta field has to be cleaned up for proper working of add button. It
     // will not make any impact on non modal add mode.
-    $originalRow.closest('table').siblings('.clearfix').find('input.paragraph-type-add-modal-delta').val('');
+    $originalRow.closest('table').siblings().find('input.paragraph-type-add-modal-delta').val('');
   };
 
   /**
