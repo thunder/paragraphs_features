@@ -239,7 +239,7 @@
    *   Returns CKEditor wrapper ID.
    */
   var getEditorWrapperSelector = function (editor) {
-    return editor.name.replace(/-[0-9]+-value(--[0-9A-Za-z_-]+)?$/, '-wrapper');
+    return editor.element.getAttribute('data-drupal-selector').replace(/-[0-9]+-value$/, '-wrapper');
   };
 
   /**
