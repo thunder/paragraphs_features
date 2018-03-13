@@ -252,6 +252,67 @@ class ParagraphsFeaturesSplitTextTest extends ParagraphsFeaturesJavascriptTestBa
 
     static::assertEquals($expected_content_0, $ck_editor_content_0);
     static::assertEquals($expected_content_1, $ck_editor_content_1);
+
+    // Case 5 - split paragraph with multiple text fields.
+    $this->addParagraphsType("test_3_text_fields");
+    static::fieldUIAddNewField("admin/structure/paragraphs_type/test_3_text_fields", "text_3_1", 'Text', 'text_long', [], []);
+    static::fieldUIAddNewField("admin/structure/paragraphs_type/test_3_text_fields", "text_3_2", 'Text', 'text_long', [], []);
+    static::fieldUIAddNewField("admin/structure/paragraphs_type/test_3_text_fields", "text_3_3", 'Text', 'text_long', [], []);
+
+    $this->drupalGet("node/add/$content_type");
+
+    $page->find('xpath', '(//*[contains(@class, "paragraph-type-add-modal-button")])[1]')->click();
+    $this->assertSession()->assertWaitOnAjaxRequest();
+    $page->find('xpath', '//*[contains(@class, "paragraphs-add-dialog") and contains(@class, "ui-dialog-content")]//*[contains(@name, "test_3_text_fields")]')->click();
+    $this->assertSession()->assertWaitOnAjaxRequest();
+
+    // Add required texts to text fields.
+    $paragraph_content_0_text_0 = '<p>Content that will be in the first text field.</p>';
+    $paragraph_content_0_text_1 = $paragraph_content_0 . $paragraph_content_1;
+    $paragraph_content_0_text_2 = '<p>Content that will be in the last text field.</p>';
+    $ck_editor_id_0 = $page->find('xpath', '(//*[@data-drupal-selector="edit-field-paragraphs-0"]//textarea)[1]')->getAttribute('id');
+    $ck_editor_id_1 = $page->find('xpath', '(//*[@data-drupal-selector="edit-field-paragraphs-0"]//textarea)[2]')->getAttribute('id');
+    $ck_editor_id_2 = $page->find('xpath', '(//*[@data-drupal-selector="edit-field-paragraphs-0"]//textarea)[3]')->getAttribute('id');
+    $driver->executeScript("CKEDITOR.instances['$ck_editor_id_0'].insertHtml('$paragraph_content_0_text_0');");
+    $driver->executeScript("CKEDITOR.instances['$ck_editor_id_1'].insertHtml('$paragraph_content_0_text_1');");
+    $driver->executeScript("CKEDITOR.instances['$ck_editor_id_2'].insertHtml('$paragraph_content_0_text_2');");
+
+    // Make split of created text paragraph.
+    $driver->executeScript("var selection = CKEDITOR.instances['$ck_editor_id_1'].getSelection(); selection.selectElement(selection.root.getChild(1));");
+    $this->clickParagraphSplitButton(1);
+
+    // Validate split results in all 6 CKEditors in 2 paragraphs.
+    $ck_editor_id_para_0_text_0 = $page->find('xpath', '(//*[@data-drupal-selector="edit-field-paragraphs-0"]//textarea)[1]')->getAttribute('id');
+    $ck_editor_id_para_0_text_1 = $page->find('xpath', '(//*[@data-drupal-selector="edit-field-paragraphs-0"]//textarea)[2]')->getAttribute('id');
+    $ck_editor_id_para_0_text_2 = $page->find('xpath', '(//*[@data-drupal-selector="edit-field-paragraphs-0"]//textarea)[3]')->getAttribute('id');
+    $ck_editor_id_para_1_text_0 = $page->find('xpath', '(//*[@data-drupal-selector="edit-field-paragraphs-1"]//textarea)[1]')->getAttribute('id');
+    $ck_editor_id_para_1_text_1 = $page->find('xpath', '(//*[@data-drupal-selector="edit-field-paragraphs-1"]//textarea)[2]')->getAttribute('id');
+    $ck_editor_id_para_1_text_2 = $page->find('xpath', '(//*[@data-drupal-selector="edit-field-paragraphs-1"]//textarea)[3]')->getAttribute('id');
+
+    static::assertEquals(
+      $paragraph_content_0_text_0 . PHP_EOL,
+      $driver->evaluateScript("CKEDITOR.instances['$ck_editor_id_para_0_text_0'].getData();")
+    );
+    static::assertEquals(
+      $paragraph_content_0 . PHP_EOL . PHP_EOL . '<p>&nbsp;</p>' . PHP_EOL,
+      $driver->evaluateScript("CKEDITOR.instances['$ck_editor_id_para_0_text_1'].getData();")
+    );
+    static::assertEquals(
+      $paragraph_content_0_text_2 . PHP_EOL,
+      $driver->evaluateScript("CKEDITOR.instances['$ck_editor_id_para_0_text_2'].getData();")
+    );
+    static::assertEquals(
+      '',
+      $driver->evaluateScript("CKEDITOR.instances['$ck_editor_id_para_1_text_0'].getData();")
+    );
+    static::assertEquals(
+      $paragraph_content_1 . PHP_EOL,
+      $driver->evaluateScript("CKEDITOR.instances['$ck_editor_id_para_1_text_1'].getData();")
+    );
+    static::assertEquals(
+      '',
+      $driver->evaluateScript("CKEDITOR.instances['$ck_editor_id_para_1_text_2'].getData();")
+    );
   }
 
 }

@@ -8,22 +8,8 @@
 
   'use strict';
 
-  /**
-   * Ensure namespace for paragraphs features exists.
-   */
-  if (typeof Drupal.paragraphs_features === 'undefined') {
-    Drupal.paragraphs_features = {};
-  }
-
-  /**
-   * Namespace for split text paragraphs feature.
-   *
-   * @type {Object}
-   */
-  Drupal.paragraphs_features.split_text = {
-    // Temporal object is used to preserve data over ajax requests.
-    _tmp: {}
-  };
+  // Temporal object is used to preserve data over ajax requests.
+  var tmpObject = {};
 
   /**
    * Register split text plugin for custom CKEditor.
@@ -31,7 +17,7 @@
    * @param {object} editorSettings
    *   CKEditor settings object.
    */
-  Drupal.paragraphs_features.split_text.registerPlugin = function (editorSettings) {
+  var registerPlugin = function (editorSettings) {
     // Split text toolbar and plugin should be registered only once.
     if (editorSettings.extraPlugins.indexOf('splittext') !== -1) {
       return;
@@ -67,7 +53,7 @@
 
       $.each(drupalSettings.editor.formats, function (editorId, editorInfo) {
         if (editorInfo.editor === 'ckeditor') {
-          Drupal.paragraphs_features.split_text.registerPlugin(editorInfo.editorSettings);
+          registerPlugin(editorInfo.editorSettings);
         }
       });
     }
@@ -85,18 +71,18 @@
    * @param {object} editor
    *   CKEditor object.
    */
-  Drupal.paragraphs_features.split_text.createNewParagraphOverDuplicate = function (editor) {
-    // Split text namespace.
-    var stNs = Drupal.paragraphs_features.split_text;
 
+  /*
+  var createNewParagraphOverDuplicate = function (editor) {
     var actionButton = $('#' + editor.name).closest('.paragraphs-subform')
       .parent()
       .find('.paragraphs-actions input[name$="_duplicate"]');
 
-    stNs.storeTempData(editor, actionButton.attr('name'));
+    storeTempData(editor, actionButton.attr('name'));
 
     actionButton.trigger('mousedown');
   };
+  */
 
   /**
    * Create new paragraph with same type after one where editor is placed.
@@ -104,10 +90,7 @@
    * @param {object} editor
    *   CKEditor object.
    */
-  Drupal.paragraphs_features.split_text.createNewParagraphOverModal = function (editor) {
-    // Split text namespace.
-    var stNs = Drupal.paragraphs_features.split_text;
-
+  var createNewParagraphOverModal = function (editor) {
     var $paragraphRow = $('#' + editor.name).closest('.paragraphs-subform').closest('tr');
     var paragraphType = $paragraphRow.find('[data-paragraphs-split-text-type]').attr('data-paragraphs-split-text-type');
     var $deltaField = $paragraphRow.closest('table').siblings('.clearfix').find('input.paragraph-type-add-modal-delta');
@@ -132,7 +115,7 @@
     var $actionButton = $('[data-drupal-selector^="' + paragraphTypeButtonSelector + '"]');
 
     // Triggering element name is required for proper handling of ajax response.
-    stNs.storeTempData(editor, $actionButton.attr('name'));
+    storeTempData(editor, $actionButton.attr('name'));
 
     $actionButton.trigger('mousedown');
   };
@@ -145,9 +128,7 @@
    * @param {string} triggerElementName
    *   Name of trigger element, required for ajax response handling.
    */
-  Drupal.paragraphs_features.split_text.storeTempData = function (editor, triggerElementName) {
-    var tmpObject = Drupal.paragraphs_features.split_text._tmp;
-
+  var storeTempData = function (editor, triggerElementName) {
     var $editorObject = $('#' + editor.name);
     var selection = editor.getSelection();
     var ranges = selection.getRanges();
@@ -182,30 +163,27 @@
    * @param {object} settings
    *   Request settings.
    */
-  Drupal.paragraphs_features.split_text.onAjaxSplit = function (e, xhr, settings) {
-    // Split text namespace.
-    var stNs = Drupal.paragraphs_features.split_text;
-
+  var onAjaxSplit = function (e, xhr, settings) {
     // Only relevant ajax actions should be handled.
-    if (settings.extraData._triggering_element_name !== stNs._tmp.triggeringElementName || !stNs._tmp.split_trigger) {
+    if (settings.extraData._triggering_element_name !== tmpObject.triggeringElementName || !tmpObject.split_trigger) {
       return;
     }
 
     // Set relevant data to original paragraph.
-    var $originalEditor = $('[data-drupal-selector="' + stNs._tmp.originalEditorSelector + '"]');
+    var $originalEditor = $('[data-drupal-selector="' + tmpObject.originalEditorSelector + '"]');
     var originalEditor = CKEDITOR.instances[$originalEditor.attr('id')];
     var $originalRow = $originalEditor.closest('tr');
-    stNs.updateEditor($originalEditor.attr('id'), stNs._tmp.oldContent);
+    updateEditor($originalEditor.attr('id'), tmpObject.oldContent);
 
     // Set "cut" data ot new paragraph.
     var $newRow = $originalRow.nextAll($originalRow.hasClass('odd') ? '.even' : '.odd');
-    var wrapperSelector = stNs.getEditorWrapperSelector(originalEditor);
+    var wrapperSelector = getEditorWrapperSelector(originalEditor);
     var fieldIndex = $originalEditor.closest('div[data-drupal-selector="' + wrapperSelector + '"]').index();
     var $newEditor = $($newRow.find('.paragraphs-subform > div')[fieldIndex]).find('textarea');
-    stNs.updateEditor($newEditor.attr('id'), stNs._tmp.newContent);
+    updateEditor($newEditor.attr('id'), tmpObject.newContent);
 
     // Cleanup states.
-    stNs._tmp.split_trigger = false;
+    tmpObject.split_trigger = false;
 
     // Delta field has to be cleaned up for proper working of add button. It
     // will not make any impact on non modal add mode.
@@ -220,7 +198,7 @@
    * @param {string} data
    *   HTML as text for CKEditor.
    */
-  Drupal.paragraphs_features.split_text.updateEditor = function (editorId, data) {
+  var updateEditor = function (editorId, data) {
     if (typeof editorId === 'undefined') {
       return;
     }
@@ -239,19 +217,16 @@
    * @param {object} editor
    *   CKEditor object.
    */
-  Drupal.paragraphs_features.split_text.split = function (editor) {
-    // Split text namespace.
-    var stNs = Drupal.paragraphs_features.split_text;
-
-    // There shuld be only one split request at a time.
-    if (stNs._tmp.split_trigger) {
+  var splitTextHandler = function (editor) {
+    // There should be only one split request at a time.
+    if (tmpObject.split_trigger) {
       return;
     }
 
     // After ajax response correct values should be placed in text editors.
-    $(document).once('ajax-paragraph').ajaxComplete(stNs.onAjaxSplit);
+    $(document).once('ajax-paragraph').ajaxComplete(onAjaxSplit);
 
-    stNs.createNewParagraphOverModal(editor);
+    createNewParagraphOverModal(editor);
   };
 
   /**
@@ -263,7 +238,7 @@
    * @return {string}
    *   Returns CKEditor wrapper ID.
    */
-  Drupal.paragraphs_features.split_text.getEditorWrapperSelector = function (editor) {
+  var getEditorWrapperSelector = function (editor) {
     return editor.name.replace(/-[0-9]+-value(--[0-9A-Za-z_-]+)?$/, '-wrapper');
   };
 
@@ -279,11 +254,8 @@
    * @return {boolean}
    *   Returns if editor is for valid paragraphs text field.
    */
-  Drupal.paragraphs_features.split_text.isValidParagraphsField = function (editor) {
-    // Split text namespace.
-    var stNs = Drupal.paragraphs_features.split_text;
-
-    var wrapperSelector = stNs.getEditorWrapperSelector(editor);
+  var isValidParagraphsField = function (editor) {
+    var wrapperSelector = getEditorWrapperSelector(editor);
     var $subForm = $('#' + editor.name).closest('.paragraphs-subform');
 
     // Paragraphs split text should work only on widgets where that option is enabled.
@@ -304,17 +276,16 @@
 
     init: function (editor) {
       // Split text namespace.
-      var stNs = Drupal.paragraphs_features.split_text;
       var modulePath = drupalSettings.paragraphs_features.split_text._path;
 
       // Split Text functionality should be added only for paragraphs Text fields.
-      if (!stNs.isValidParagraphsField(editor)) {
+      if (!isValidParagraphsField(editor)) {
         return;
       }
 
       editor.addCommand('splitText', {
         exec: function (editor) {
-          stNs.split(editor, 'before');
+          splitTextHandler(editor, 'before');
         }
       });
 
