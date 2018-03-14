@@ -5,11 +5,11 @@
  * Contains hooks for Paragraphs Feature module.
  */
 
-use Drupal\Component\Utility\Html;
 use Drupal\Core\Field\FieldDefinitionInterface;
 use Drupal\Core\Field\WidgetInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\paragraphs\Plugin\Field\FieldWidget\ParagraphsWidget;
+use Drupal\paragraphs_features\ParagraphsFeatures;
 
 /**
  * Implements hook_field_widget_multivalue_form_alter().
@@ -21,12 +21,9 @@ function paragraphs_features_field_widget_multivalue_form_alter(array &$elements
     return;
   }
 
-  if ($widget->getSetting('add_mode') === 'modal' && $widget->getThirdPartySetting('paragraphs_features', 'add_in_between')) {
-    // Logic for getting field wrapper ID is taken from Paragraphs module.
-    $fieldWrapperId = Html::getId(implode('-', array_merge($context['form']['#parents'], [$elements['#field_name']])) . '-add-more-wrapper');
-
-    $elements['add_more']['#attached']['library'][] = 'paragraphs_features/drupal.paragraphs_features.add_in_between';
-    $elements['add_more']['#attached']['drupalSettings']['paragraphs_features']['add_in_between'][$fieldWrapperId] = TRUE;
+  if ($widget->getSetting('add_mode') === 'modal') {
+    $fieldWrapperId = ParagraphsFeatures::getWrapperId($context['form']['#parents'], $elements['#field_name']);
+    ParagraphsFeatures::registerFormWidgetFeatures($elements, $widget, $fieldWrapperId);
   }
 }
 
@@ -34,27 +31,29 @@ function paragraphs_features_field_widget_multivalue_form_alter(array &$elements
  * Implements hook_field_widget_third_party_settings_form().
  */
 function paragraphs_features_field_widget_third_party_settings_form(WidgetInterface $plugin, FieldDefinitionInterface $field_definition, $form_mode, $form, FormStateInterface $form_state) {
-  $element = [];
+  $elements = [];
 
   if ($plugin instanceof ParagraphsWidget) {
-    // Define rule for enabling/disabling "add in between" option.
-    $display_add_in_between_option_rule = [
-      ':input[name="fields[' . $field_definition->getName() . '][settings_edit_form][settings][add_mode]"]' => [
-        'value' => 'modal',
-      ],
-    ];
-
-    $element['add_in_between'] = [
-      '#type' => 'checkbox',
-      '#title' => t('Enable add in between buttons'),
-      '#default_value' => $plugin->getThirdPartySetting('paragraphs_features', 'add_in_between'),
-      '#attributes' => ['class' => ['paragraphs-features__add-in-between__option']],
-      '#states' => [
-        'enabled' => $display_add_in_between_option_rule,
-        'visible' => $display_add_in_between_option_rule,
-      ],
-    ];
+    $elements = ParagraphsFeatures::getThirdPartyForm($plugin, $field_definition->getName());
   }
 
-  return $element;
+  return $elements;
+}
+
+/**
+ * Implements hook_paragraphs_behavior_info_alter().
+ */
+function paragraphs_features_paragraphs_widget_actions_alter(array &$widget_actions, array &$context) {
+  /** @var \Drupal\paragraphs\Entity\Paragraph $paragraphs_entity */
+  $paragraphs_entity = $context['paragraphs_entity'];
+
+  foreach ($widget_actions as $grouping => $buttons) {
+    foreach ($buttons as $button_id => $button_element) {
+      if ($button_id === 'remove_button') {
+        $widget_actions[$grouping][$button_id]['#attributes']['data-paragraphs-split-text-type'] = $paragraphs_entity->getType();
+
+        break 2;
+      }
+    }
+  }
 }

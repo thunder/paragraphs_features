@@ -7,3 +7,9 @@ drupal.paragraphs_features.add_in_between:
       css/paragraphs-features.add-in-between.css: {}
   dependencies:
     - paragraphs/drupal.paragraphs.modal
+
+drupal.paragraphs_features.split_text:
+  js:
+    js/plugins/splittext/plugin.js: {}
+  dependencies:
+    - core/ckeditor

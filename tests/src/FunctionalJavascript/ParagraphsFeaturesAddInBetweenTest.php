@@ -5,6 +5,8 @@ namespace Drupal\Tests\paragraphs_features\FunctionalJavascript;
 /**
  * Tests the add in between paragraphs feature.
  *
+ * TODO: Move widget settings form tests in separate class.
+ *
  * @group paragraphs_features
  */
 class ParagraphsFeaturesAddInBetweenTest extends ParagraphsFeaturesJavascriptTestBase {
