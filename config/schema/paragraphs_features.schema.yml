@@ -1,0 +1,13 @@
+paragraphs_features_paragraphs_widget_third_party:
+  type: mapping
+  label: 'Schema for Paragraphs Features options of Paragraphs Widget'
+  mapping:
+    add_in_between:
+      type: boolean
+      label: 'Flag for add in between feature'
+    split_text:
+      type: boolean
+      label: 'Flag for paragraphs split text feature'
+
+field.widget.third_party.paragraphs_features:
+  type: paragraphs_features_paragraphs_widget_third_party
