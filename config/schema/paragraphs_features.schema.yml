@@ -1,4 +1,4 @@
-paragraphs_features_paragraphs_widget_third_party:
+paragraphs_features_third_party:
   type: mapping
   label: 'Schema for Paragraphs Features options of Paragraphs Widget'
   mapping:
@@ -10,4 +10,4 @@ paragraphs_features_paragraphs_widget_third_party:
       label: 'Flag for paragraphs split text feature'
 
 field.widget.third_party.paragraphs_features:
-  type: paragraphs_features_paragraphs_widget_third_party
+  type: paragraphs_features_third_party
