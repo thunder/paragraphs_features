@@ -8,6 +8,7 @@
 use Drupal\Core\Field\FieldDefinitionInterface;
 use Drupal\Core\Field\WidgetInterface;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Render\Element;
 use Drupal\paragraphs\Plugin\Field\FieldWidget\ParagraphsWidget;
 use Drupal\paragraphs_features\ParagraphsFeatures;
 
@@ -54,6 +55,17 @@ function paragraphs_features_paragraphs_widget_actions_alter(array &$widget_acti
 
         break 2;
       }
+    }
+  }
+
+  // @todo Get widget configuration setting 'single_more'.
+  if (count($widget_actions['dropdown_actions'])) {
+    $visible_actions = Element::getVisibleChildren($widget_actions['dropdown_actions']);
+    if (count($visible_actions) == 1) {
+      $visible_actions = reset($visible_actions);
+      $widget_actions['actions'][$visible_actions] = $widget_actions['dropdown_actions'][$visible_actions];
+      $widget_actions['dropdown_actions'] = [];
+
     }
   }
 }
