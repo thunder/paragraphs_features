@@ -1,3 +1,11 @@
+paragraphs_features.settings:
+  type: config_object
+  label: 'Paragraphs features settings'
+  mapping:
+    dropdown_to_button:
+      type: boolean
+      label: 'Flag for reduce dropdown to button when there is only one option'
+
 paragraphs_features_third_party:
   type: mapping
   label: 'Schema for Paragraphs Features options of Paragraphs Widget'

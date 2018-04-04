@@ -58,14 +58,18 @@ function paragraphs_features_paragraphs_widget_actions_alter(array &$widget_acti
     }
   }
 
-  // @todo Get widget configuration setting 'single_more'.
-  if (count($widget_actions['dropdown_actions'])) {
+  /* Render single option for dropdown as button. */
+
+  // Get configuration setting for reducing dropdown to button on single option.
+  $dropdown_to_button = \Drupal::config('paragraphs_features.settings')->get('dropdown_to_button');
+
+  if ($dropdown_to_button && count($widget_actions['dropdown_actions'])) {
     $visible_actions = Element::getVisibleChildren($widget_actions['dropdown_actions']);
+
     if (count($visible_actions) == 1) {
       $visible_actions = reset($visible_actions);
       $widget_actions['actions'][$visible_actions] = $widget_actions['dropdown_actions'][$visible_actions];
       $widget_actions['dropdown_actions'] = [];
-
     }
   }
 }
