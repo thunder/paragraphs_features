@@ -55,4 +55,3 @@ class SettingsForm extends ConfigFormBase {
   }
 
 }
-
