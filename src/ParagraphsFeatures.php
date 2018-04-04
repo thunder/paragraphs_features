@@ -16,11 +16,7 @@ class ParagraphsFeatures {
    *
    * @var array
    */
-  public static $availableFeatures = [
-    'add_in_between',
-    'single_more',
-    'split_text',
-  ];
+  public static $availableFeatures = ['add_in_between', 'split_text'];
 
   /**
    * Getting paragraphs widget wrapper ID.
@@ -52,12 +48,9 @@ class ParagraphsFeatures {
   public static function registerFormWidgetFeatures(array &$elements, ParagraphsWidget $widget, $fieldWrapperId) {
     foreach (static::$availableFeatures as $feature) {
       if ($widget->getThirdPartySetting('paragraphs_features', $feature)) {
-        // @todo Find nicer way to check the need of loading a corresponding library.
-        if (in_array($feature, ['add_in_between', 'split_text'])) {
-          $elements['add_more']['#attached']['library'][] = 'paragraphs_features/drupal.paragraphs_features.' . $feature;
-          $elements['add_more']['#attached']['drupalSettings']['paragraphs_features'][$feature][$fieldWrapperId] = TRUE;
-          $elements['add_more']['#attached']['drupalSettings']['paragraphs_features'][$feature]['_path'] = drupal_get_path('module', 'paragraphs_features');
-        }
+        $elements['add_more']['#attached']['library'][] = 'paragraphs_features/drupal.paragraphs_features.' . $feature;
+        $elements['add_more']['#attached']['drupalSettings']['paragraphs_features'][$feature][$fieldWrapperId] = TRUE;
+        $elements['add_more']['#attached']['drupalSettings']['paragraphs_features'][$feature]['_path'] = drupal_get_path('module', 'paragraphs_features');
       }
     }
   }
@@ -88,17 +81,6 @@ class ParagraphsFeatures {
       '#title' => t('Enable add in between buttons'),
       '#default_value' => $plugin->getThirdPartySetting('paragraphs_features', 'add_in_between'),
       '#attributes' => ['class' => ['paragraphs-features__add-in-between__option']],
-      '#states' => [
-        'enabled' => $modal_related_options_rule,
-        'visible' => $modal_related_options_rule,
-      ],
-    ];
-
-    $elements['single_more'] = [
-      '#type' => 'checkbox',
-      '#title' => t('Expand more options to button for single option'),
-      '#default_value' => $plugin->getThirdPartySetting('paragraphs_features', 'split_text'),
-      '#attributes' => ['class' => ['paragraphs-features__single-more__option']],
       '#states' => [
         'enabled' => $modal_related_options_rule,
         'visible' => $modal_related_options_rule,

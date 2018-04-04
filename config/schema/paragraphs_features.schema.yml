@@ -7,9 +7,6 @@ paragraphs_features_third_party:
       label: 'Flag for add in between feature'
     split_text:
       type: boolean
-      label: 'Flag for expanding more options to button for single option'
-    split_text:
-      type: boolean
       label: 'Flag for paragraphs split text feature'
 
 field.widget.third_party.paragraphs_features:
