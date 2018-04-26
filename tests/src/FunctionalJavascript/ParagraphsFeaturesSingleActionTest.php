@@ -20,15 +20,13 @@ class ParagraphsFeaturesSingleActionTest extends ParagraphsFeaturesJavascriptTes
     $this->createTestConfiguration($content_type, 1);
 
     // 1) Enable setting to show single action as button.
-    $this->config('paragraphs_features.settings')
-      ->set('dropdown_to_button', TRUE)
-      ->save();
+    $this->enableDropdownToButton();
 
     // Setup content type settings, this will disable all paragraph actions.
     $this->setupParagraphSettings($content_type);
+    $this->drupalGet("node/add/$content_type");
 
     // 1a) Check that the remove action is displayed, but no dropdown toggle.
-    $this->drupalGet("node/add/$content_type");
     $this->assertSession()->elementExists('xpath', '//input[@name="field_paragraphs_0_remove"]');
     $this->assertSession()->elementNotExists('xpath', '//input[@name="field_paragraphs_0_duplicate"]');
     $this->assertSession()->elementNotExists('xpath', '//div[contains(@class, "paragraphs-dropdown")]');
@@ -44,12 +42,9 @@ class ParagraphsFeaturesSingleActionTest extends ParagraphsFeaturesJavascriptTes
 
     // 2) Disable setting to show single action as button, actions should
     // always be shown as dropdown now.
-    $this->config('paragraphs_features.settings')
-      ->set('dropdown_to_button', FALSE)
-      ->save();
+    $this->disableDropdownToButton();
 
     // 2a) We still have two actions enabled, dropdown should be shown anyway.
-    $this->drupalGet("node/add/$content_type");
     $this->assertSession()->elementExists('xpath', '//input[@name="field_paragraphs_0_remove"]');
     $this->assertSession()->elementExists('xpath', '//input[@name="field_paragraphs_0_duplicate"]');
     $this->assertSession()->elementExists('xpath', '//div[contains(@class, "paragraphs-dropdown")]');
@@ -102,9 +97,12 @@ class ParagraphsFeaturesSingleActionTest extends ParagraphsFeaturesJavascriptTes
   protected function setupParagraphSettings($content_type) {
     $currentUrl = $this->getSession()->getCurrentUrl();
 
+    // Have a default paragraph, it simplifies the clicking on the edit page.
     $this->config('core.entity_form_display.node.' . $content_type . '.default')
       ->set('content.field_paragraphs.settings.default_paragraph_type', 'test_1')
       ->save();
+
+    // Disable duplicate and add_above actions.
     $this->config('core.entity_form_display.node.' . $content_type . '.default')
       ->set('content.field_paragraphs.settings.features.duplicate', '0')
       ->save();
@@ -115,4 +113,29 @@ class ParagraphsFeaturesSingleActionTest extends ParagraphsFeaturesJavascriptTes
     $this->drupalGet($currentUrl);
   }
 
+  /**
+   * Enable the dropdown to button setting.
+   */
+  protected function enableDropdownToButton() {
+    $currentUrl = $this->getSession()->getCurrentUrl();
+
+    $this->config('paragraphs_features.settings')
+      ->set('dropdown_to_button', TRUE)
+      ->save();
+
+    $this->drupalGet($currentUrl);
+  }
+
+  /**
+   * Disable the dropdown to button setting.
+   */
+  protected function disableDropdownToButton() {
+    $currentUrl = $this->getSession()->getCurrentUrl();
+
+    $this->config('paragraphs_features.settings')
+      ->set('dropdown_to_button', FALSE)
+      ->save();
+
+    $this->drupalGet($currentUrl);
+  }
 }
