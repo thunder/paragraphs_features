@@ -138,4 +138,5 @@ class ParagraphsFeaturesSingleActionTest extends ParagraphsFeaturesJavascriptTes
 
     $this->drupalGet($currentUrl);
   }
+
 }
