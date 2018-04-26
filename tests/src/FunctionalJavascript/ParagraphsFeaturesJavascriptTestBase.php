@@ -70,7 +70,6 @@ abstract class ParagraphsFeaturesJavascriptTestBase extends JavascriptTestBase {
     $this->loginAsAdmin([
       "administer content types",
       "administer node form display",
-      "administer site configuration",
       "edit any $content_type content",
       "create $content_type content",
     ]);
