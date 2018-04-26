@@ -3,6 +3,7 @@ type: module
 description: 'Provides additional paragraphs widgets.'
 core: 8.x
 package: Paragraphs
+configure: paragraphs_features.settings_form
 dependencies:
   - paragraphs:paragraphs
   - drupal:field (>= 8.5)
