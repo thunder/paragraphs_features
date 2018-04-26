@@ -3,7 +3,7 @@
 namespace Drupal\Tests\paragraphs_features\FunctionalJavascript;
 
 /**
- * Test the display of single actions according to the dropdown_to_button setting.
+ * Test display of single actions according to the dropdown_to_button setting.
  *
  * @group paragraphs_features
  */
