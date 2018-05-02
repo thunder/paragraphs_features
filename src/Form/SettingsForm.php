@@ -36,7 +36,7 @@ class SettingsForm extends ConfigFormBase {
 
     $form['dropdown_to_button'] = [
       '#type' => 'checkbox',
-      '#title' => $this->t('Reduce dropdown to button when there is only one option'),
+      '#title' => $this->t('Reduce actions dropdown to a button when there is only one option'),
       '#default_value' => $config->get('dropdown_to_button'),
     ];
 

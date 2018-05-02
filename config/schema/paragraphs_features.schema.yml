@@ -4,7 +4,7 @@ paragraphs_features.settings:
   mapping:
     dropdown_to_button:
       type: boolean
-      label: 'Flag for reduce dropdown to button when there is only one option'
+      label: 'Flag for reduce actions dropdown to a button when there is only one option'
 
 paragraphs_features_third_party:
   type: mapping
