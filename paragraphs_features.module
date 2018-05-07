@@ -22,10 +22,8 @@ function paragraphs_features_field_widget_multivalue_form_alter(array &$elements
     return;
   }
 
-  if ($widget->getSetting('add_mode') === 'modal') {
-    $fieldWrapperId = ParagraphsFeatures::getWrapperId($context['form']['#parents'], $elements['#field_name']);
-    ParagraphsFeatures::registerFormWidgetFeatures($elements, $widget, $fieldWrapperId);
-  }
+  $fieldWrapperId = ParagraphsFeatures::getWrapperId($context['form']['#parents'], $elements['#field_name']);
+  ParagraphsFeatures::registerFormWidgetFeatures($elements, $widget, $fieldWrapperId);
 }
 
 /**

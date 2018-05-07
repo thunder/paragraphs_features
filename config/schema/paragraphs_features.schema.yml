@@ -13,6 +13,9 @@ paragraphs_features_third_party:
     add_in_between:
       type: boolean
       label: 'Flag for add in between feature'
+    delete_confirmation:
+      type: boolean
+      label: 'Flag for delete confirmation feature'
     split_text:
       type: boolean
       label: 'Flag for paragraphs split text feature'

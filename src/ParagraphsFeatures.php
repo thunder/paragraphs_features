@@ -16,7 +16,7 @@ class ParagraphsFeatures {
    *
    * @var array
    */
-  public static $availableFeatures = ['add_in_between', 'split_text'];
+  public static $availableFeatures = ['add_in_between', 'delete_confirmation', 'split_text'];
 
   /**
    * Getting paragraphs widget wrapper ID.
@@ -96,6 +96,13 @@ class ParagraphsFeatures {
         'enabled' => $modal_related_options_rule,
         'visible' => $modal_related_options_rule,
       ],
+    ];
+
+    $elements['delete_confirmation'] = [
+      '#type' => 'checkbox',
+      '#title' => t('Enable confirmation on paragraphs remove'),
+      '#default_value' => $plugin->getThirdPartySetting('paragraphs_features', 'delete_confirmation'),
+      '#attributes' => ['class' => ['paragraphs-features__delete-confirmation__option']],
     ];
 
     return $elements;
