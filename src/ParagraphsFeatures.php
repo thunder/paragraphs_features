@@ -16,7 +16,11 @@ class ParagraphsFeatures {
    *
    * @var array
    */
-  public static $availableFeatures = ['add_in_between', 'delete_confirmation', 'split_text'];
+  public static $availableFeatures = [
+    'add_in_between',
+    'delete_confirmation',
+    'split_text',
+  ];
 
   /**
    * Getting paragraphs widget wrapper ID.
