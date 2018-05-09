@@ -66,7 +66,6 @@ class ParagraphsFeaturesDeleteConfirmationTest extends ParagraphsFeaturesJavascr
     $this->drupalGet("node/add/$content_type");
     $session = $this->getSession();
     $page = $session->getPage();
-    $driver = $session->getDriver();
 
     // 2a) custom remove button is not present.
     $this->assertSession()->elementNotExists('xpath', '//button[@class="paragraphs-features__delete-confirm"]');

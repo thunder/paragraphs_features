@@ -23,7 +23,7 @@
   /**
    * Theme functions for confirmation message.
    *
-   * @param options
+   * @param {object} options
    *   Configuration options used to construct the markup.
    * @return {string}
    *   Returns markup.
@@ -43,7 +43,8 @@
    * Handler for paragraphs_actions custom remove button.
    * Also adds Confirmation message, buttons and their handlers.
    *
-   * @returns {Function}
+   * @return {Function}
+   *   Returns event handler.
    */
   Drupal.paragraphs_features.deleteConfirmHandler = function () {
     return function (event) {
@@ -51,7 +52,7 @@
       // Hide children.
       $wrapper.children().wrap('<div class="visually-hidden"></div>');
       // Add markup.
-      $wrapper.append(Drupal.theme('paragraphsFeaturesDeleteConfirmationMessage', { message: Drupal.t('Are you sure you want to remove this paragraph?'), remove: Drupal.t('Remove'), cancel: Drupal.t('Cancel') }));
+      $wrapper.append(Drupal.theme('paragraphsFeaturesDeleteConfirmationMessage', {message: Drupal.t('Are you sure you want to remove this paragraph?'), remove: Drupal.t('Remove'), cancel: Drupal.t('Cancel')}));
       // Add handlers for buttons.
       $wrapper.find('.paragraphs-features__delete-confirmation__cancel-button').bind('mousedown', Drupal.paragraphs_features.deleteConfirmRemoveHandler());
       $wrapper.find('.paragraphs-features__delete-confirmation__remove-button').bind('mousedown', Drupal.paragraphs_features.deleteConfirmCancelHandler());
@@ -61,8 +62,10 @@
   /**
    * Handler for remove action.
    *
-   * @param event
-   * @returns {Function}
+   * @param {Event} event
+   *   An event
+   * @return {Function}
+   *   Returns event handler.
    */
   Drupal.paragraphs_features.deleteConfirmCancelHandler = function () {
     return function (event) {
@@ -73,8 +76,10 @@
   /**
    * Handler for cancel action.
    *
-   * @param event
-   * @returns {Function}
+   * @param {Event} event
+   *   An event
+   * @return {Function}
+   *   Returns event handler.
    */
   Drupal.paragraphs_features.deleteConfirmRemoveHandler = function () {
     return function (event) {
@@ -98,6 +103,6 @@
         // Hide original Button
         $(this).wrap('<div class="visually-hidden"></div>');
       });
-    },
+    }
   };
 }(jQuery, Drupal));
