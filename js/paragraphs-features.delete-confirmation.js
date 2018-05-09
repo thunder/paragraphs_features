@@ -69,7 +69,7 @@
    */
   Drupal.paragraphs_features.deleteConfirmCancelHandler = function () {
     return function (event) {
-      $(event.target).parents('div[id*="-item-wrapper"]').find('input.paragraphs-dropdown-action[data-drupal-selector$="remove"]').trigger('mousedown');
+      $(event.target).parents('div[id*="-item-wrapper"]').find('.paragraphs-actions *[data-drupal-selector*="-remove"]').trigger('mousedown');
     };
   };
 
@@ -97,7 +97,7 @@
   Drupal.behaviors.paragraphsFeaturesDeleteConfirmationInit = {
     attach: function (context, settings) {
       var $actions = $(context).find('.paragraphs-actions').once('paragraphs-features-delete-confirmation-init');
-      $actions.find('input.paragraphs-dropdown-action[data-drupal-selector*="remove"]').each(function () {
+      $actions.find('*[data-drupal-selector*="remove"]').each(function () {
         // Add custom button and handler.
         $(Drupal.theme('paragraphsFeaturesDeleteConfirmationButton')).insertBefore(this).bind('mousedown', Drupal.paragraphs_features.deleteConfirmHandler());
         // Hide original Button
