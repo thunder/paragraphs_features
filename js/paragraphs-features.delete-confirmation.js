@@ -16,8 +16,8 @@
    * @return {string}
    *   Returns markup.
    */
-  Drupal.theme.paragraphsFeaturesDeleteConfirmationButton = function () {
-    return '<button type="button" class="paragraphs-features__delete-confirm paragraphs-dropdown-action button js-form-submit form-submit">' + Drupal.t('Remove') + '</button>';
+  Drupal.theme.paragraphsFeaturesDeleteConfirmationButton = function (options) {
+    return '<button type="button" class="paragraphs-features__delete-confirm ' + options.class + '">' + Drupal.t('Remove') + '</button>';
   };
 
   /**
@@ -99,7 +99,7 @@
       var $actions = $(context).find('.paragraphs-actions').once('paragraphs-features-delete-confirmation-init');
       $actions.find('*[data-drupal-selector*="remove"]').each(function () {
         // Add custom button and handler.
-        $(Drupal.theme('paragraphsFeaturesDeleteConfirmationButton')).insertBefore(this).bind('mousedown', Drupal.paragraphs_features.deleteConfirmHandler());
+        $(Drupal.theme('paragraphsFeaturesDeleteConfirmationButton', {class: $(this).attr('class')})).insertBefore(this).bind('mousedown', Drupal.paragraphs_features.deleteConfirmHandler());
         // Hide original Button
         $(this).wrap('<div class="visually-hidden"></div>');
       });
