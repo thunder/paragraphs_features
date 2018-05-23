@@ -40,16 +40,16 @@ class ParagraphsFeaturesDeleteConfirmationTest extends ParagraphsFeaturesJavascr
     $this->assertSession()->elementExists('css', 'div.paragraphs-features__delete-confirmation');
     $this->assertSession()->elementExists('css', 'button.paragraphs-features__delete-confirmation__remove-button');
     $this->assertSession()->elementExists('css', 'button.paragraphs-features__delete-confirmation__cancel-button');
-    $are_elements_hidden = $session->evaluateScript("jQuery('div[id=\"field-paragraphs-0-item-wrapper\"]').children().length - jQuery('div[id=\"field-paragraphs-0-item-wrapper\"]').children('.visually-hidden').length === 1");
-    $this->assertEquals(TRUE, $are_elements_hidden, 'Inner form elements should be hidden.');
+    $is_element_hidden = $session->evaluateScript("jQuery('div[data-drupal-selector=\"edit-field-paragraphs-0\"]').parents('.visually-hidden').length === 1");
+    $this->assertEquals(TRUE, $is_element_hidden, 'Inner form element should be hidden.');
 
     // 1c) Cancel remove paragraph.
     $page->find('xpath', '//button[contains(@class, "paragraphs-features__delete-confirmation__cancel-button")]')->click();
     // Confirmation message is removed, paragraphs inner form elements should be
     // shown.
     $this->assertSession()->elementNotExists('xpath', '//div[@class="paragraphs-features__delete-confirmation"]');
-    $are_elements_hidden = $session->evaluateScript("jQuery('div[id=\"field-paragraphs-0-item-wrapper\"]').children('.visually-hidden').length === 0");
-    $this->assertEquals(TRUE, $are_elements_hidden, 'Inner form elements should be hidden.');
+    $is_element_visible = $session->evaluateScript("jQuery('div[data-drupal-selector=\"edit-field-paragraphs-0\"]').parents('.visually-hidden').length === 0");
+    $this->assertEquals(TRUE, $is_element_visible, 'Inner form elements should be visible.');
 
     // 1d) Trigger delete confirmation message, remove paragraph.
     $page->find('xpath', '//button[contains(@class, "paragraphs-dropdown-toggle")]')->click();
