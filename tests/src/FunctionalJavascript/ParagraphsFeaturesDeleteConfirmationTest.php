@@ -123,11 +123,12 @@ class ParagraphsFeaturesDeleteConfirmationTest extends ParagraphsFeaturesJavascr
 
   /**
    * Setup paragraphs field for nested paragraph.
+   *
    */
   protected function setupNestedParagraphSettings() {
     $currentUrl = $this->getSession()->getCurrentUrl();
 
-    // Default paragraph and edit mode.
+    // Default paragraph and edit mode
     $this->config('core.entity_form_display.paragraph.test_nested.default')
       ->set('content.field_paragraphs.settings.default_paragraph_type', 'test_1')
       ->set('content.field_paragraphs.settings.edit_mode', 'open')
