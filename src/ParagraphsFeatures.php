@@ -73,6 +73,13 @@ class ParagraphsFeatures {
   public static function getThirdPartyForm(WidgetInterface $plugin, $field_name) {
     $elements = [];
 
+    $elements['delete_confirmation'] = [
+      '#type' => 'checkbox',
+      '#title' => t('Enable confirmation on paragraphs remove'),
+      '#default_value' => $plugin->getThirdPartySetting('paragraphs_features', 'delete_confirmation'),
+      '#attributes' => ['class' => ['paragraphs-features__delete-confirmation__option']],
+    ];
+
     // Define rule for enabling/disabling options that depend on modal add mode.
     $modal_related_options_rule = [
       ':input[name="fields[' . $field_name . '][settings_edit_form][settings][add_mode]"]' => [
@@ -100,13 +107,6 @@ class ParagraphsFeatures {
         'enabled' => $modal_related_options_rule,
         'visible' => $modal_related_options_rule,
       ],
-    ];
-
-    $elements['delete_confirmation'] = [
-      '#type' => 'checkbox',
-      '#title' => t('Enable confirmation on paragraphs remove'),
-      '#default_value' => $plugin->getThirdPartySetting('paragraphs_features', 'delete_confirmation'),
-      '#attributes' => ['class' => ['paragraphs-features__delete-confirmation__option']],
     ];
 
     return $elements;
