@@ -48,7 +48,7 @@
    */
   Drupal.paragraphs_features.deleteConfirmHandler = function () {
     return function (event) {
-      var $wrapper = $(event.target).parents('div[id*="-item-wrapper"]');
+      var $wrapper = $(event.target).parents('div[id*="-item-wrapper"]').first();
       // Hide children.
       $wrapper.children().wrap('<div class="visually-hidden"></div>');
       // Add markup.
@@ -69,7 +69,7 @@
    */
   Drupal.paragraphs_features.deleteConfirmCancelHandler = function () {
     return function (event) {
-      $(event.target).parents('div[id*="-item-wrapper"]').find('.paragraphs-actions *[data-drupal-selector*="-remove"]').trigger('mousedown');
+      $(event.target).parents('div[id*="-item-wrapper"]').first().find('.paragraphs-actions *[data-drupal-selector*="-remove"]').trigger('mousedown');
     };
   };
 
@@ -83,8 +83,8 @@
    */
   Drupal.paragraphs_features.deleteConfirmRemoveHandler = function () {
     return function (event) {
-      var $wrapper = $(event.target).parents('div[id*="-item-wrapper"]');
-      $wrapper.children('.paragraphs-features__delete-confirmation').remove();
+      var $wrapper = $(event.target).parents('div[id*="-item-wrapper"]').first();
+      $wrapper.children('.paragraphs-features__delete-confirmation').first().remove();
       $wrapper.children('.visually-hidden').children().unwrap();
     };
   };
