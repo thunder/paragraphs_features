@@ -8,6 +8,10 @@ drupal.paragraphs_features.add_in_between:
   dependencies:
     - paragraphs/drupal.paragraphs.modal
 
+drupal.paragraphs_features.delete_confirmation:
+  js:
+    js/paragraphs-features.delete-confirmation.js: {}
+
 drupal.paragraphs_features.split_text:
   js:
     js/plugins/splittext/plugin.js: {}
