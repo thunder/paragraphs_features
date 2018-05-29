@@ -13,6 +13,9 @@
   /**
    * Theme function for remove button
    *
+   * @param {object} options
+   *   Options for delete confirmation button.
+   *
    * @return {string}
    *   Returns markup.
    */
