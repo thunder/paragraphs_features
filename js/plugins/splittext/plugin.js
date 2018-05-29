@@ -135,17 +135,21 @@
 
     // Last node that should be selected to cut content should be text type.
     var lastNode = ranges[0].document.getBody().getLast();
-    while (lastNode && lastNode.type === CKEDITOR.NODE_ELEMENT) {
-      lastNode = lastNode.getLast();
-    }
 
-    // The last node should be text, but in case it's not found, we are going to
-    // use a last element of the document.
-    if (!lastNode || lastNode.type !== CKEDITOR.NODE_TEXT) {
-      lastNode = ranges[0].document.getBody().getLast();
-    }
-
+    // In order to find the last text node, we have to walk backward searching
+    // for last text node.
     ranges[0].setEndAfter(lastNode);
+    var walker = new CKEDITOR.dom.walker(ranges[0]);
+    var lastTextNode = walker.previous();
+    while (lastTextNode && lastTextNode.type !== CKEDITOR.NODE_TEXT) {
+      lastTextNode = walker.previous();
+    }
+
+    if (lastTextNode) {
+      ranges[0].setEndAfter(lastTextNode);
+    }
+
+    // Set new selection and trigger cut for it.
     selection.selectRanges(ranges);
 
     // Temporal container is used to preserve data over ajax requests.
