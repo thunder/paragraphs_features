@@ -133,8 +133,18 @@
     var selection = editor.getSelection();
     var ranges = selection.getRanges();
 
-    // Last node that should be selected to cut content.
+    // Last node that should be selected to cut content should be text type.
     var lastNode = ranges[0].document.getBody().getLast();
+    while (lastNode.type === CKEDITOR.NODE_ELEMENT) {
+      lastNode = lastNode.getLast();
+    }
+
+    // The last node should be text, but in case it's not found, we are going to
+    // use a last element of the document.
+    if (lastNode.type !== CKEDITOR.NODE_TEXT) {
+      lastNode = ranges[0].document.getBody().getLast();
+    }
+
     ranges[0].setEndAfter(lastNode);
     selection.selectRanges(ranges);
 
