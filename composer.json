@@ -11,6 +11,6 @@
     ],
     "require": {
         "drupal/core": "^8.5",
-        "drupal/paragraphs": "dev-1.x"
+        "drupal/paragraphs": "^1.3"
     }
 }
