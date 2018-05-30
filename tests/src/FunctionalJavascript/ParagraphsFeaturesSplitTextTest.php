@@ -8,7 +8,7 @@ use Drupal\filter\Entity\FilterFormat;
 /**
  * Tests the paragraph text split feature.
  *
- * @group paragraphs_features_split
+ * @group paragraphs_features
  */
 class ParagraphsFeaturesSplitTextTest extends ParagraphsFeaturesJavascriptTestBase {
 
