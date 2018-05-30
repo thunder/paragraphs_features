@@ -132,35 +132,46 @@
     var $editorObject = $('#' + editor.name);
     var selection = editor.getSelection();
     var ranges = selection.getRanges();
+    var endNode = ranges[0].getBoundaryNodes().endNode;
 
-    // Last node that should be selected to cut content should be text type.
-    var lastNode = ranges[0].document.getBody().getLast();
+    // First node that should be selected to cut content should be text type.
+    var firstNode = ranges[0].document.getBody().getFirst();
+    ranges[0].setStartBefore(firstNode);
 
-    // In order to find the last text node, we have to walk backward searching
-    // for last text node.
-    ranges[0].setEndAfter(lastNode);
+    // In order to find the first text node, we have to walk forward searching
+    // for first text node.
     var walker = new CKEDITOR.dom.walker(ranges[0]);
-    var lastTextNode = walker.previous();
-    while (lastTextNode && lastTextNode.type !== CKEDITOR.NODE_TEXT) {
-      lastTextNode = walker.previous();
+    var firstTextNode = walker.next();
+    while (firstTextNode && firstTextNode.type !== CKEDITOR.NODE_TEXT) {
+      firstTextNode = walker.next();
     }
 
-    if (lastTextNode) {
-      ranges[0].setEndAfter(lastTextNode);
+    // To have styles nicely transferred additional tweaks for selection range
+    // are required. Only problematic part is when first element is split.
+    if (firstTextNode) {
+      var firstTextBaseParent = firstTextNode.getParents()[2];
+      var endNodeBaseParent = endNode.getParents()[2];
+      if (!firstTextBaseParent || !endNodeBaseParent || firstTextBaseParent.equals(endNodeBaseParent)) {
+        ranges[0].setStartBefore(firstTextNode);
+      }
     }
 
     // Set new selection and trigger cut for it.
     selection.selectRanges(ranges);
+
+    // First we "cut" text that will be "pasted" to new added paragraph.
+    tmpObject.oldContent = editor.extractSelectedHtml(true, true);
+    tmpObject.newContent = editor.getData();
+
+    // Set extracted old data back to editor, because flickering of text
+    // content in CKEditor looks strange and confusing for user.
+    editor.setData(tmpObject.oldContent);
 
     // Temporal container is used to preserve data over ajax requests.
     tmpObject.originalEditorSelector = $editorObject.data('drupal-selector');
 
     // Triggering element is required for proper handling of ajax response.
     tmpObject.triggeringElementName = triggerElementName;
-
-    // First we "cut" text that will be "pasted" to new added paragraph.
-    tmpObject.newContent = editor.extractSelectedHtml(true);
-    tmpObject.oldContent = editor.getData();
 
     tmpObject.split_trigger = true;
   };
