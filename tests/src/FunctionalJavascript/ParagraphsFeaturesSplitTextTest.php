@@ -246,6 +246,16 @@ class ParagraphsFeaturesSplitTextTest extends ParagraphsFeaturesJavascriptTestBa
     // We are getting strange results on phantomjs. Results are different on
     // Chrome and Firefox. Also phantomjs results from usage perspective is not
     // so much different.
+    //
+    // Expected result is:
+    //
+    // '<ol>'
+    // '<li><strong>text</strong> and back to normal</li>'
+    // '<li>line 3</li>'
+    // '</ol>'
+    // '<p>Text end after indexed list</p>'
+    //
+    // with correct indenting and new lines at end.
     $expected_content_1 =
       '<p><strong>text</strong> and back to normal</p>' . PHP_EOL . PHP_EOL .
       '<ol>' . PHP_EOL .
