@@ -8,7 +8,7 @@ use Drupal\filter\Entity\FilterFormat;
 /**
  * Tests the paragraph text split feature.
  *
- * @group paragraphs_features
+ * @group paragraphs_features_split
  */
 class ParagraphsFeaturesSplitTextTest extends ParagraphsFeaturesJavascriptTestBase {
 
@@ -155,7 +155,7 @@ class ParagraphsFeaturesSplitTextTest extends ParagraphsFeaturesJavascriptTestBa
     $ck_editor_id_0 = $this->getCkEditorId(0);
     $ck_editor_id_1 = $this->getCkEditorId(1);
     static::assertEquals(
-      $paragraph_content_0 . PHP_EOL . PHP_EOL . '<p>&nbsp;</p>' . PHP_EOL,
+      $paragraph_content_0 . PHP_EOL,
       $driver->evaluateScript("CKEDITOR.instances['$ck_editor_id_0'].getData();")
     );
     static::assertEquals(
