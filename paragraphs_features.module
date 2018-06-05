@@ -60,14 +60,19 @@ function paragraphs_features_paragraphs_widget_actions_alter(array &$widget_acti
 
   // Get configuration setting for reducing dropdown to button on single option.
   $dropdown_to_button = \Drupal::config('paragraphs_features.settings')->get('dropdown_to_button');
+  if (!$dropdown_to_button) {
+    return;
+  }
 
-  if ($dropdown_to_button && count($widget_actions['dropdown_actions'])) {
-    $visible_actions = Element::getVisibleChildren($widget_actions['dropdown_actions']);
+  // "Add above" feature is added by JS and we don't have it in actions list.
+  if ($context['element']['top']['#attributes']['class'] && in_array('add-above-on', $context['element']['top']['#attributes']['class'])) {
+    return;
+  }
 
-    if (count($visible_actions) == 1) {
-      $visible_actions = reset($visible_actions);
-      $widget_actions['actions'][$visible_actions] = $widget_actions['dropdown_actions'][$visible_actions];
-      $widget_actions['dropdown_actions'] = [];
-    }
+  $visible_actions = Element::getVisibleChildren($widget_actions['dropdown_actions']);
+  if (count($visible_actions) === 1) {
+    $visible_actions = reset($visible_actions);
+    $widget_actions['actions'][$visible_actions] = $widget_actions['dropdown_actions'][$visible_actions];
+    $widget_actions['dropdown_actions'] = [];
   }
 }

@@ -57,6 +57,51 @@ class ParagraphsFeaturesSingleActionTest extends ParagraphsFeaturesJavascriptTes
   }
 
   /**
+   * Test "add above" feature in combination with single action to button.
+   */
+  public function testAddAboveSupport() {
+    // Create content type with paragraphs field.
+    $content_type = 'test_single_action';
+
+    // Create nested paragraph with addition of one text test paragraph.
+    $this->createTestConfiguration($content_type, 1);
+
+    // Enable setting to show single action as button.
+    $this->enableDropdownToButton();
+
+    // Setup content type settings, this will disable all paragraph actions.
+    $this->setupParagraphSettings($content_type);
+
+    // Check that dropdown toggle is not displayed.
+    $this->drupalGet("node/add/$content_type");
+    $this->assertSession()->elementNotExists('xpath', '//div[contains(@class, "paragraphs-dropdown")]');
+
+    // Enable Add Above.
+    $this->setParagraphFeature($content_type, 'add_above', 'add_above');
+
+    // Check that dropdown toggle is displayed.
+    $this->drupalGet("node/add/$content_type");
+    $this->assertSession()->elementExists('xpath', '//div[contains(@class, "paragraphs-dropdown")]');
+  }
+
+  /**
+   * Helper method to set paragraphs widget feature configuration options.
+   *
+   * @param string $content_type
+   *   The content type containing a paragraphs field.
+   * @param string $feature
+   *   Feature name.
+   * @param string $value
+   *   Feature value. Usually same as the feature name to enable it or "0" to
+   *   disable it.
+   */
+  protected function setParagraphFeature($content_type, $feature, $value) {
+    $this->config('core.entity_form_display.node.' . $content_type . '.default')
+      ->set('content.field_paragraphs.settings.features.' . $feature, $value)
+      ->save();
+  }
+
+  /**
    * Enables the duplicate action.
    *
    * @param string $content_type
@@ -64,11 +109,7 @@ class ParagraphsFeaturesSingleActionTest extends ParagraphsFeaturesJavascriptTes
    */
   protected function enableDuplicateAction($content_type) {
     $currentUrl = $this->getSession()->getCurrentUrl();
-
-    $this->config('core.entity_form_display.node.' . $content_type . '.default')
-      ->set('content.field_paragraphs.settings.features.duplicate', 'duplicate')
-      ->save();
-
+    $this->setParagraphFeature($content_type, 'duplicate', 'duplicate');
     $this->drupalGet($currentUrl);
   }
 
@@ -80,11 +121,7 @@ class ParagraphsFeaturesSingleActionTest extends ParagraphsFeaturesJavascriptTes
    */
   protected function disableDuplicateAction($content_type) {
     $currentUrl = $this->getSession()->getCurrentUrl();
-
-    $this->config('core.entity_form_display.node.' . $content_type . '.default')
-      ->set('content.field_paragraphs.settings.features.duplicate', '0')
-      ->save();
-
+    $this->setParagraphFeature($content_type, 'duplicate', '0');
     $this->drupalGet($currentUrl);
   }
 
@@ -103,12 +140,8 @@ class ParagraphsFeaturesSingleActionTest extends ParagraphsFeaturesJavascriptTes
       ->save();
 
     // Disable duplicate and add_above actions.
-    $this->config('core.entity_form_display.node.' . $content_type . '.default')
-      ->set('content.field_paragraphs.settings.features.duplicate', '0')
-      ->save();
-    $this->config('core.entity_form_display.node.' . $content_type . '.default')
-      ->set('content.field_paragraphs.settings.features.add_above', '0')
-      ->save();
+    $this->setParagraphFeature($content_type, 'duplicate', '0');
+    $this->setParagraphFeature($content_type, 'add_above', '0');
 
     $this->drupalGet($currentUrl);
   }
