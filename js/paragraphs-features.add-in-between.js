@@ -210,12 +210,10 @@
       var allDrags = $table.find('> tbody > tr.draggable');
       var allAdds = $table.find('> tbody > tr.paragraphs-features__add-in-between__row');
 
+      // We have to re-stripe add in between rows.
       allDrags.each(function (index, dragElem) {
-        var $paragraphRow = $(dragElem);
-        if ($paragraphRow.prev('tr').hasClass('draggable')) {
-          Drupal.detachBehaviors(allAdds[index], drupalSettings, 'move');
+        if (allAdds[index]) {
           $(dragElem).before(allAdds[index]);
-          Drupal.attachBehaviors(allAdds[index], drupalSettings);
         }
       });
     };
