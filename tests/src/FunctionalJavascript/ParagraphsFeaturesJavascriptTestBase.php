@@ -4,7 +4,7 @@ namespace Drupal\Tests\paragraphs_features\FunctionalJavascript;
 
 use Drupal\Core\Entity\Entity\EntityFormDisplay;
 use Drupal\field_ui\Tests\FieldUiTestTrait;
-use Drupal\FunctionalJavascriptTests\JavascriptTestBase;
+use Drupal\FunctionalJavascriptTests\WebDriverTestBase;
 use Drupal\paragraphs\Tests\Classic\ParagraphsCoreVersionUiTestTrait;
 use Drupal\Tests\paragraphs\FunctionalJavascript\LoginAdminTrait;
 use Drupal\Tests\paragraphs\FunctionalJavascript\ParagraphsTestBaseTrait;
@@ -14,7 +14,7 @@ use Drupal\Tests\paragraphs\FunctionalJavascript\ParagraphsTestBaseTrait;
  *
  * @package Drupal\Tests\paragraphs_features\FunctionalJavascript
  */
-abstract class ParagraphsFeaturesJavascriptTestBase extends JavascriptTestBase {
+abstract class ParagraphsFeaturesJavascriptTestBase extends WebDriverTestBase {
 
   use LoginAdminTrait;
   use FieldUiTestTrait;
