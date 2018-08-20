@@ -243,22 +243,9 @@ class ParagraphsFeaturesSplitTextTest extends ParagraphsFeaturesJavascriptTestBa
       "\t" . '<li>line 2 with some <strong>bold</strong></li>' . PHP_EOL .
       '</ol>' . PHP_EOL;
 
-    // We are getting strange results on phantomjs. Results are different on
-    // Chrome and Firefox. Also phantomjs results from usage perspective is not
-    // so much different.
-    //
-    // Expected result is:
-    //
-    // '<ol>'
-    // '<li><strong>text</strong> and back to normal</li>'
-    // '<li>line 3</li>'
-    // '</ol>'
-    // '<p>Text end after indexed list</p>'
-    //
-    // with correct indenting and new lines at end.
     $expected_content_1 =
-      '<p><strong>text</strong> and back to normal</p>' . PHP_EOL . PHP_EOL .
       '<ol>' . PHP_EOL .
+      "\t" . '<li><strong>text</strong> and back to normal</li>' . PHP_EOL .
       "\t" . '<li>line 3</li>' . PHP_EOL .
       '</ol>' . PHP_EOL . PHP_EOL .
       '<p>Text end after indexed list</p>' . PHP_EOL;
@@ -268,9 +255,9 @@ class ParagraphsFeaturesSplitTextTest extends ParagraphsFeaturesJavascriptTestBa
 
     // Case 5 - split paragraph with multiple text fields.
     $this->addParagraphsType("test_3_text_fields");
-    static::fieldUIAddNewField("admin/structure/paragraphs_type/test_3_text_fields", "text_3_1", 'Text', 'text_long', [], []);
-    static::fieldUIAddNewField("admin/structure/paragraphs_type/test_3_text_fields", "text_3_2", 'Text', 'text_long', [], []);
-    static::fieldUIAddNewField("admin/structure/paragraphs_type/test_3_text_fields", "text_3_3", 'Text', 'text_long', [], []);
+    $this->addFieldtoParagraphType('test_3_text_fields', 'text_3_1', 'text_long');
+    $this->addFieldtoParagraphType('test_3_text_fields', 'text_3_2', 'text_long');
+    $this->addFieldtoParagraphType('test_3_text_fields', 'text_3_3', 'text_long');
 
     $this->drupalGet("node/add/$content_type");
 
