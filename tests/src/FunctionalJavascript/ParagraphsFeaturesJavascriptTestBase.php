@@ -3,8 +3,8 @@
 namespace Drupal\Tests\paragraphs_features\FunctionalJavascript;
 
 use Drupal\Core\Entity\Entity\EntityFormDisplay;
-use Drupal\field_ui\Tests\FieldUiTestTrait;
-use Drupal\FunctionalJavascriptTests\JavascriptTestBase;
+use Drupal\field\Entity\FieldStorageConfig;
+use Drupal\FunctionalJavascriptTests\WebDriverTestBase;
 use Drupal\paragraphs\Tests\Classic\ParagraphsCoreVersionUiTestTrait;
 use Drupal\Tests\paragraphs\FunctionalJavascript\LoginAdminTrait;
 use Drupal\Tests\paragraphs\FunctionalJavascript\ParagraphsTestBaseTrait;
@@ -14,10 +14,9 @@ use Drupal\Tests\paragraphs\FunctionalJavascript\ParagraphsTestBaseTrait;
  *
  * @package Drupal\Tests\paragraphs_features\FunctionalJavascript
  */
-abstract class ParagraphsFeaturesJavascriptTestBase extends JavascriptTestBase {
+abstract class ParagraphsFeaturesJavascriptTestBase extends WebDriverTestBase {
 
   use LoginAdminTrait;
-  use FieldUiTestTrait;
   use ParagraphsTestBaseTrait;
   use ParagraphsCoreVersionUiTestTrait;
 
@@ -77,16 +76,19 @@ abstract class ParagraphsFeaturesJavascriptTestBase extends JavascriptTestBase {
     // Add a paragraph types.
     for ($paragraph_type_index = 1; $paragraph_type_index <= $num_of_test_paragraphs; $paragraph_type_index++) {
       $this->addParagraphsType("test_$paragraph_type_index");
-      static::fieldUIAddNewField("admin/structure/paragraphs_type/test_$paragraph_type_index", "text_$paragraph_type_index", 'Text', 'text_long', [], []);
+      $this->addFieldtoParagraphType("test_$paragraph_type_index", "text_$paragraph_type_index", 'text_long');
     }
 
     // Create nested paragraph type.
     $this->addParagraphsType('test_nested');
-    static::fieldUIAddNewField('admin/structure/paragraphs_type/test_nested', 'paragraphs', 'Paragraphs', 'entity_reference_revisions', [
-      'settings[target_type]' => 'paragraph',
-      'cardinality' => 'number',
-      'cardinality_number' => '4',
-    ], []);
+
+    // Add a paragraphs field.
+    $this->addParagraphsField('test_nested', 'field_paragraphs', 'paragraph');
+
+    // Set cardinality to 4, because it's used in tests.
+    $field_storage = FieldStorageConfig::loadByName('paragraph', 'field_paragraphs');
+    $field_storage->set('cardinality', 4);
+    $field_storage->save();
 
     // Set the settings for the field in the nested paragraph.
     $component = [
