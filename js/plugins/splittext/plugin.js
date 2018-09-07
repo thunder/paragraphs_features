@@ -201,10 +201,14 @@
     updateEditor($originalEditor.attr('id'), tmpObject.oldContent);
 
     // Set "cut" data ot new paragraph.
-    var $newRow = $originalRow.nextAll($originalRow.hasClass('odd') ? '.even' : '.odd');
+    var $newRow = $originalRow.nextAll($originalRow.hasClass('odd') ? '.even' : '.odd').first();
     var wrapperSelector = getEditorWrapperSelector(originalEditor);
-    var fieldIndex = $originalEditor.closest('div[data-drupal-selector="' + wrapperSelector + '"]').index();
-    var $newEditor = $($newRow.find('.paragraphs-subform > div')[fieldIndex]).find('textarea');
+
+    // Build regex for search.
+    var fieldSelector = wrapperSelector.replace(/-[0-9]+-/, '-[0-9]+-');
+    var $newEditor = $('[data-drupal-selector]', $newRow).filter(function (index) {
+      return $(this).data('drupal-selector').match(fieldSelector);
+    }).find('textarea');
     updateEditor($newEditor.attr('id'), tmpObject.newContent);
 
     // Cleanup states.
