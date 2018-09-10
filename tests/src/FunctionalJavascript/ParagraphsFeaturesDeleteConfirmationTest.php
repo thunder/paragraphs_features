@@ -104,6 +104,58 @@ class ParagraphsFeaturesDeleteConfirmationTest extends ParagraphsFeaturesJavascr
   }
 
   /**
+   * This is test mainly to cover problem with initialization of CKEditor.
+   *
+   * After hiding and showing paragraphs, CKEditor gets in wrong state and it
+   * doesn't show content and it's not possible to use it for text editing.
+   */
+  public function testCkEditorAfterCancel() {
+    // Create content type with paragraphs field.
+    $content_type = 'test_delete_confirm';
+
+    // Text used for comparison.
+    $unique_comparison_text = 'Far, far below the deepest delvings of the dwarves, the world is gnawed by nameless things.';
+
+    // Create nested paragraph with addition of one text test paragraph.
+    $this->createTestConfiguration($content_type, 1);
+    $this->setupParagraphSettings($content_type);
+    $this->createEditor();
+
+    // 1) Enable setting to show confirmation on remove action.
+    $this->enableDeleteConfirmation($content_type);
+
+    $this->drupalGet("node/add/$content_type");
+    $session = $this->getSession();
+    $driver = $session->getDriver();
+    $page = $session->getPage();
+
+    // 1a) Fill "some" text in paragraphs text field.
+    $ck_editor_id_0 = $this->getCkEditorId(0);
+    $driver->executeScript("CKEDITOR.instances['$ck_editor_id_0'].setData('$unique_comparison_text');");
+
+    // 1b) Check that text inside CKEditor iframe is correct.
+    static::assertEquals(
+      "<p>$unique_comparison_text</p>",
+      $driver->evaluateScript("jQuery('#' + CKEDITOR.instances['$ck_editor_id_0'].id + '_contents').find('iframe').contents().find('body').html();")
+    );
+
+    // 1c) Trigger delete confirmation message.
+    $page->find('xpath', '//button[contains(@class, "paragraphs-dropdown-toggle")]')->click();
+    $page->find('xpath', '//button[contains(@class, "paragraphs-features__delete-confirm")]')->click();
+
+    // 1d) Cancel remove paragraph.
+    $page->find('xpath', '//button[contains(@class, "paragraphs-features__delete-confirmation__cancel-button")]')->click();
+
+    // 1e) Confirm that text is displayed properly and that CKEditor is properly
+    // initialized too.
+    static::assertEquals(
+      "<p>$unique_comparison_text</p>",
+      $driver->evaluateScript("jQuery('#' + CKEDITOR.instances['$ck_editor_id_0'].id + '_contents').find('iframe').contents().find('body').html();")
+    );
+    static::assertTrue($driver->evaluateScript("typeof CKEDITOR.instances['$ck_editor_id_0'].document.getWindow().$ !== 'undefined';"));
+  }
+
+  /**
    * Setup paragraphs field for a content type.
    *
    * @param string $content_type
