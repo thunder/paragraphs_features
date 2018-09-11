@@ -52,10 +52,8 @@
   Drupal.paragraphs_features.deleteConfirmHandler = function () {
     return function (event) {
       var $wrapper = $(event.target).parents('div[id*="-item-wrapper"]').first();
-      // Hiding of elements can lead to incorrect behaviour for some components.
-      Drupal.detachBehaviors($wrapper.children(), drupalSettings, 'paragraphs-features-delete-confirmation');
       // Hide children.
-      $wrapper.children().wrap('<div class="visually-hidden"></div>');
+      $wrapper.children().toggleClass('visually-hidden');
       // Add markup.
       $wrapper.append(Drupal.theme('paragraphsFeaturesDeleteConfirmationMessage', {message: Drupal.t('Are you sure you want to remove this paragraph?'), remove: Drupal.t('Remove'), cancel: Drupal.t('Cancel')}));
       // Add handlers for buttons.
@@ -90,9 +88,7 @@
     return function (event) {
       var $wrapper = $(event.target).parents('div[id*="-item-wrapper"]').first();
       $wrapper.children('.paragraphs-features__delete-confirmation').first().remove();
-      $wrapper.children('.visually-hidden').children().unwrap();
-      // We are putting all components into correct state after showing them.
-      Drupal.attachBehaviors($wrapper.children(), drupalSettings);
+      $wrapper.children().toggleClass('visually-hidden');
     };
   };
 
