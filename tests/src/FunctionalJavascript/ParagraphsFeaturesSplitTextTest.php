@@ -2,60 +2,12 @@
 
 namespace Drupal\Tests\paragraphs_features\FunctionalJavascript;
 
-use Drupal\editor\Entity\Editor;
-use Drupal\filter\Entity\FilterFormat;
-
 /**
  * Tests the paragraph text split feature.
  *
  * @group paragraphs_features
  */
 class ParagraphsFeaturesSplitTextTest extends ParagraphsFeaturesJavascriptTestBase {
-
-  /**
-   * Modules to enable.
-   *
-   * @var array
-   */
-  protected static $modules = [
-    'ckeditor',
-  ];
-
-  /**
-   * Create CKEditor for testing of CKEditor integration.
-   */
-  protected function createEditor() {
-    // Create a text format and associate CKEditor.
-    $filtered_html_format = FilterFormat::create([
-      'format' => 'filtered_html',
-      'name' => 'Filtered HTML',
-      'weight' => 0,
-    ]);
-    $filtered_html_format->save();
-
-    Editor::create([
-      'format' => 'filtered_html',
-      'editor' => 'ckeditor',
-    ])->save();
-
-    // After createTestConfiguration, $this->admin_user will be created by
-    // LoginAdminTrait used in base class.
-    $this->admin_user->addRole($this->createRole(['use text format filtered_html']));
-    $this->admin_user->save();
-  }
-
-  /**
-   * Get CKEditor ID, that can be used to get CKEditor objects in JavaScript.
-   *
-   * @param int $paragraph_index
-   *   Text paragraph index.
-   *
-   * @return string
-   *   Returns Id for CKEditor.
-   */
-  protected function getCkEditorId($paragraph_index) {
-    return $this->getSession()->getPage()->find('xpath', '//*[@data-drupal-selector="edit-field-paragraphs-' . $paragraph_index . '"]//textarea')->getAttribute('id');
-  }
 
   /**
    * Create new text paragraph to end of paragraphs list.
