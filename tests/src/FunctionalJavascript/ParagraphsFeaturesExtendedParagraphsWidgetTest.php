@@ -50,7 +50,7 @@ class ParagraphsFeaturesExtendedParagraphsWidgetTest extends ParagraphsFeaturesJ
     $this->drupalPostForm(NULL, [], 'Update');
     $this->assertSession()->assertWaitOnAjaxRequest();
 
-    $this->drupalPostForm(NULL, [], t('Save'));
+    $this->drupalPostForm(NULL, [], $this->t('Save'));
 
     // Check that add in between functionality is used.
     $this->drupalGet("node/add/$content_type");
