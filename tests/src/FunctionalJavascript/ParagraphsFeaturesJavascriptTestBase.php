@@ -3,6 +3,7 @@
 namespace Drupal\Tests\paragraphs_features\FunctionalJavascript;
 
 use Drupal\Core\Entity\Entity\EntityFormDisplay;
+use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\editor\Entity\Editor;
 use Drupal\field\Entity\FieldStorageConfig;
 use Drupal\filter\Entity\FilterFormat;
@@ -21,6 +22,7 @@ abstract class ParagraphsFeaturesJavascriptTestBase extends WebDriverTestBase {
   use LoginAdminTrait;
   use ParagraphsTestBaseTrait;
   use ParagraphsCoreVersionUiTestTrait;
+  use StringTranslationTrait;
 
   /**
    * Modules to enable.

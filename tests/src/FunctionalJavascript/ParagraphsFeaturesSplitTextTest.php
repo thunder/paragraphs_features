@@ -89,7 +89,7 @@ class ParagraphsFeaturesSplitTextTest extends ParagraphsFeaturesJavascriptTestBa
 
     $this->drupalPostForm(NULL, [], 'Update');
     $this->assertSession()->assertWaitOnAjaxRequest();
-    $this->drupalPostForm(NULL, [], t('Save'));
+    $this->drupalPostForm(NULL, [], $this->t('Save'));
 
     // Case 1 - simple text split.
     $paragraph_content_0 = '<p>Content that will be in the first paragraph after the split.</p>';
