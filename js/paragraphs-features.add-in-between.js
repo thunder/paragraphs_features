@@ -153,7 +153,7 @@
   Drupal.behaviors.paragraphsFeaturesAddInBetweenTableDragDrop = {
     attach: function () {
       for (var tableId in drupalSettings.tableDrag) {
-        if (drupalSettings.tableDrag.hasOwnProperty(tableId)) {
+        if (Object.prototype.hasOwnProperty.call(drupalSettings.tableDrag, tableId)) {
           Drupal.paragraphs_features.add_in_between.adjustDragDrop(tableId);
 
           jQuery('#' + tableId)
