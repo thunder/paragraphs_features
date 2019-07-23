@@ -65,7 +65,7 @@ class ParagraphsFeaturesAddInBetweenTest extends ParagraphsFeaturesJavascriptTes
 
     $this->drupalPostForm(NULL, [], 'Update');
     $this->assertSession()->assertWaitOnAjaxRequest();
-    $this->drupalPostForm(NULL, [], t('Save'));
+    $this->drupalPostForm(NULL, [], $this->t('Save'));
 
     // Check that default add mode functionality is used.
     $this->drupalGet("node/add/$content_type");
@@ -81,7 +81,7 @@ class ParagraphsFeaturesAddInBetweenTest extends ParagraphsFeaturesJavascriptTes
 
     $this->drupalPostForm(NULL, [], 'Update');
     $this->assertSession()->assertWaitOnAjaxRequest();
-    $this->drupalPostForm(NULL, [], t('Save'));
+    $this->drupalPostForm(NULL, [], $this->t('Save'));
 
     // Check that add in between functionality is used.
     $this->drupalGet("node/add/$content_type");
@@ -143,7 +143,7 @@ class ParagraphsFeaturesAddInBetweenTest extends ParagraphsFeaturesJavascriptTes
     $page->uncheckField('fields[field_paragraphs][settings_edit_form][third_party_settings][paragraphs_features][add_in_between]');
     $this->drupalPostForm(NULL, [], 'Update');
     $this->assertSession()->assertWaitOnAjaxRequest();
-    $this->drupalPostForm(NULL, [], t('Save'));
+    $this->drupalPostForm(NULL, [], $this->t('Save'));
 
     // Set modal add mode with add in between option for nested paragraph.
     $this->drupalGet("admin/structure/paragraphs_type/test_nested/form-display");
@@ -155,7 +155,7 @@ class ParagraphsFeaturesAddInBetweenTest extends ParagraphsFeaturesJavascriptTes
     $page->checkField('fields[field_paragraphs][settings_edit_form][third_party_settings][paragraphs_features][add_in_between]');
     $this->drupalPostForm(NULL, [], 'Update');
     $this->assertSession()->assertWaitOnAjaxRequest();
-    $this->drupalPostForm(NULL, [], t('Save'));
+    $this->drupalPostForm(NULL, [], $this->t('Save'));
 
     // Check that add in between functionality is not available for base
     // paragraphs and it's used for nested paragraph.
