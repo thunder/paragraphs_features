@@ -101,8 +101,11 @@
     attach: function (context, settings) {
       var $actions = $(context).find('.paragraphs-actions').once('paragraphs-features-delete-confirmation-init');
       $actions.find('*[data-drupal-selector*="remove"]').each(function () {
-        // Add custom button and handler.
-        $(Drupal.theme('paragraphsFeaturesDeleteConfirmationButton', {class: $(this).attr('class')})).insertBefore(this).bind('mousedown', Drupal.paragraphs_features.deleteConfirmHandler());
+        // Add custom button element and handler.
+        var $element = $(Drupal.theme('paragraphsFeaturesDeleteConfirmationButton', {class: $(this).attr('class')})).insertBefore(this);
+        if ($(this).prop('disabled') !== true) {
+          $element.bind('mousedown', Drupal.paragraphs_features.deleteConfirmHandler());
+        }
         // Hide original Button
         $(this).wrap('<div class="visually-hidden"></div>');
       });
