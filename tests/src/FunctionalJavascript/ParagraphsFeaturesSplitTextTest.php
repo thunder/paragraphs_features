@@ -265,6 +265,57 @@ class ParagraphsFeaturesSplitTextTest extends ParagraphsFeaturesJavascriptTestBa
       '',
       $driver->evaluateScript("CKEDITOR.instances['$ck_editor_id_para_1_text_2'].getData();")
     );
+
+    // Case 6 - simple text split with auto-collapse.
+    // 6.1 - Enable auto-collapse.
+    $this->drupalGet("admin/structure/types/manage/$content_type/form-display");
+
+    // Edit form display settings.
+    $page->pressButton('field_paragraphs_settings_edit');
+    $this->assertSession()->assertWaitOnAjaxRequest();
+
+    // Set edit mode to closed.
+    $page->selectFieldOption('fields[field_paragraphs][settings_edit_form][settings][edit_mode]', 'closed');
+    $session->executeScript("jQuery('[name=\"fields[field_paragraphs][settings_edit_form][settings][edit_mode]\"]').trigger('change');");
+    $this->assertSession()->assertWaitOnAjaxRequest();
+
+    // Set auto-collapse mode.
+    $page->selectFieldOption('fields[field_paragraphs][settings_edit_form][settings][autocollapse]', 'all');
+    $session->executeScript("jQuery('[name=\"fields[field_paragraphs][settings_edit_form][settings][autocollapse]\"]').trigger('change');");
+    $this->assertSession()->assertWaitOnAjaxRequest();
+
+    $this->drupalPostForm(NULL, [], 'Update');
+    $this->assertSession()->assertWaitOnAjaxRequest();
+    $this->drupalPostForm(NULL, [], $this->t('Save'));
+
+    // 6.2 - Test that simple text split works with auto-collapse.
+    $paragraph_content_0 = '<p>Content that will be in the first paragraph after the split.</p>';
+    $paragraph_content_1 = '<p>Content that will be in the second paragraph after the split.</p>';
+
+    // Check that split text functionality is used.
+    $this->drupalGet("node/add/$content_type");
+    $ck_editor_id = $this->createNewTextParagraph(0, $paragraph_content_0 . $paragraph_content_1);
+
+    // Make split of created text paragraph.
+    $driver->executeScript("var selection = CKEDITOR.instances['$ck_editor_id'].getSelection(); selection.selectElement(selection.root.getChild(1)); var ranges = selection.getRanges(); ranges[0].setEndBefore(ranges[0].getBoundaryNodes().endNode); selection.selectRanges(ranges);");
+    $this->clickParagraphSplitButton(0);
+
+    // Validate split results. First newly created paragraph.
+    $ck_editor_id_1 = $this->getCkEditorId(1);
+    static::assertEquals(
+      $paragraph_content_1 . PHP_EOL,
+      $driver->evaluateScript("CKEDITOR.instances['$ck_editor_id_1'].getData();")
+    );
+
+    // And then original collapsed paragraph.
+    $page->pressButton('field_paragraphs_0_edit');
+    $this->assertSession()->assertWaitOnAjaxRequest();
+
+    $ck_editor_id_0 = $this->getCkEditorId(0);
+    static::assertEquals(
+      $paragraph_content_0 . PHP_EOL . PHP_EOL . '<p><br />' . PHP_EOL . '</p>' . PHP_EOL,
+      $driver->evaluateScript("CKEDITOR.instances['$ck_editor_id_0'].getData();")
+    );
   }
 
 }
