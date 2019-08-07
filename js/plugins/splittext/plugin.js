@@ -103,12 +103,7 @@
 
     // New paragraph is always added after existing one - all post ajax
     // functionality expects that.
-    var insertionDelta = $paragraphRow.index() + 1;
-
-    // Add in between buttons doubles number of rows.
-    if ($paragraphRow.siblings('.paragraphs-features__add-in-between__row').length !== 0) {
-      insertionDelta /= 2;
-    }
+    var insertionDelta = $paragraphRow.parent().find('> tr.draggable').index($paragraphRow) + 1;
     $deltaField.val(insertionDelta);
 
     var paragraphTypeButtonSelector = $deltaField.attr('data-drupal-selector').substr('edit-'.length).replace(/-add-more-add-modal-form-area-add-more-delta$/, '-' + paragraphType + '-add-more').replace(/_/g, '-');
@@ -160,15 +155,20 @@
     selection.selectRanges(ranges);
 
     // First we "cut" text that will be "pasted" to new added paragraph.
-    tmpObject.oldContent = editor.extractSelectedHtml(true, true);
+    var oldContent = editor.extractSelectedHtml(true, true);
     tmpObject.newContent = editor.getData();
 
-    // Set extracted old data back to editor, because flickering of text
-    // content in CKEditor looks strange and confusing for user.
-    editor.setData(tmpObject.oldContent);
+    // Set extracted old data back to editor. New content will be set to newly
+    // added paragraph.
+    editor.setData(oldContent);
+    editor.updateElement();
+    editor.element.data('editor-value-is-changed', true);
 
     // Temporal container is used to preserve data over ajax requests.
-    tmpObject.originalEditorSelector = $editorObject.data('drupal-selector');
+    var $originalRow = $editorObject.closest('tr');
+    tmpObject.originalRowIndex = $originalRow.parent().find('> tr.draggable').index($originalRow);
+    tmpObject.originalRowParagraphId = $originalRow.closest('.field--widget-paragraphs').prop('id');
+    tmpObject.originalEditorWrapperSelector = getEditorWrapperSelector(editor);
 
     // Triggering element is required for proper handling of ajax response.
     tmpObject.triggeringElementName = triggerElementName;
@@ -194,19 +194,18 @@
       return;
     }
 
-    // Set relevant data to original paragraph.
-    var $originalEditor = $('[data-drupal-selector="' + tmpObject.originalEditorSelector + '"]');
-    var originalEditor = CKEDITOR.instances[$originalEditor.attr('id')];
-    var $originalRow = $originalEditor.closest('tr');
-    updateEditor($originalEditor.attr('id'), tmpObject.oldContent);
+    var originalRow = $('#' + tmpObject.originalRowParagraphId)
+      .find('table')
+      .first()
+      .find('> tbody > tr.draggable, > tr.draggable')[tmpObject.originalRowIndex];
+    var $originalRow = $(originalRow);
 
     // Set "cut" data ot new paragraph.
     var $newRow = $originalRow.nextAll($originalRow.hasClass('odd') ? '.even' : '.odd').first();
-    var wrapperSelector = getEditorWrapperSelector(originalEditor);
 
     // Build regex for search.
-    var fieldSelector = wrapperSelector.replace(/-[0-9]+-/, '-[0-9]+-');
-    var $newEditor = $('[data-drupal-selector]', $newRow).filter(function (index) {
+    var fieldSelector = tmpObject.originalEditorWrapperSelector.replace(/-[0-9]+-/, '-[0-9]+-');
+    var $newEditor = $('[data-drupal-selector]', $newRow).filter(function () {
       return $(this).data('drupal-selector').match(fieldSelector);
     }).find('textarea');
     updateEditor($newEditor.attr('id'), tmpObject.newContent);
