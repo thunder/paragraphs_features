@@ -107,7 +107,7 @@ class ParagraphsFeaturesSplitTextTest extends ParagraphsFeaturesJavascriptTestBa
     $ck_editor_id_0 = $this->getCkEditorId(0);
     $ck_editor_id_1 = $this->getCkEditorId(1);
     static::assertEquals(
-      $paragraph_content_0 . PHP_EOL . PHP_EOL . '<p><br />' . PHP_EOL . '</p>' . PHP_EOL,
+      $paragraph_content_0 . PHP_EOL,
       $driver->evaluateScript("CKEDITOR.instances['$ck_editor_id_0'].getData();")
     );
     static::assertEquals(
@@ -134,7 +134,7 @@ class ParagraphsFeaturesSplitTextTest extends ParagraphsFeaturesJavascriptTestBa
     $ck_editor_id_0 = $this->getCkEditorId(1);
     $ck_editor_id_1 = $this->getCkEditorId(2);
     static::assertEquals(
-      $paragraph_content_0 . PHP_EOL . PHP_EOL . '<p><br />' . PHP_EOL . '</p>' . PHP_EOL,
+      $paragraph_content_0 . PHP_EOL,
       $driver->evaluateScript("CKEDITOR.instances['$ck_editor_id_0'].getData();")
     );
     static::assertEquals(
@@ -246,7 +246,7 @@ class ParagraphsFeaturesSplitTextTest extends ParagraphsFeaturesJavascriptTestBa
       $driver->evaluateScript("CKEDITOR.instances['$ck_editor_id_para_0_text_0'].getData();")
     );
     static::assertEquals(
-      $paragraph_content_0 . PHP_EOL . PHP_EOL . '<p><br />' . PHP_EOL . '</p>' . PHP_EOL,
+      $paragraph_content_0 . PHP_EOL,
       $driver->evaluateScript("CKEDITOR.instances['$ck_editor_id_para_0_text_1'].getData();")
     );
     static::assertEquals(
@@ -313,7 +313,7 @@ class ParagraphsFeaturesSplitTextTest extends ParagraphsFeaturesJavascriptTestBa
 
     $ck_editor_id_0 = $this->getCkEditorId(0);
     static::assertEquals(
-      $paragraph_content_0 . PHP_EOL . PHP_EOL . '<p><br />' . PHP_EOL . '</p>' . PHP_EOL,
+      $paragraph_content_0 . PHP_EOL,
       $driver->evaluateScript("CKEDITOR.instances['$ck_editor_id_0'].getData();")
     );
   }
