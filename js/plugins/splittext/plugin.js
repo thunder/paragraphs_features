@@ -154,13 +154,8 @@
     // Set new selection and trigger cut for it.
     selection.selectRanges(ranges);
 
-    // First we "cut" text that will be "pasted" to new added paragraph.
+    // We "cut" text that will be "pasted" to new added paragraph.
     tmpObject.newContent = editor.extractSelectedHtml(true, true);
-    // tmpObject.newContent = editor.getData();
-    //
-    // // Set extracted old data back to editor. New content will be set to newly
-    // // added paragraph.
-    // editor.setData(oldContent);
     editor.updateElement();
     editor.element.data('editor-value-is-changed', true);
 
