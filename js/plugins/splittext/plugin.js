@@ -136,18 +136,18 @@
     // In order to find the first text node, we have to walk backward searching
     // for first text node.
     var walker = new CKEDITOR.dom.walker(ranges[0]);
-    var lastTextNode = walker.previous();
-    while (lastTextNode && lastTextNode.type !== CKEDITOR.NODE_TEXT) {
-      lastTextNode = walker.previous();
+    var firstTextNode = walker.previous();
+    while (firstTextNode && firstTextNode.type !== CKEDITOR.NODE_TEXT) {
+      firstTextNode = walker.previous();
     }
 
     // To have styles nicely transferred additional tweaks for selection range
     // are required. Only problematic part is when first element is split.
-    if (lastTextNode) {
-      var lastTextBaseParent = lastTextNode.getParents()[2];
+    if (firstTextNode) {
+      var firstTextBaseParent = firstTextNode.getParents()[2];
       var startNodeBaseParent = startNode.getParents()[2];
-      if (!lastTextBaseParent || !startNodeBaseParent || lastTextBaseParent.equals(startNodeBaseParent)) {
-        ranges[0].setStartBefore(lastTextNode);
+      if (!firstTextBaseParent || !startNodeBaseParent || firstTextBaseParent.equals(startNodeBaseParent)) {
+        ranges[0].setStartBefore(firstTextNode);
       }
     }
 
