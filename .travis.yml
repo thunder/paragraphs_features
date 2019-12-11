@@ -24,19 +24,14 @@ env:
     - COMPOSER_MEMORY_LIMIT=-1
 
 matrix:
-  allow_failures:
-    - env: DRUPAL_TRAVIS_DRUPAL_VERSION=~8.8.0
   include:
-    - env: DRUPAL_TRAVIS_DRUPAL_VERSION=~8.7.0
-    - env: DRUPAL_TRAVIS_DRUPAL_VERSION=~8.7.0
-      php: 7.2
-    - env: DRUPAL_TRAVIS_DRUPAL_VERSION=~8.8.0 DRUPAL_TRAVIS_TEST_DEPRECATION=false
+    - env: DRUPAL_TRAVIS_DRUPAL_VERSION=9.0.x-dev
+    - env: DRUPAL_TRAVIS_DRUPAL_VERSION=~8.8.0
       php: 7.2
     - env: DRUPAL_TRAVIS_DRUPAL_VERSION=~8.8.0
-    - env: DRUPAL_TRAVIS_DRUPAL_VERSION=~8.8.0 DRUPAL_TRAVIS_TEST_DEPRECATION=false
 
 before_install:
-  - composer global require thunder/travis
+  - composer global require thunder/travis:dev-drupal9
 
 script:
   - test-drupal-project
