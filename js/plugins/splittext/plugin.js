@@ -127,29 +127,10 @@
     var $editorObject = $('#' + editor.name);
     var selection = editor.getSelection();
     var ranges = selection.getRanges();
-    var startNode = ranges[0].getBoundaryNodes().startNode;
 
     // Last node that should be selected to cut content should be text type.
     var lastNode = ranges[0].document.getBody().getLast();
     ranges[0].setEndAfter(lastNode);
-
-    // In order to find the first text node, we have to walk backward searching
-    // for first text node.
-    var walker = new CKEDITOR.dom.walker(ranges[0]);
-    var firstTextNode = walker.previous();
-    while (firstTextNode && firstTextNode.type !== CKEDITOR.NODE_TEXT) {
-      firstTextNode = walker.previous();
-    }
-
-    // To have styles nicely transferred additional tweaks for selection range
-    // are required. Only problematic part is when first element is split.
-    if (firstTextNode) {
-      var firstTextBaseParent = firstTextNode.getParents()[2];
-      var startNodeBaseParent = startNode.getParents()[2];
-      if (!firstTextBaseParent || !startNodeBaseParent || firstTextBaseParent.equals(startNodeBaseParent)) {
-        ranges[0].setStartBefore(firstTextNode);
-      }
-    }
 
     // Set new selection and trigger cut for it.
     selection.selectRanges(ranges);
