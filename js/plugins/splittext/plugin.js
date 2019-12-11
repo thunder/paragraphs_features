@@ -127,40 +127,16 @@
     var $editorObject = $('#' + editor.name);
     var selection = editor.getSelection();
     var ranges = selection.getRanges();
-    var endNode = ranges[0].getBoundaryNodes().endNode;
 
-    // First node that should be selected to cut content should be text type.
-    var firstNode = ranges[0].document.getBody().getFirst();
-    ranges[0].setStartBefore(firstNode);
-
-    // In order to find the first text node, we have to walk forward searching
-    // for first text node.
-    var walker = new CKEDITOR.dom.walker(ranges[0]);
-    var firstTextNode = walker.next();
-    while (firstTextNode && firstTextNode.type !== CKEDITOR.NODE_TEXT) {
-      firstTextNode = walker.next();
-    }
-
-    // To have styles nicely transferred additional tweaks for selection range
-    // are required. Only problematic part is when first element is split.
-    if (firstTextNode) {
-      var firstTextBaseParent = firstTextNode.getParents()[2];
-      var endNodeBaseParent = endNode.getParents()[2];
-      if (!firstTextBaseParent || !endNodeBaseParent || firstTextBaseParent.equals(endNodeBaseParent)) {
-        ranges[0].setStartBefore(firstTextNode);
-      }
-    }
+    // Last node that should be selected to cut content should be text type.
+    var lastNode = ranges[0].document.getBody().getLast();
+    ranges[0].setEndAfter(lastNode);
 
     // Set new selection and trigger cut for it.
     selection.selectRanges(ranges);
 
-    // First we "cut" text that will be "pasted" to new added paragraph.
-    var oldContent = editor.extractSelectedHtml(true, true);
-    tmpObject.newContent = editor.getData();
-
-    // Set extracted old data back to editor. New content will be set to newly
-    // added paragraph.
-    editor.setData(oldContent);
+    // We "cut" text that will be "pasted" to new added paragraph.
+    tmpObject.newContent = editor.extractSelectedHtml(true, true);
     editor.updateElement();
     editor.element.data('editor-value-is-changed', true);
 

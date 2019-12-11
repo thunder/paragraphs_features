@@ -1,18 +1,18 @@
 language: php
 dist: xenial
 
-php:
-  - 7.2
-
 services:
   - mysql
 
 cache:
   apt: true
   directories:
-  - "$HOME/.composer/cache"
-  - "$HOME/.drush/cache"
-  - "$HOME/.npm"
+    - "$HOME/.composer/cache"
+    - "$HOME/.drush/cache"
+    - "$HOME/.npm"
+
+php:
+  - 7.3
 
 branches:
   only:
@@ -21,9 +21,22 @@ branches:
 env:
   global:
     - PATH="$PATH:$HOME/.composer/vendor/bin"
+    - COMPOSER_MEMORY_LIMIT=-1
+
+matrix:
+  allow_failures:
+    - env: DRUPAL_TRAVIS_DRUPAL_VERSION=~8.8.0
+  include:
+    - env: DRUPAL_TRAVIS_DRUPAL_VERSION=~8.7.0
+    - env: DRUPAL_TRAVIS_DRUPAL_VERSION=~8.7.0
+      php: 7.2
+    - env: DRUPAL_TRAVIS_DRUPAL_VERSION=~8.8.0 DRUPAL_TRAVIS_TEST_DEPRECATION=false
+      php: 7.2
+    - env: DRUPAL_TRAVIS_DRUPAL_VERSION=~8.8.0
+    - env: DRUPAL_TRAVIS_DRUPAL_VERSION=~8.8.0 DRUPAL_TRAVIS_TEST_DEPRECATION=false
 
 before_install:
-  - composer global require thunder/travis @beta
+  - composer global require thunder/travis
 
 script:
   - test-drupal-project
