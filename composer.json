@@ -26,7 +26,7 @@
         }
     ],
     "require": {
-        "drupal/core": "^8.8|^9.0",
+        "drupal/core": "^8.7.7|^9.0",
         "drupal/paragraphs": "1.x-dev"
     }
 }
