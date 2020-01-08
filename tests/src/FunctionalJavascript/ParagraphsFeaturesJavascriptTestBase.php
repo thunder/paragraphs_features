@@ -25,9 +25,12 @@ abstract class ParagraphsFeaturesJavascriptTestBase extends WebDriverTestBase {
   use StringTranslationTrait;
 
   /**
-   * Modules to enable.
-   *
-   * @var array
+   * {@inheritdoc}
+   */
+  protected $defaultTheme = 'stark';
+
+  /**
+   * {@inheritdoc}
    */
   protected static $modules = [
     'block',
