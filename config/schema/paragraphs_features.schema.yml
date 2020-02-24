@@ -19,6 +19,9 @@ paragraphs_features_third_party:
     split_text:
       type: boolean
       label: 'Flag for paragraphs split text feature'
+    show_drag_and_drop:
+      type: boolean
+      label: 'Flag for showing drag & drop button'
 
 field.widget.third_party.paragraphs_features:
   type: paragraphs_features_third_party

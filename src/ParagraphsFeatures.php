@@ -57,6 +57,11 @@ class ParagraphsFeatures {
         $elements['add_more']['#attached']['drupalSettings']['paragraphs_features'][$feature]['_path'] = drupal_get_path('module', 'paragraphs_features');
       }
     }
+    // This feature is not part of of the foreach above, since it is not a
+    // javascript feature, it is a direct modification of the form.
+    if ($elements['header_actions']['dropdown_actions']['dragdrop_mode']) {
+      $elements['header_actions']['dropdown_actions']['dragdrop_mode']['#access'] = $widget->getThirdPartySetting('paragraphs_features', 'show_drag_and_drop', TRUE);
+    }
   }
 
   /**
@@ -107,6 +112,17 @@ class ParagraphsFeatures {
         'enabled' => $modal_related_options_rule,
         'visible' => $modal_related_options_rule,
       ],
+    ];
+
+    // Only show the drag & drop feature if we can find the sortable library.
+    $library_discovery = \Drupal::service('library.discovery');
+    $library = $library_discovery->getLibraryByName('paragraphs', 'paragraphs-dragdrop');
+
+    $elements['show_drag_and_drop'] = [
+      '#type' => 'checkbox',
+      '#title' => t('Show drag & drop button'),
+      '#default_value' => $plugin->getThirdPartySetting('paragraphs_features', 'show_drag_and_drop'),
+      '#access' => !empty($library),
     ];
 
     return $elements;
