@@ -85,7 +85,7 @@ widget UI.
 ##### Display Drag and drop button
 
 Paragraphs adds a drag & drop button to the action menu, that initiates an advanced drag & drop ui.
-You can select, if you want this. This feature is only available, if the core/sortable library is
+You can select if you want this. This feature is only available, if the core/sortable library is
 loaded.
 
 MAINTAINERS
