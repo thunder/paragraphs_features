@@ -6,7 +6,7 @@ paragraphs_features.settings:
       type: boolean
       label: 'Flag for reduce actions dropdown to a button when there is only one option'
 
-paragraphs_features_third_party:
+field.widget.third_party.paragraphs_features:
   type: mapping
   label: 'Schema for Paragraphs Features options of Paragraphs Widget'
   mapping:
@@ -22,6 +22,3 @@ paragraphs_features_third_party:
     show_drag_and_drop:
       type: boolean
       label: 'Flag for showing drag & drop button'
-
-field.widget.third_party.paragraphs_features:
-  type: paragraphs_features_third_party

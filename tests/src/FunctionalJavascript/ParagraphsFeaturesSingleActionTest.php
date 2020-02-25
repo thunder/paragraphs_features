@@ -142,7 +142,12 @@ class ParagraphsFeaturesSingleActionTest extends ParagraphsFeaturesJavascriptTes
     // Disable duplicate and add_above actions.
     $this->setParagraphFeature($content_type, 'duplicate', '0');
     $this->setParagraphFeature($content_type, 'add_above', '0');
-    $this->setParagraphFeature($content_type, 'show_drag_and_drop', '0');
+
+    $this->config('core.entity_form_display.node.' . $content_type . '.default')
+      ->set('content.field_paragraphs.third_party_settings.paragraphs_features', [
+        'show_drag_and_drop' => FALSE,
+      ])
+      ->save();
 
     $this->drupalGet($currentUrl);
   }
