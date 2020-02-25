@@ -60,7 +60,7 @@ class ParagraphsFeatures {
     // This feature is not part of of the foreach above, since it is not a
     // javascript feature, it is a direct modification of the form.
     if (!empty($elements['header_actions']['dropdown_actions']['dragdrop_mode'])) {
-      $elements['header_actions']['dropdown_actions']['dragdrop_mode']['#access'] = $widget->getThirdPartySetting('paragraphs_features', 'show_drag_and_drop', TRUE);
+      $elements['header_actions']['dropdown_actions']['dragdrop_mode']['#access'] = (bool) $widget->getThirdPartySetting('paragraphs_features', 'show_drag_and_drop');
     }
   }
 

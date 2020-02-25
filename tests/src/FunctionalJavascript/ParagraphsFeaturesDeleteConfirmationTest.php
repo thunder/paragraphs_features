@@ -33,7 +33,7 @@ class ParagraphsFeaturesDeleteConfirmationTest extends ParagraphsFeaturesJavascr
     $this->assertSession()->elementExists('xpath', '//button[contains(@class, "paragraphs-features__delete-confirm")]');
 
     // 1b) Trigger delete confirmation message.
-    $page->find('xpath', '(//button[contains(@class, "paragraphs-dropdown-toggle")])[2]')->click();
+    $page->find('xpath', '//button[contains(@class, "paragraphs-dropdown-toggle")]')->click();
     $page->find('xpath', '//button[contains(@class, "paragraphs-features__delete-confirm")]')->click();
     // Message and buttons are shown, paragraphs inner form elements should be
     // hidden.
@@ -52,7 +52,7 @@ class ParagraphsFeaturesDeleteConfirmationTest extends ParagraphsFeaturesJavascr
     $this->assertEquals(FALSE, $are_elements_hidden, 'Inner form elements should be visible.');
 
     // 1d) Trigger delete confirmation message, remove paragraph.
-    $page->find('xpath', '(//button[contains(@class, "paragraphs-dropdown-toggle")])[2]')->click();
+    $page->find('xpath', '//button[contains(@class, "paragraphs-dropdown-toggle")]')->click();
     $page->find('xpath', '//button[contains(@class, "paragraphs-features__delete-confirm")]')->click();
     $page->find('xpath', '//button[contains(@class, "paragraphs-features__delete-confirmation__remove-button")]')->click();
     $this->assertSession()->assertWaitOnAjaxRequest();
@@ -94,7 +94,7 @@ class ParagraphsFeaturesDeleteConfirmationTest extends ParagraphsFeaturesJavascr
     $this->assertSession()->elementNotExists('xpath', '//button[@class="paragraphs-features__delete-confirm"]');
 
     // 3b) Instant removal.
-    $page->find('xpath', '(//button[contains(@class, "paragraphs-dropdown-toggle")])[2]')->click();
+    $page->find('xpath', '//button[contains(@class, "paragraphs-dropdown-toggle")]')->click();
     $page->find('xpath', '//input[@data-drupal-selector="field-paragraphs-0-remove"]')->click();
     $this->assertSession()->assertWaitOnAjaxRequest();
 
@@ -140,7 +140,7 @@ class ParagraphsFeaturesDeleteConfirmationTest extends ParagraphsFeaturesJavascr
     );
 
     // 1c) Trigger delete confirmation message.
-    $page->find('xpath', '(//button[contains(@class, "paragraphs-dropdown-toggle")])[2]')->click();
+    $page->find('xpath', '//button[contains(@class, "paragraphs-dropdown-toggle")]')->click();
     $page->find('xpath', '//button[contains(@class, "paragraphs-features__delete-confirm")]')->click();
 
     // 1d) Cancel remove paragraph.
