@@ -122,7 +122,7 @@ class ParagraphsFeatures {
     $elements['show_drag_and_drop'] = [
       '#type' => 'checkbox',
       '#title' => t('Show drag & drop button'),
-      '#default_value' => $plugin->getThirdPartySetting('paragraphs_features', 'show_drag_and_drop'),
+      '#default_value' => $plugin->getThirdPartySetting('paragraphs_features', 'show_drag_and_drop', TRUE),
       '#access' => !empty($library),
     ];
 
