@@ -137,6 +137,7 @@ class ParagraphsFeaturesSingleActionTest extends ParagraphsFeaturesJavascriptTes
     // Have a default paragraph, it simplifies the clicking on the edit page.
     $this->config('core.entity_form_display.node.' . $content_type . '.default')
       ->set('content.field_paragraphs.settings.default_paragraph_type', 'test_1')
+      ->set('content.field_paragraphs.third_party_settings.paragraphs_features.show_drag_and_drop', FALSE)
       ->save();
 
     // Disable duplicate and add_above actions.
