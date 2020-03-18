@@ -50,7 +50,9 @@ CONFIGURATION
        Paragraphs features for configuration.
     3. Select whether you want to reduce the actions dropdown to a button when
        there is only one option. Save.
-
+    4. Select whether you want to display in between button.
+    5. Select whether you want to confirm paragraph deletion.
+    6. Select whether you want to the display the Drag and drop button in the actions menu.
 
 AVAILABLE FEATURES
 ------------------
@@ -80,6 +82,11 @@ improves UX since one additional click to expand drop-down is removed.
 This feature provides a delete confirmation form for the paragraphs experimental
 widget UI.
 
+##### Display Drag and drop button
+
+Paragraphs adds a drag & drop button to the action menu, that initiates an advanced drag & drop ui.
+You can select if you want this. This feature is only available, if the core/sortable library is
+loaded.
 
 MAINTAINERS
 -----------

@@ -40,7 +40,7 @@ function paragraphs_features_field_widget_third_party_settings_form(WidgetInterf
 }
 
 /**
- * Implements hook_paragraphs_behavior_info_alter().
+ * Implements hook_paragraphs_widget_actions_alter().
  */
 function paragraphs_features_paragraphs_widget_actions_alter(array &$widget_actions, array &$context) {
   /** @var \Drupal\paragraphs\Entity\Paragraph $paragraphs_entity */

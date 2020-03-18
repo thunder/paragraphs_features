@@ -168,6 +168,7 @@ class ParagraphsFeaturesDeleteConfirmationTest extends ParagraphsFeaturesJavascr
     $this->config('core.entity_form_display.node.' . $content_type . '.default')
       ->set('content.field_paragraphs.settings.default_paragraph_type', 'test_1')
       ->set('content.field_paragraphs.settings.add_mode', 'button')
+      ->set('content.field_paragraphs.third_party_settings.paragraphs_features.show_drag_and_drop', FALSE)
       ->save();
 
     $this->drupalGet($currentUrl);
