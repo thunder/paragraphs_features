@@ -1,5 +1,5 @@
 language: php
-dist: xenial
+dist: bionic
 
 services:
   - mysql
@@ -24,7 +24,7 @@ env:
 
 matrix:
   include:
-    - env: DRUPAL_TESTING_DRUPAL_VERSION=9.0.x-dev
+    - env: DRUPAL_TESTING_DRUPAL_VERSION=~9.0.0
     - env: DRUPAL_TESTING_DRUPAL_VERSION=~8.8.0
       php: 7.2
     - env: DRUPAL_TESTING_DRUPAL_VERSION=~8.8.0
