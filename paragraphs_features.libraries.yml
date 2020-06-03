@@ -18,6 +18,4 @@ drupal.paragraphs_features.split_text:
   dependencies:
     - core/ckeditor
     - core/drupal
-    - core/drupalSettings
-    - core/jquery
     - core/jquery.once
