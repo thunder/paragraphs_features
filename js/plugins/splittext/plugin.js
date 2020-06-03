@@ -177,7 +177,7 @@
     var $originalRow = $(originalRow);
 
     // Set "cut" data ot new paragraph.
-    var $newRow = $originalRow.nextAll($originalRow.hasClass('odd') ? '.even' : '.odd').first();
+    var $newRow = $originalRow.nextAll('tr[class*="paragraph-type--"]').first();
 
     // Build regex for search.
     var fieldSelector = tmpObject.originalEditorWrapperSelector.replace(/-[0-9]+-/, '-[0-9]+-');

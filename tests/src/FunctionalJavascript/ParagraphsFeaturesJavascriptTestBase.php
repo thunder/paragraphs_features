@@ -8,7 +8,7 @@ use Drupal\editor\Entity\Editor;
 use Drupal\field\Entity\FieldStorageConfig;
 use Drupal\filter\Entity\FilterFormat;
 use Drupal\FunctionalJavascriptTests\WebDriverTestBase;
-use Drupal\paragraphs\Tests\Classic\ParagraphsCoreVersionUiTestTrait;
+use Drupal\Tests\paragraphs\Traits\ParagraphsCoreVersionUiTestTrait;
 use Drupal\Tests\paragraphs\FunctionalJavascript\LoginAdminTrait;
 use Drupal\Tests\paragraphs\FunctionalJavascript\ParagraphsTestBaseTrait;
 
@@ -25,9 +25,12 @@ abstract class ParagraphsFeaturesJavascriptTestBase extends WebDriverTestBase {
   use StringTranslationTrait;
 
   /**
-   * Modules to enable.
-   *
-   * @var array
+   * {@inheritdoc}
+   */
+  protected $defaultTheme = 'stark';
+
+  /**
+   * {@inheritdoc}
    */
   protected static $modules = [
     'block',
