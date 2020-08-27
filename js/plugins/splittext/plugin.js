@@ -12,54 +12,6 @@
   var tmpObject = {};
 
   /**
-   * Register split text plugin for custom CKEditor.
-   *
-   * @param {object} editorSettings
-   *   CKEditor settings object.
-   */
-  var registerPlugin = function (editorSettings) {
-    // Split text toolbar and plugin should be registered only once.
-    if (editorSettings.extraPlugins.indexOf('splittext') !== -1) {
-      return;
-    }
-
-    // We want to have plugin enabled for all text editors.
-    editorSettings.extraPlugins += ',splittext';
-
-    // Split text option should be added as last one in toolbar and preserved
-    // there after ajax requests are executed.
-    var toolbar = editorSettings.toolbar;
-    if (typeof editorSettings._splittextIndex === 'undefined') {
-      editorSettings._splittextIndex = toolbar.length - 1;
-      toolbar.push('/');
-    }
-
-    toolbar[editorSettings._splittextIndex] = {
-      name: Drupal.t('Split text'),
-      items: ['SplitText']
-    };
-  };
-
-  /**
-   * Register split text plugin for all CKEditors.
-   *
-   * @type {{attach: attach}}
-   */
-  Drupal.behaviors.setSplitTextPlugin = {
-    attach: function () {
-      if (!drupalSettings || !drupalSettings.editor || !drupalSettings.editor.formats) {
-        return;
-      }
-
-      $.each(drupalSettings.editor.formats, function (editorId, editorInfo) {
-        if (editorInfo.editor === 'ckeditor') {
-          registerPlugin(editorInfo.editorSettings);
-        }
-      });
-    }
-  };
-
-  /**
    * Create new paragraph with same type after one where editor is placed.
    *
    * -------------------------------------------------------------------------*
@@ -93,7 +45,13 @@
   var createNewParagraphOverModal = function (editor) {
     var $paragraphRow = $('#' + editor.name).closest('.paragraphs-subform').closest('tr');
     var paragraphType = $paragraphRow.find('[data-paragraphs-split-text-type]').attr('data-paragraphs-split-text-type');
-    var $deltaField = $paragraphRow.closest('table').siblings().find('input.paragraph-type-add-modal-delta');
+    var $deltaField = function ($paragraphRow) {
+      var $deltaField = $paragraphRow.closest('table').siblings().find('input.paragraph-type-add-modal-delta');
+      if ($deltaField.length === 0) {
+        $deltaField = $paragraphRow.closest('.layer-wrapper').siblings().find('input.paragraph-type-add-modal-delta');
+      }
+      return $deltaField;
+    }($paragraphRow);
 
     // Stop splitting functionality if add button is disabled or not available.
     var $addButton = $deltaField.siblings('.paragraph-type-add-modal-button');
