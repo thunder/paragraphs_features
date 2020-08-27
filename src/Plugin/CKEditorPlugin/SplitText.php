@@ -59,16 +59,4 @@ class SplitText extends PluginBase implements CKEditorPluginInterface, CKEditorP
     return [];
   }
 
-  /**
-   * {@inheritdoc}
-   */
-//  public function getButtons() {
-//    $path = drupal_get_path('module', 'paragraphs_features') . '/js/plugins/splittext';
-//    return [
-//      'InsertAsin' => [
-//        'label' => $this->t('Insert amazon product card'),
-//        'image' => $path . '/icons/splittext.png',
-//      ],
-//    ];
-//  }
 }
