@@ -27,5 +27,8 @@
     ],
     "require": {
         "drupal/paragraphs": "^1.12"
+    },
+    "require-dev": {
+        "drupal/gin": "^3.0"
     }
 }
