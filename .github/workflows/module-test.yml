@@ -82,3 +82,5 @@ jobs:
 
     - name: Start webserver and run the tests
       run: test-drupal-project
+      env:
+        THEME: ${{ matrix.THEME }}

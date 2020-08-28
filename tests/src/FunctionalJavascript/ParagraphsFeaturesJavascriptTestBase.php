@@ -49,8 +49,8 @@ abstract class ParagraphsFeaturesJavascriptTestBase extends WebDriverTestBase {
    * {@inheritdoc}
    */
   protected function setUp() {
-    $this-> defaultTheme = getenv('THEME') ?: 'stark';
-    
+    $this->defaultTheme = getenv('THEME') ?: 'stark';
+
     parent::setUp();
 
     // Place the breadcrumb, tested in fieldUIAddNewField().
