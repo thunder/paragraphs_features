@@ -67,10 +67,6 @@ jobs:
       env:
         DRUPAL_TESTING_DRUPAL_VERSION: ${{ matrix.DRUPAL_TESTING_DRUPAL_VERSION }}
 
-    - name: Add select2 library to the composer dependencies
-      run: composer require npm-asset/select2:^4.0.7 --no-update
-      working-directory: /tmp/test/select2/install
-
     - name: Build the docroot
       run: test-drupal-project build
 
