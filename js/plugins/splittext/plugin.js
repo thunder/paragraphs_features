@@ -222,7 +222,7 @@
 
     // Paragraphs split text should work only on widgets where that option is enabled.
     var paragraphWrapperId = $subForm.closest('.paragraphs-tabs-wrapper').attr('id');
-    if (!drupalSettings.paragraphs_features.split_text[paragraphWrapperId]) {
+    if (typeof drupalSettings.paragraphs_features.split_text === 'undefined' || !drupalSettings.paragraphs_features.split_text[paragraphWrapperId]) {
       return false;
     }
 
@@ -233,17 +233,19 @@
    * Register define new plugin.
    */
   CKEDITOR.plugins.add('splittext', {
+    icons: 'splittext',
     hidpi: true,
     requires: '',
 
     init: function (editor) {
-      // Split text namespace.
-      var modulePath = drupalSettings.paragraphs_features.split_text._path;
 
       // Split Text functionality should be added only for paragraphs Text fields.
       if (!isValidParagraphsField(editor)) {
         return;
       }
+
+      // Get module path necessary for button icons.
+      var modulePath = drupalSettings.paragraphs_features.split_text._path;
 
       editor.addCommand('splitText', {
         exec: function (editor) {

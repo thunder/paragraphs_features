@@ -98,7 +98,6 @@ class ParagraphsFeaturesSplitTextTest extends ParagraphsFeaturesJavascriptTestBa
     // Check that split text functionality is used.
     $this->drupalGet("node/add/$content_type");
     $ck_editor_id = $this->createNewTextParagraph(0, $paragraph_content_0 . $paragraph_content_1);
-
     // Make split of created text paragraph.
     $driver->executeScript("var selection = CKEDITOR.instances['$ck_editor_id'].getSelection(); selection.selectElement(selection.root.getChild(1)); var ranges = selection.getRanges(); ranges[0].setEndBefore(ranges[0].getBoundaryNodes().endNode); selection.selectRanges(ranges);");
     $this->clickParagraphSplitButton(0);
