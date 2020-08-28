@@ -27,7 +27,7 @@ abstract class ParagraphsFeaturesJavascriptTestBase extends WebDriverTestBase {
   /**
    * {@inheritdoc}
    */
-  protected $defaultTheme;
+  protected $defaultTheme = 'stark';
 
   /**
    * {@inheritdoc}
@@ -43,15 +43,23 @@ abstract class ParagraphsFeaturesJavascriptTestBase extends WebDriverTestBase {
     'paragraphs_test',
     'paragraphs_features',
     'paragraphs_features_test',
+    'shortcut',
   ];
 
   /**
    * {@inheritdoc}
    */
   protected function setUp() {
-    $this->defaultTheme = getenv('THEME') ?: 'stark';
-
     parent::setUp();
+
+    if ($theme = getenv('THEME')) {
+      $this->assertTrue(\Drupal::service('theme_installer')->install([$theme]));
+      $this->container->get('config.factory')
+        ->getEditable('system.theme')
+        ->set('default', $theme)
+        ->set('admin', $theme)
+        ->save();
+    }
 
     // Place the breadcrumb, tested in fieldUIAddNewField().
     $this->drupalPlaceBlock('system_breadcrumb_block');
