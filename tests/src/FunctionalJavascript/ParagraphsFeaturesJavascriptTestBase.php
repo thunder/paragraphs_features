@@ -27,7 +27,7 @@ abstract class ParagraphsFeaturesJavascriptTestBase extends WebDriverTestBase {
   /**
    * {@inheritdoc}
    */
-  protected $defaultTheme = 'stark';
+  protected $defaultTheme = getEnv('THEME') ?: 'stark';
 
   /**
    * {@inheritdoc}
