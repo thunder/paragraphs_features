@@ -75,7 +75,7 @@
   Drupal.paragraphs_features.add_in_between.getAddModalBlock = function ($table) {
     var $addModalBlock = $table.siblings('.form-actions, .clearfix');
     if ($addModalBlock.length === 0) {
-      $addModalBlock = $table.parents('.layer-wrapper').siblings('.form-actions');
+      $addModalBlock = $table.parents('.layer-wrapper').first().siblings('.form-actions');
     }
     return $addModalBlock;
   };
