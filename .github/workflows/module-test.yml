@@ -24,16 +24,16 @@ jobs:
         THEME: ['stark', 'seven', 'claro', 'gin']
         DRUPAL_TESTING_DRUPAL_VERSION: '~8.9.0'
         PHP: '7.3'
-	include:
-          - THEME: 'stark'
-            DRUPAL_TESTING_DRUPAL_VERSION: '~8.8.0'
-            PHP: '7.3'
-          - THEME: 'stark'
-            DRUPAL_TESTING_DRUPAL_VERSION: '~8.9.0'
-            PHP: '7.3' }
-          - THEME: 'stark'
-            DRUPAL_TESTING_DRUPAL_VERSION: '~9.0.0'
-            PHP: '7.4' }
+  	    include:
+        - THEME: 'stark'
+          DRUPAL_TESTING_DRUPAL_VERSION: '~8.8.0'
+          PHP: '7.3'
+        - THEME: 'stark'
+          DRUPAL_TESTING_DRUPAL_VERSION: '~8.9.0'
+          PHP: '7.3' }
+        - THEME: 'stark'
+          DRUPAL_TESTING_DRUPAL_VERSION: '~9.0.0'
+          PHP: '7.4' }
 
     steps:
     - uses: actions/checkout@v1
