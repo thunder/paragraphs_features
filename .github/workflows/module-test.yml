@@ -22,8 +22,8 @@ jobs:
     strategy:
       matrix:
         THEME: ['stark', 'seven', 'claro', 'gin']
-        DRUPAL_TESTING_DRUPAL_VERSION: '~8.9.0'
-        PHP: '7.3'
+        DRUPAL_TESTING_DRUPAL_VERSION: ['~8.9.0']
+        PHP: ['7.3']
         include:
         - THEME: 'stark'
           DRUPAL_TESTING_DRUPAL_VERSION: '~8.8.0'
