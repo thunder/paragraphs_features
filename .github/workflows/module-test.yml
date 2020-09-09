@@ -53,14 +53,6 @@ jobs:
         key: ${{ runner.os }}-composer-cache-${{ hashFiles('**/composer.json') }}
         restore-keys: ${{ runner.os }}-composer-cache-
 
-    - name: Cache NPM dependencies
-      id: npm-cache
-      uses: actions/cache@v1
-      with:
-        path: ~/.npm
-        key: ${{ runner.os }}-npm-cache
-        restore-keys: ${{ runner.os }}-npm-cache
-
     - name: Get build environment
       run: composer global require thunder/drupal-testing
 
