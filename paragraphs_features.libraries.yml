@@ -6,6 +6,8 @@ drupal.paragraphs_features.add_in_between:
     theme:
       css/paragraphs-features.add-in-between.css: {}
   dependencies:
+    - core/drupal
+    - core/jquery.once
     - paragraphs/drupal.paragraphs.modal
 
 drupal.paragraphs_features.delete_confirmation:
@@ -14,8 +16,7 @@ drupal.paragraphs_features.delete_confirmation:
 
 drupal.paragraphs_features.split_text:
   js:
-    js/plugins/splittext/plugin.js: {}
+    js/paragraphs-features.split-text.js: {}
   dependencies:
-    - core/ckeditor
     - core/drupal
     - core/jquery.once

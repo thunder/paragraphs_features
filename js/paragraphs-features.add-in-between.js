@@ -54,6 +54,33 @@
   };
 
   /**
+   * Get paragraphs add modal block in various themes structures.
+   *
+   *  gin:
+   *   .layer-wrapper table
+   *   .form-actions
+   * claro:
+   *   table
+   *   .form-actions
+   * thunder-admin / seven:
+   *   table
+   *   .clearfix
+   *
+   * @param {Object} $table
+   *   jQuery object for the table element.
+   *
+   * @return {Object} $addModalBlock
+   *   jQuery object for the add modal block element.
+   */
+  Drupal.paragraphs_features.add_in_between.getAddModalBlock = function ($table) {
+    var $addModalBlock = $table.siblings('.form-actions, .clearfix');
+    if ($addModalBlock.length === 0) {
+      $addModalBlock = $table.parents('.layer-wrapper').first().siblings('.form-actions');
+    }
+    return $addModalBlock;
+  };
+
+  /**
    * Init paragraphs widget with add in between functionality.
    *
    * @param {string} paragraphsWidgetId
@@ -65,7 +92,7 @@
 
     $tables.each(function (index, table) {
       var $table = $(table);
-      var $addModalBlock = $table.siblings('.clearfix');
+      var $addModalBlock = Drupal.paragraphs_features.add_in_between.getAddModalBlock($table);
       var $addModalButton = $addModalBlock.find('.paragraph-type-add-modal-button');
 
       // Ensure that paragraph list uses modal dialog.
@@ -114,8 +141,7 @@
         .once('paragraphs-features-add-in-between')
         .on('click', function (event) {
           var $button = $(this);
-          var $add_more_wrapper = $button.closest('table')
-            .siblings('.clearfix')
+          var $add_more_wrapper = Drupal.paragraphs_features.add_in_between.getAddModalBlock($button.closest('table'))
             .find('.paragraphs-add-dialog');
           var delta = $button.closest('tr').index() / 2;
 
@@ -139,7 +165,7 @@
    *   Integer value for delta position where a new paragraph should be added.
    */
   Drupal.paragraphs_features.add_in_between.setDelta = function ($add_more_wrapper, delta) {
-    var $delta = $add_more_wrapper.closest('.clearfix')
+    var $delta = $add_more_wrapper.parents('.form-actions, .clearfix')
       .find('.paragraph-type-add-modal-delta');
 
     $delta.val(delta);
