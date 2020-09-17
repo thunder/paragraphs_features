@@ -217,12 +217,17 @@
    *   Returns if editor is for valid paragraphs text field.
    */
   var isValidParagraphsField = function (editor) {
+    // Feature not enabled,
+    if (!drupalSettings.paragraphs_features || !drupalSettings.paragraphs_features.split_text) {
+      return false;
+    }
+
     var wrapperSelector = getEditorWrapperSelector(editor);
     var $subForm = $('#' + editor.name).closest('.paragraphs-subform');
 
     // Paragraphs split text should work only on widgets where that option is enabled.
     var paragraphWrapperId = $subForm.closest('.paragraphs-tabs-wrapper').attr('id');
-    if (typeof drupalSettings.paragraphs_features.split_text === 'undefined' || !drupalSettings.paragraphs_features.split_text[paragraphWrapperId]) {
+    if (!drupalSettings.paragraphs_features.split_text[paragraphWrapperId]) {
       return false;
     }
 
