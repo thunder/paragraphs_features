@@ -6,9 +6,7 @@ use Drupal\Core\Form\ConfigFormBase;
 use Drupal\Core\Form\FormStateInterface;
 
 /**
- * Class SettingsForm.
- *
- * @package Drupal\paragraphs_features\Form
+ * Settings form for paragraphs_features.
  */
 class SettingsForm extends ConfigFormBase {
 
