@@ -22,8 +22,11 @@ function paragraphs_features_field_widget_multivalue_form_alter(array &$elements
     return;
   }
 
-  $fieldWrapperId = ParagraphsFeatures::getWrapperId($context['form']['#parents'], $elements['#field_name']);
-  ParagraphsFeatures::registerFormWidgetFeatures($elements, $widget, $fieldWrapperId);
+  // For compatibility with Drag & Drop in Paragraphs.
+  if (!empty($elements['#field_name'])) {
+    $fieldWrapperId = ParagraphsFeatures::getWrapperId($context['form']['#parents'], $elements['#field_name']);
+    ParagraphsFeatures::registerFormWidgetFeatures($elements, $widget, $fieldWrapperId);
+  }
 }
 
 /**
