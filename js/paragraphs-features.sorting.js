@@ -16,7 +16,7 @@
 
           // Support for classic paragraphs widget with patch (deprecated).
           if (typeof Drupal.behaviors.paragraphsFeaturesAddInBetweenInit === 'undefined') {
-            // We have to remove the once flag right before reattaching the behaviours,
+            // We have to remove the once flag right before reattaching the behaviors,
             // because otherwise they would be automatically attached in the swapping process.
             $table.data('jquery-once-init-in-between-buttons', false);
             Drupal.behaviors.initInBetweenButtons.attach();
