@@ -1,0 +1,16 @@
+
+.paragraphs-features__add-in-between__row {
+  border-bottom: 0;
+}
+.paragraphs-features__add-in-between__row td {
+  height: auto;
+}
+
+/*.field--widget-paragraphs .field-multiple-table  > tbody > tr {*/
+/*  border-bottom: 0;*/
+/*}*/
+
+/* gin specific margin override */
+.field--widget-paragraphs .paragraphs-tabs-wrapper .field-multiple-table .draggable {
+  margin-top: 0;
+}

@@ -19,6 +19,7 @@ class ParagraphsFeatures {
   public static $availableFeatures = [
     'add_in_between',
     'delete_confirmation',
+    'sorting',
     'split_text',
   ];
 
@@ -52,7 +53,7 @@ class ParagraphsFeatures {
   public static function registerFormWidgetFeatures(array &$elements, ParagraphsWidget $widget, $fieldWrapperId) {
     foreach (static::$availableFeatures as $feature) {
       if ($widget->getThirdPartySetting('paragraphs_features', $feature)) {
-        $elements['add_more']['#attached']['library'][] = 'paragraphs_features/drupal.paragraphs_features.' . $feature;
+        $elements['add_more']['#attached']['library'][] = 'paragraphs_features/' . $feature;
         $elements['add_more']['#attached']['drupalSettings']['paragraphs_features'][$feature][$fieldWrapperId] = TRUE;
         $elements['add_more']['#attached']['drupalSettings']['paragraphs_features'][$feature]['_path'] = drupal_get_path('module', 'paragraphs_features');
       }
@@ -98,6 +99,17 @@ class ParagraphsFeatures {
       '#title' => t('Enable add in between buttons'),
       '#default_value' => $plugin->getThirdPartySetting('paragraphs_features', 'add_in_between'),
       '#attributes' => ['class' => ['paragraphs-features__add-in-between__option']],
+      '#states' => [
+        'enabled' => $modal_related_options_rule,
+        'visible' => $modal_related_options_rule,
+      ],
+    ];
+
+    $elements['sorting'] = [
+      '#type' => 'checkbox',
+      '#title' => t('Enable checkbox sorting'),
+      '#default_value' => $plugin->getThirdPartySetting('paragraphs_features', 'sorting'),
+      '#attributes' => ['class' => ['paragraphs-features__sorting__option']],
       '#states' => [
         'enabled' => $modal_related_options_rule,
         'visible' => $modal_related_options_rule,
