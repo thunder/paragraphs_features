@@ -39,7 +39,7 @@
     // add sorting toggle button on top
     this.$table.find('> thead > tr > th:first').append(this.toggleCheckboxButtonWrapper);
     // add sorting checkbox to items
-    this.$table.find('> tbody > tr.draggable > .field-multiple-drag .tabledrag-cell-content').append(
+    this.$table.find('> tbody > tr.draggable > .field-multiple-drag .tabledrag-cell-content').prepend(
       $('<span class="tabledrag-checkbox-wrapper"><input type="checkbox" class="tabledrag-checkbox" /></span>')
         .hide()
     );
@@ -215,13 +215,7 @@
         swapAfter = true;
       }
 
-      // currentRow.markChanged() also marks first td in child rows
-      // (see taxonomy term list) so we mark it manually.
-      var marker = Drupal.theme('tableDragChangedMarker');
-      var cell = $(currentRow.element).find('td').eq(0);
-      if (cell.find('abbr.tabledrag-changed').length === 0) {
-        cell.append(marker);
-      }
+      this.rowObject.markChanged();
 
       // also updates the weights.
       this.updateFields(currentRow.element);

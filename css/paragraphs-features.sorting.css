@@ -35,7 +35,6 @@
 .field-multiple-table > tbody > tr.tabledrag-sort-target-wrapper {
   background:transparent;
   border-bottom:0;
-  height:22px;
 }
 
 .field-multiple-table > tbody > tr.tabledrag-sort-target-wrapper > td.tabledrag-sort-target-column {
