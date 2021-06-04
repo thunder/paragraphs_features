@@ -51,6 +51,9 @@ class ParagraphsFeatures {
    *   Field Wrapper ID, usually provided by ::getWrapperId().
    */
   public static function registerFormWidgetFeatures(array &$elements, ParagraphsWidget $widget, $fieldWrapperId) {
+    if (!in_array(\Drupal::theme()->getActiveTheme()->getName(), ['claro', 'gin'])) {
+      return;
+    }
     foreach (static::$availableFeatures as $feature) {
       if ($widget->getThirdPartySetting('paragraphs_features', $feature)) {
         $elements['add_more']['#attached']['library'][] = 'paragraphs_features/' . $feature;
@@ -79,6 +82,10 @@ class ParagraphsFeatures {
    */
   public static function getThirdPartyForm(WidgetInterface $plugin, $field_name) {
     $elements = [];
+    $disabled = FALSE;
+    if (!in_array(\Drupal::theme()->getActiveTheme()->getName(), ['claro', 'gin'])) {
+      $disabled = TRUE;
+    }
 
     $elements['delete_confirmation'] = [
       '#type' => 'checkbox',
@@ -111,9 +118,11 @@ class ParagraphsFeatures {
       '#default_value' => $plugin->getThirdPartySetting('paragraphs_features', 'sorting'),
       '#attributes' => ['class' => ['paragraphs-features__sorting__option']],
       '#states' => [
-        'enabled' => $modal_related_options_rule,
+        'enabled' => !$modal_related_options_rule && !$disabled,
         'visible' => $modal_related_options_rule,
       ],
+      '#disabled' => $disabled,
+      '#description' => $disabled ? t('This feature only works with claro / gin themes.') : '',
     ];
 
     $elements['split_text'] = [
