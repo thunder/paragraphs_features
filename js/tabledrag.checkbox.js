@@ -136,26 +136,26 @@
         '<span class="tabledrag-sort-target-right"></span>' +
       '</a>'
     )
-    .on('click', $.proxy(function (e) {
-      e.preventDefault();
+      .on('click', $.proxy(function (e) {
+        e.preventDefault();
 
-      var $targetWrapper = $(e.target).closest('tr');
-      var row = $targetWrapper.prev();
-      var swapAfter = true;
+        var $targetWrapper = $(e.target).closest('tr');
+        var row = $targetWrapper.prev();
+        var swapAfter = true;
 
-      // on click on the first target, the rows should be inserted before the first row.
-      if ($targetWrapper.hasClass('tabledrag-sort-before')) {
-        row = $targetWrapper.next();
-        swapAfter = false;
-      }
+        // on click on the first target, the rows should be inserted before the first row.
+        if ($targetWrapper.hasClass('tabledrag-sort-before')) {
+          row = $targetWrapper.next();
+          swapAfter = false;
+        }
 
-      this.removeSortTargets();
-      this.sort(row, swapAfter);
-      this.addSortTargets();
+        this.removeSortTargets();
+        this.sort(row, swapAfter);
+        this.addSortTargets();
 
-    }, this))
-    .wrap('<tr class="tabledrag-sort-target-wrapper"><td class="tabledrag-sort-target-column" colspan="3"></td></tr>')
-    .parent().parent();
+      }, this))
+      .wrap('<tr class="tabledrag-sort-target-wrapper"><td class="tabledrag-sort-target-column" colspan="3"></td></tr>')
+      .parent().parent();
 
     this.$table.find('> tbody > tr.draggable').after($target);
     this.$table.find('> tbody > tr.draggable:first').before($target.clone(true).addClass('tabledrag-sort-before'));
