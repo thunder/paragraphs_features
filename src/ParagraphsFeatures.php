@@ -51,7 +51,10 @@ class ParagraphsFeatures {
    *   Field Wrapper ID, usually provided by ::getWrapperId().
    */
   public static function registerFormWidgetFeatures(array &$elements, ParagraphsWidget $widget, $fieldWrapperId) {
-    if (!in_array(\Drupal::theme()->getActiveTheme()->getName(), ['claro', 'gin'])) {
+    if (!in_array(
+      \Drupal::theme()->getActiveTheme()->getName(),
+      ['claro', 'gin']
+    )) {
       return;
     }
     foreach (static::$availableFeatures as $feature) {
@@ -83,7 +86,10 @@ class ParagraphsFeatures {
   public static function getThirdPartyForm(WidgetInterface $plugin, $field_name) {
     $elements = [];
     $disabled = FALSE;
-    if (!in_array(\Drupal::theme()->getActiveTheme()->getName(), ['claro', 'gin'])) {
+    if (!in_array(
+      \Drupal::theme()->getActiveTheme()->getName(),
+      ['claro', 'gin']
+    )) {
       $disabled = TRUE;
     }
 

@@ -30,14 +30,14 @@
    *   Returns markup string for add in between row.
    */
   Drupal.theme.paragraphsFeaturesAddInBetweenRow = function (config) {
-    return '' +
+    return
       '<tr class="paragraphs-features__add-in-between__row">' +
       '  <td colspan="100%">' +
       '    <div class="paragraphs-features__add-in-between__wrapper">' +
       '      <input class="paragraphs-features__add-in-between__button button--extrasmall js-show button js-form-submit form-submit" type="submit" value="' + config.text + '">' +
       '    </div>' +
       '  </td>' +
-      '</tr>';
+      '</tr>'`;
   };
 
   /**
