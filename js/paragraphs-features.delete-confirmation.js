@@ -20,7 +20,7 @@
    *   Returns markup.
    */
   Drupal.theme.paragraphsFeaturesDeleteConfirmationButton = function (options) {
-    return '<button type="button" class="paragraphs-features__delete-confirm ' + options.class + '">' + Drupal.t('Remove') + '</button>';
+    return '<button type="button" class="paragraphs-features__delete-confirm button--extrasmall ' + options.class + '">' + Drupal.t('Remove') + '</button>';
   };
 
   /**
@@ -36,8 +36,8 @@
       '<div class="paragraphs-features__delete-confirmation">' +
       '  <div class="paragraphs-features__delete-confirmation__message">' + options.message + '</div>' +
       '  <div class="form-actions js-form-wrapper form-wrapper" id="edit-actions">' +
-      '    <button type="button" class="paragraphs-features__delete-confirmation__remove-button button button--primary js-form-submit form-submit">' + options.remove + '</button>' +
-      '    <button type="button" class="paragraphs-features__delete-confirmation__cancel-button button js-form-submit form-submit">' + options.cancel + '</button>' +
+      '    <button type="button" class="paragraphs-features__delete-confirmation__remove-button button button--extrasmall button--primary js-form-submit form-submit">' + options.remove + '</button>' +
+      '    <button type="button" class="paragraphs-features__delete-confirmation__cancel-button button button--extrasmall js-form-submit form-submit">' + options.cancel + '</button>' +
       '  </div>' +
       '</div>';
   };

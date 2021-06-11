@@ -19,6 +19,7 @@ class ParagraphsFeatures {
   public static $availableFeatures = [
     'add_in_between',
     'delete_confirmation',
+    'sorting',
     'split_text',
   ];
 
@@ -50,9 +51,15 @@ class ParagraphsFeatures {
    *   Field Wrapper ID, usually provided by ::getWrapperId().
    */
   public static function registerFormWidgetFeatures(array &$elements, ParagraphsWidget $widget, $fieldWrapperId) {
+    if (!in_array(
+      \Drupal::theme()->getActiveTheme()->getName(),
+      ['claro', 'gin']
+    )) {
+      return;
+    }
     foreach (static::$availableFeatures as $feature) {
       if ($widget->getThirdPartySetting('paragraphs_features', $feature)) {
-        $elements['add_more']['#attached']['library'][] = 'paragraphs_features/drupal.paragraphs_features.' . $feature;
+        $elements['add_more']['#attached']['library'][] = 'paragraphs_features/' . $feature;
         $elements['add_more']['#attached']['drupalSettings']['paragraphs_features'][$feature][$fieldWrapperId] = TRUE;
         $elements['add_more']['#attached']['drupalSettings']['paragraphs_features'][$feature]['_path'] = drupal_get_path('module', 'paragraphs_features');
       }
@@ -78,6 +85,13 @@ class ParagraphsFeatures {
    */
   public static function getThirdPartyForm(WidgetInterface $plugin, $field_name) {
     $elements = [];
+    $disabled = FALSE;
+    if (!in_array(
+      \Drupal::theme()->getActiveTheme()->getName(),
+      ['claro', 'gin']
+    )) {
+      $disabled = TRUE;
+    }
 
     $elements['delete_confirmation'] = [
       '#type' => 'checkbox',
@@ -102,6 +116,19 @@ class ParagraphsFeatures {
         'enabled' => $modal_related_options_rule,
         'visible' => $modal_related_options_rule,
       ],
+    ];
+
+    $elements['sorting'] = [
+      '#type' => 'checkbox',
+      '#title' => t('Enable checkbox sorting'),
+      '#default_value' => $plugin->getThirdPartySetting('paragraphs_features', 'sorting'),
+      '#attributes' => ['class' => ['paragraphs-features__sorting__option']],
+      '#states' => [
+        'enabled' => !$modal_related_options_rule && !$disabled,
+        'visible' => $modal_related_options_rule,
+      ],
+      '#disabled' => $disabled,
+      '#description' => $disabled ? t('This feature only works with claro / gin themes.') : '',
     ];
 
     $elements['split_text'] = [

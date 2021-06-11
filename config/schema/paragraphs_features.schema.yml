@@ -16,6 +16,9 @@ paragraphs_features_third_party:
     delete_confirmation:
       type: boolean
       label: 'Flag for delete confirmation feature'
+    sorting:
+      type: boolean
+      label: 'Flag for paragraphs checkbox sorting feature'
     split_text:
       type: boolean
       label: 'Flag for paragraphs split text feature'

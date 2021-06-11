@@ -2,6 +2,8 @@ name: Run module tests
 
 on:
   pull_request:
+    branches:
+      - 2.x
     paths-ignore:
       - '**.md'
 
@@ -21,16 +23,9 @@ jobs:
 
     strategy:
       matrix:
-        THEME: ['stark', 'seven', 'claro', 'gin']
-        DRUPAL_TESTING_DRUPAL_VERSION: ['~8.9.0']
-        PHP: ['7.3']
-        include:
-        - THEME: 'stark'
-          DRUPAL_TESTING_DRUPAL_VERSION: '~8.9.0'
-          PHP: '7.4'
-        - THEME: 'stark'
-          DRUPAL_TESTING_DRUPAL_VERSION: '~9.1.0'
-          PHP: '7.4'
+        THEME: ['claro', 'gin']
+        DRUPAL_TESTING_DRUPAL_VERSION: ['~9.1.0']
+        PHP: ['7.4']
 
     steps:
     - uses: actions/checkout@v1

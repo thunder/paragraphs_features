@@ -1,5 +1,5 @@
 
-drupal.paragraphs_features.add_in_between:
+add_in_between:
   js:
     js/paragraphs-features.add-in-between.js: {}
   css:
@@ -9,14 +9,39 @@ drupal.paragraphs_features.add_in_between:
     - core/drupal
     - core/jquery.once
     - paragraphs/drupal.paragraphs.modal
+    - paragraphs_features/widget
 
-drupal.paragraphs_features.delete_confirmation:
+delete_confirmation:
   js:
     js/paragraphs-features.delete-confirmation.js: {}
+  css:
+    theme:
+      css/paragraphs-features.delete-confirmation.css: {}
+  dependencies:
+    - core/drupal
+    - core/jquery.once
 
-drupal.paragraphs_features.split_text:
+sorting:
+  js:
+    js/paragraphs-features.sorting.js: {}
+    js/tabledrag.checkbox.js: {}
+  css:
+    theme:
+      css/paragraphs-features.sorting.css: {}
+  dependencies:
+    - core/drupal
+    - core/jquery.once
+    - core/drupal.tabledrag
+    - paragraphs_features/widget
+
+split_text:
   js:
     js/paragraphs-features.split-text.js: {}
   dependencies:
     - core/drupal
     - core/jquery.once
+
+widget:
+  css:
+    theme:
+      css/paragraphs-features.widget.css: { }
