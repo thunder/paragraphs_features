@@ -11,22 +11,23 @@
     function isInViewport(element) {
       var rect = element.getBoundingClientRect();
       return (
-        rect.top >= 0 &&
-        rect.left >= 0 &&
-        rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) &&
-        rect.right <= (window.innerWidth || document.documentElement.clientWidth)
+        element.offsetHeight > (window.innerHeight || document.documentElement.clientHeight) ||
+        (
+          rect.top >= 0 &&
+          rect.left >= 0 &&
+          rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) &&
+          rect.right <= (window.innerWidth || document.documentElement.clientWidth)
+        )
       );
     }
 
     var element = document.querySelector(response.selector).parentElement;
-    var counter = 0;
     var interval = setInterval(function () {
       element.scrollIntoView({
         block: 'center',
         behavior: 'smooth'
       });
-      counter++;
-      if (isInViewport(element) || counter > 25) {
+      if (isInViewport(element)) {
         clearInterval(interval);
       }
     }, 50);
