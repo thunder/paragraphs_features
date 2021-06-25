@@ -9,7 +9,7 @@
   Drupal.AjaxCommands.prototype.scrollToElement = function (ajax, response) {
 
     function isInViewport(element) {
-      const rect = element.getBoundingClientRect();
+      var rect = element.getBoundingClientRect();
       return (
         rect.top >= 0 &&
         rect.left >= 0 &&
