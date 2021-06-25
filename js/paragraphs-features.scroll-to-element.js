@@ -1,5 +1,5 @@
 /**
- * @file thunder-paragraph-features.add-in-between.js
+ * @file thunder-paragraph-features.scroll-to-element.js
  */
 
 (function ($, Drupal, drupalSettings) {
@@ -8,29 +8,18 @@
 
   Drupal.AjaxCommands.prototype.scrollToElement = function (ajax, response) {
 
-    function isInViewport(element) {
-      var rect = element.getBoundingClientRect();
-      return (
-        element.offsetHeight > (window.innerHeight || document.documentElement.clientHeight) ||
-        (
-          rect.top >= 0 &&
-          rect.left >= 0 &&
-          rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) &&
-          rect.right <= (window.innerWidth || document.documentElement.clientWidth)
-        )
-      );
-    }
-
-    var element = document.querySelector(response.selector).parentElement;
-    var interval = setInterval(function () {
+    var element = document.querySelector(response.selector);
+    var resizeObserver = new ResizeObserver(function (event) {
+      console.log(event)
       element.scrollIntoView({
-        block: 'center',
-        behavior: 'smooth'
+        block: 'center'
       });
-      if (isInViewport(element)) {
-        clearInterval(interval);
-      }
-    }, 50);
+    });
+    resizeObserver.observe(element);
+    setTimeout(function () {
+        resizeObserver.unobserve(element)
+      }, 500
+    );
 
   };
 
