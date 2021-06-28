@@ -1,14 +1,24 @@
 /**
- * @file thunder-paragraph-features.scroll-to-element.js
+ * @file
+ * Provides an AJAX command for scrolling to an element.
  */
 
-(function ($, Drupal, drupalSettings) {
+(function (Drupal) {
 
   'use strict';
 
-  Drupal.AjaxCommands.prototype.scrollToElement = function (ajax, response) {
-
-    var resizeObserver = new ResizeObserver(function (event) {
+  /**
+   * Command to scroll to an paragraph item.
+   *
+   * @param {Drupal.Ajax} ajax
+   *   The Drupal Ajax object.
+   * @param {object} response
+   *   Object holding the server response.
+   * @param {number} [status]
+   *   The HTTP status code.
+   */
+  Drupal.AjaxCommands.prototype.scrollToElement = function (ajax, response, status) {
+    var resizeObserver = new ResizeObserver(function () {
       document
         .querySelector('[data-drupal-selector=' + response.drupalElementSelector + ']')
         .scrollIntoView({block: 'center'});
@@ -21,5 +31,4 @@
       resizeObserver.unobserve(parent);
     }, 500);
   };
-
-}(jQuery, Drupal, drupalSettings));
+}(Drupal));
