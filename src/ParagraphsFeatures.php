@@ -93,7 +93,7 @@ class ParagraphsFeatures {
 
     $response = new AjaxResponse();
     $response->addCommand(new InsertCommand(NULL, $element));
-    $response->addCommand(new ScrollToElementCommand('#' . $element[$element['#max_delta']]['#id']));
+    $response->addCommand(new ScrollToElementCommand($element[$element['#max_delta']]['#attributes']['data-drupal-selector'], $element['#attributes']['data-drupal-selector']));
     return $response;
   }
 

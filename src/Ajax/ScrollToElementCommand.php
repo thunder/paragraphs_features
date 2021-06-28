@@ -16,16 +16,26 @@ class ScrollToElementCommand implements CommandInterface {
    *
    * @var string
    */
-  protected $selector;
+  protected $elementSelector;
+
+  /**
+   * A CSS selector string.
+   *
+   * @var string
+   */
+  protected $parentSelector;
 
   /**
    * Constructs a ScrollToElementCommand object.
    *
-   * @param string $selector
-   *   A CSS selector.
+   * @param string $elementSelector
+   *   The data-drupal-selector for the paragraphs element.
+   * @param string $parentSelector
+   *   The data-drupal-selector for the paragraphs field.
    */
-  public function __construct(string $selector) {
-    $this->selector = $selector;
+  public function __construct(string $elementSelector, string $parentSelector) {
+    $this->elementSelector = $elementSelector;
+    $this->parentSelector = $parentSelector;
   }
 
   /**
@@ -34,7 +44,8 @@ class ScrollToElementCommand implements CommandInterface {
   public function render() {
     return [
       'command' => 'scrollToElement',
-      'selector' => $this->selector,
+      'drupalElementSelector' => $this->elementSelector,
+      'drupalParentSelector' => $this->parentSelector,
     ];
   }
 

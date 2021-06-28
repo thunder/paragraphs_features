@@ -8,20 +8,17 @@
 
   Drupal.AjaxCommands.prototype.scrollToElement = function (ajax, response) {
 
-    var element = document.querySelector(response.selector);
     var resizeObserver = new ResizeObserver(function (event) {
-      element.scrollIntoView({ block: "center"});
+      document
+        .querySelector('[data-drupal-selector=' + response.drupalElementSelector + ']')
+        .scrollIntoView({block: 'center'});
     });
 
-    var elements = document.documentElement.getElementsByTagName("*");
-    for (var i = 0; i < elements.length; i++) {
-      resizeObserver.observe(elements[i]);
-    };
+    var parent = document.querySelector('[data-drupal-selector=' + response.drupalParentSelector + ']');
+    resizeObserver.observe(parent);
 
     setTimeout(function () {
-      for (var i = 0; i < elements.length; i++) {
-        resizeObserver.unobserve(elements[i]);
-      }
+      resizeObserver.unobserve(parent);
     }, 500);
   };
 
