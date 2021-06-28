@@ -159,4 +159,21 @@ abstract class ParagraphsFeaturesJavascriptTestBase extends WebDriverTestBase {
     return $this->getSession()->getPage()->find('xpath', '//*[@data-drupal-selector="edit-field-paragraphs-' . $paragraph_index . '"]//textarea')->getAttribute('id');
   }
 
+  /**
+   * Scroll element with defined css selector in middle of browser view.
+   *
+   * @param string $cssSelector
+   *   CSS Selector for element that should be centralized.
+   */
+  public function scrollElementInView($cssSelector) {
+    $this->getSession()
+      ->executeScript('
+        var viewPortHeight = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
+        var element = jQuery(\'' . addcslashes($cssSelector, '\'') . '\');
+        var scrollTop = element.offset().top - (viewPortHeight/2);
+        var scrollableParent = jQuery.isFunction(element.scrollParent) ? element.scrollParent() : [];
+        if (scrollableParent.length > 0 && scrollableParent[0] !== document && scrollableParent[0] !== document.body) { scrollableParent[0].scrollTop = scrollableParent[0].scrollTop + scrollTop - scrollableParent.offset().top } else { window.scroll(0, scrollTop); };
+      ');
+  }
+
 }
