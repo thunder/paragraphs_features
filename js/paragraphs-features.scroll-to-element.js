@@ -10,17 +10,19 @@
 
     var element = document.querySelector(response.selector);
     var resizeObserver = new ResizeObserver(function (event) {
-      console.log(event)
-      element.scrollIntoView({
-        block: 'center'
-      });
+      element.scrollIntoView({ block: "center"});
     });
-    resizeObserver.observe(element);
-    setTimeout(function () {
-        resizeObserver.unobserve(element)
-      }, 500
-    );
 
+    var elements = document.documentElement.getElementsByTagName("*");
+    for (var i = 0; i < elements.length; i++) {
+      resizeObserver.observe(elements[i]);
+    };
+
+    setTimeout(function () {
+      for (var i = 0; i < elements.length; i++) {
+        resizeObserver.unobserve(elements[i]);
+      }
+    }, 500);
   };
 
 }(jQuery, Drupal, drupalSettings));
