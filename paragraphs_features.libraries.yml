@@ -24,3 +24,5 @@ drupal.paragraphs_features.split_text:
 drupal.paragraphs_features.scroll_to_element:
   js:
     js/paragraphs-features.scroll-to-element.js: {}
+  dependencies:
+    - core/drupal
