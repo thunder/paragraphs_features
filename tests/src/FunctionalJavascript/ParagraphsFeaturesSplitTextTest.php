@@ -32,6 +32,7 @@ class ParagraphsFeaturesSplitTextTest extends ParagraphsFeaturesJavascriptTestBa
     $this->assertSession()->assertWaitOnAjaxRequest();
     $page->find('xpath', '//*[contains(@class, "paragraphs-add-dialog") and contains(@class, "ui-dialog-content")]//*[contains(@name, "test_1")]')->click();
     $this->assertSession()->assertWaitOnAjaxRequest();
+    sleep(1);
 
     $ck_editor_id = $this->getCkEditorId($index);
     $driver->executeScript("CKEDITOR.instances['$ck_editor_id'].insertHtml('$text');");
