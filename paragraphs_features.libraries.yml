@@ -20,3 +20,9 @@ drupal.paragraphs_features.split_text:
   dependencies:
     - core/drupal
     - core/jquery.once
+
+drupal.paragraphs_features.scroll_to_element:
+  js:
+    js/paragraphs-features.scroll-to-element.js: {}
+  dependencies:
+    - core/drupal

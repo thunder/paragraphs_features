@@ -3,7 +3,12 @@
 namespace Drupal\paragraphs_features;
 
 use Drupal\Component\Utility\Html;
+use Drupal\Core\Ajax\AjaxResponse;
+use Drupal\Core\Ajax\InsertCommand;
+use Drupal\paragraphs_features\Ajax\ScrollToElementCommand;
 use Drupal\Core\Field\WidgetInterface;
+use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Render\Element;
 use Drupal\paragraphs\Plugin\Field\FieldWidget\ParagraphsWidget;
 
 /**
@@ -57,12 +62,39 @@ class ParagraphsFeatures {
         $elements['add_more']['#attached']['drupalSettings']['paragraphs_features'][$feature]['_path'] = drupal_get_path('module', 'paragraphs_features');
       }
     }
+
+    $elements['add_more']['#attached']['library'][] = 'paragraphs_features/drupal.paragraphs_features.scroll_to_element';
+    foreach (Element::children($elements['add_more']) as $button) {
+      $elements['add_more'][$button]['#ajax']['callback'] = [
+        static::class, 'addMoreAjax',
+      ];
+    }
     // This feature is not part of of the foreach above, since it is not a
     // javascript feature, it is a direct modification of the form. If the
     // feature is not set, it defaults back to paragraphs behavior.
     if (!empty($elements['header_actions']['dropdown_actions']['dragdrop_mode'])) {
       $elements['header_actions']['dropdown_actions']['dragdrop_mode']['#access'] = (bool) $widget->getThirdPartySetting('paragraphs_features', 'show_drag_and_drop', TRUE);
     }
+  }
+
+  /**
+   * Adds a scroll event to the ajax response.
+   *
+   * @param array $form
+   *   The form array.
+   * @param \Drupal\Core\Form\FormStateInterface $form_state
+   *   The form state object.
+   *
+   * @return \Drupal\Core\Ajax\AjaxResponse
+   *   The ajax response with the paragraph to add.
+   */
+  public static function addMoreAjax(array $form, FormStateInterface $form_state) {
+    $element = ParagraphsWidget::addMoreAjax($form, $form_state);
+
+    $response = new AjaxResponse();
+    $response->addCommand(new InsertCommand(NULL, $element));
+    $response->addCommand(new ScrollToElementCommand($element[$element['#max_delta']]['#attributes']['data-drupal-selector'], $element['#attributes']['data-drupal-selector']));
+    return $response;
   }
 
   /**
