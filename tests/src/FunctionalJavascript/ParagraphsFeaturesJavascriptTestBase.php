@@ -159,4 +159,18 @@ abstract class ParagraphsFeaturesJavascriptTestBase extends WebDriverTestBase {
     return $this->getSession()->getPage()->find('xpath', '//*[@data-drupal-selector="edit-field-paragraphs-' . $paragraph_index . '"]//textarea')->getAttribute('id');
   }
 
+  /**
+   * Scroll element with defined css selector in middle of browser view.
+   *
+   * @param string $cssSelector
+   *   CSS Selector for element that should be centralized.
+   */
+  public function scrollElementInView($cssSelector) {
+    $this->getSession()
+      ->executeScript('
+        var element = document.querySelector(\'' . addcslashes($cssSelector, '\'') . '\');
+        element.scrollIntoView({block: "center"});
+      ');
+  }
+
 }

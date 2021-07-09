@@ -45,3 +45,9 @@ widget:
   css:
     theme:
       css/paragraphs-features.widget.css: { }
+
+drupal.paragraphs_features.scroll_to_element:
+  js:
+    js/paragraphs-features.scroll-to-element.js: {}
+  dependencies:
+    - core/drupal
