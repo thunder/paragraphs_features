@@ -12,7 +12,7 @@
     this.sortCheckbox = $('<span class="tabledrag-checkbox-wrapper"><input type="checkbox" class="tabledrag-checkbox" /></span>')
       .on('change', $.proxy(function (e) {
         // At least one checkbox is checked.
-        let oneChecked = Array.prototype.slice.call(this.$table.get(0).querySelectorAll('input.tabledrag-checkbox[type="checkbox"]')).some(input => input.checked);
+        var oneChecked = Array.prototype.slice.call(this.table.querySelectorAll('input.tabledrag-checkbox[type="checkbox"]')).some(input => input.checked);
 
         this.$table.find()
         if (!this.$table.hasClass('tabledrag-checkbox-active')) {
@@ -35,20 +35,11 @@
 
     // Add spacer rows.
     this.addSpacer();
+
     // Add sorting checkbox to items.
+    this.$table.find('tbody > tr.draggable > .field-multiple-drag .tabledrag-handle').hide();
     this.$table.find('> tbody > tr.draggable > .field-multiple-drag .tabledrag-cell-content').prepend(this.sortCheckbox);
     this.$table.addClass('tabledrag-checkbox-sort');
-  };
-
-  Drupal.tableDrag.prototype.toggleStyleOfCheckboxButton = function () {
-    var button = this.toggleCheckboxButtonWrapper.find('button');
-    button.toggleClass('button--primary');
-
-    var text = Drupal.t('Sort');
-    if (this.$table.hasClass('tabledrag-checkbox-active')) {
-      text = Drupal.t('Finish sort');
-    }
-    button.text(text);
   };
 
   /**
