@@ -12,16 +12,16 @@
     this.sortCheckbox = $('<span class="tabledrag-checkbox-wrapper"><input type="checkbox" class="tabledrag-checkbox" /></span>')
       .on('change', $.proxy(function (e) {
         // At least one checkbox is checked.
-        var oneChecked = Array.prototype.slice.call(this.table.querySelectorAll('input.tabledrag-checkbox[type="checkbox"]')).some(input => input.checked);
+        var oneChecked = Array.prototype.slice.call(this.table.querySelectorAll('input.tabledrag-checkbox[type="checkbox"]'))
+          .some(function (input) { return input.checked; });
 
-        this.$table.find()
         if (!this.$table.hasClass('tabledrag-checkbox-active')) {
           this.triggerStartEvent();
           this.$table.addClass('tabledrag-checkbox-active');
           this.addSortTargets();
         }
         else if (!oneChecked) {
-          this.removeSortTargets()
+          this.removeSortTargets();
           this.$table.removeClass('tabledrag-checkbox-active');
           this.triggerEndEvent();
         }
