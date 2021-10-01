@@ -16,15 +16,18 @@ paragraphs_features_third_party:
     delete_confirmation:
       type: boolean
       label: 'Flag for delete confirmation feature'
+    hide_row_weight_sort:
+      type: boolean
+      label: 'Flag for hiding row weight sort'
+    show_drag_and_drop:
+      type: boolean
+      label: 'Flag for showing drag & drop button'
     sorting:
       type: boolean
       label: 'Flag for paragraphs checkbox sorting feature'
     split_text:
       type: boolean
       label: 'Flag for paragraphs split text feature'
-    show_drag_and_drop:
-      type: boolean
-      label: 'Flag for showing drag & drop button'
 
 field.widget.third_party.paragraphs_features:
   type: paragraphs_features_third_party
