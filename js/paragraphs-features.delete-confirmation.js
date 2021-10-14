@@ -54,6 +54,7 @@
       var $wrapper = $(event.target).parents('div[id*="-item-wrapper"]').first();
       // Hide children.
       $wrapper.children().toggleClass('visually-hidden');
+      $wrapper.parents('.draggable').first().find('.js-tabledrag-cell-content').first().toggleClass('visually-hidden');
       // Add markup.
       $wrapper.append(Drupal.theme('paragraphsFeaturesDeleteConfirmationMessage', {message: Drupal.t('Are you sure you want to remove this paragraph?'), remove: Drupal.t('Remove'), cancel: Drupal.t('Cancel')}));
       // Add handlers for buttons.
@@ -89,6 +90,7 @@
       var $wrapper = $(event.target).parents('div[id*="-item-wrapper"]').first();
       $wrapper.children('.paragraphs-features__delete-confirmation').first().remove();
       $wrapper.children().toggleClass('visually-hidden');
+      $wrapper.parents('.draggable').first().find('.js-tabledrag-cell-content').first().toggleClass('visually-hidden');
     };
   };
 
