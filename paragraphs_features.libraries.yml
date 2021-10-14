@@ -51,3 +51,10 @@ drupal.paragraphs_features.scroll_to_element:
     js/paragraphs-features.scroll-to-element.js: {}
   dependencies:
     - core/drupal
+
+hide_row_weight_sort:
+  js:
+    js/paragraphs-features.hide-row-weight-sort.js: {}
+  dependencies:
+    - core/drupal
+    - core/drupal.tabledrag

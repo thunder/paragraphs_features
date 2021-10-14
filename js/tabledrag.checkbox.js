@@ -8,26 +8,25 @@
    * On click on the sorting button, show/hide the checkboxes and add/remove sorting targets.
    */
   Drupal.tableDrag.prototype.initCkbx = function () {
-    // build toggle button
-    this.toggleCheckboxButtonWrapper = $('<button type="button" class="tabledrag-toggle-checkbox button button--extrasmall"></button>')
-      .on('click', $.proxy(function (e) {
-        e.preventDefault();
+
+    this.sortCheckbox = $('<span class="tabledrag-checkbox-wrapper"><input type="checkbox" class="tabledrag-checkbox" /></span>')
+      .on('change', $.proxy(function (e) {
+        // At least one checkbox is checked.
+        var oneChecked = Array.prototype.slice.call(this.table.querySelectorAll('input.tabledrag-checkbox[type="checkbox"]'))
+          .some(function (input) { return input.checked; });
+
         if (!this.$table.hasClass('tabledrag-checkbox-active')) {
           this.triggerStartEvent();
+          this.$table.addClass('tabledrag-checkbox-active');
+          this.addSortTargets();
         }
-        this.toggleRelatedButtons();
-        this.$table.toggleClass('tabledrag-checkbox-active');
-        this.toggleCheckboxes();
-        this.toggleSortTargets();
-        this.toggleStyleOfCheckboxButton();
-        if (!this.$table.hasClass('tabledrag-checkbox-active')) {
-          this.disableCheckboxes();
+        else if (!oneChecked) {
+          this.removeSortTargets();
+          this.$table.removeClass('tabledrag-checkbox-active');
           this.triggerEndEvent();
         }
-      }, this))
-      .text(Drupal.t('Sort'))
-      .wrap('<div class="tabledrag-toggle-checkbox-wrapper"></div>')
-      .parent();
+
+      }, this));
 
     this.addInBeetween = !(
       typeof Drupal.behaviors.paragraphsFeaturesAddInBetweenInit === 'undefined' &&
@@ -36,24 +35,11 @@
 
     // Add spacer rows.
     this.addSpacer();
-    // add sorting toggle button on top
-    this.$table.find('> thead > tr > th:first').append(this.toggleCheckboxButtonWrapper);
-    // add sorting checkbox to items
-    this.$table.find('> tbody > tr.draggable > .field-multiple-drag .tabledrag-cell-content').prepend(
-      $('<span class="tabledrag-checkbox-wrapper"><input type="checkbox" class="tabledrag-checkbox" /></span>')
-        .hide()
-    );
-  };
 
-  Drupal.tableDrag.prototype.toggleStyleOfCheckboxButton = function () {
-    var button = this.toggleCheckboxButtonWrapper.find('button');
-    button.toggleClass('button--primary');
-
-    var text = Drupal.t('Sort');
-    if (this.$table.hasClass('tabledrag-checkbox-active')) {
-      text = Drupal.t('Finish sort');
-    }
-    button.text(text);
+    // Add sorting checkbox to items.
+    this.$table.find('tbody > tr.draggable > .field-multiple-drag .tabledrag-handle').hide();
+    this.$table.find('> tbody > tr.draggable > .field-multiple-drag .tabledrag-cell-content').prepend(this.sortCheckbox);
+    this.$table.addClass('tabledrag-checkbox-sort');
   };
 
   /**
@@ -151,7 +137,10 @@
 
         this.removeSortTargets();
         this.sort(row, swapAfter);
-        this.addSortTargets();
+        // End sort, clean up.
+        this.disableCheckboxes();
+        this.$table.removeClass('tabledrag-checkbox-active');
+        this.triggerEndEvent();
 
       }, this))
       .wrap('<tr class="tabledrag-sort-target-wrapper"><td class="tabledrag-sort-target-column" colspan="3"></td></tr>')

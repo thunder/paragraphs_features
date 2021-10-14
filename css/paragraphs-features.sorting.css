@@ -7,10 +7,6 @@
   margin-left: -16px;
 }
 
-.field-multiple-table.tabledrag-checkbox-active > tbody > tr.draggable > .field-multiple-drag .tabledrag-handle {
-  display: none;
-}
-
 .field-multiple-table .tabledrag-toggle-checkbox-wrapper {
   float: right;
 }

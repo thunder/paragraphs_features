@@ -24,6 +24,7 @@ class ParagraphsFeatures {
   public static $availableFeatures = [
     'add_in_between',
     'delete_confirmation',
+    'hide_row_weight_sort',
     'sorting',
     'split_text',
   ];
@@ -183,6 +184,12 @@ class ParagraphsFeatures {
       '#title' => t('Show drag & drop button'),
       '#default_value' => $plugin->getThirdPartySetting('paragraphs_features', 'show_drag_and_drop', TRUE),
       '#access' => !empty($library),
+    ];
+
+    $elements['hide_row_weight_sort'] = [
+      '#type' => 'checkbox',
+      '#title' => t('Hide row weight sorting'),
+      '#default_value' => $plugin->getThirdPartySetting('paragraphs_features', 'hide_row_weight_sort'),
     ];
 
     return $elements;
