@@ -58,9 +58,14 @@ class ParagraphsFeatures {
     foreach (static::$availableFeatures as $feature) {
       if ($widget->getThirdPartySetting('paragraphs_features', $feature)) {
         $elements['add_more']['#attached']['library'][] = 'paragraphs_features/drupal.paragraphs_features.' . $feature;
-        $elements['add_more']['#attached']['drupalSettings']['paragraphs_features'][$feature][$fieldWrapperId] = TRUE;
-        $elements['add_more']['#attached']['drupalSettings']['paragraphs_features'][$feature]['_path'] = drupal_get_path('module', 'paragraphs_features');
+        $elements['add_more']['#attached']['drupalSettings']['paragraphs_features'][$feature][$fieldWrapperId] = ['wrapperId' => $fieldWrapperId];
       }
+      if ($feature === 'add_in_between') {
+        $elements['add_more']['#attached']['drupalSettings']['paragraphs_features'][$feature][$fieldWrapperId]['linkCount'] =
+          $widget->getThirdPartySetting('paragraphs_features', 'add_in_between_link_count');
+      }
+      // Set module path for split_text feature.
+      $elements['add_more']['#attached']['drupalSettings']['paragraphs_features']['_path'] = drupal_get_path('module', 'paragraphs_features');
     }
 
     $elements['add_more']['#attached']['library'][] = 'paragraphs_features/drupal.paragraphs_features.scroll_to_element';
@@ -134,6 +139,23 @@ class ParagraphsFeatures {
         'enabled' => $modal_related_options_rule,
         'visible' => $modal_related_options_rule,
       ],
+    ];
+
+    $elements['add_in_between_link_count'] = [
+      '#type' => 'number',
+      '#title' => t('Number of add in between links', [], ['context' => 'Paragraphs Editor Enhancements']),
+      '#default_value' => $plugin->getThirdPartySetting('paragraphs_features', 'add_in_between_link_count', 3),
+      '#min' => 0,
+      '#attributes' => ['class' => ['paragraphs-features__add-in-between__option']],
+      '#states' => [
+        'enabled' => $modal_related_options_rule + [
+          ':input[name="fields[' . $field_name . '][settings_edit_form][third_party_settings][paragraphs_features][add_in_between]"]' => [
+            'checked' => TRUE,
+          ],
+        ],
+        'visible' => [$modal_related_options_rule],
+      ],
+      '#description' => t('Set the number of buttons available to directly add a paragraph.'),
     ];
 
     $elements['split_text'] = [
