@@ -4,7 +4,7 @@
 
 (($, Drupal, once) => {
 
-  // 'use strict';
+  'use strict';
 
   /**
    * Ensure namespace for paragraphs features exists.
@@ -30,17 +30,17 @@
    *   Returns element for add in between row.
    */
   Drupal.theme.paragraphsFeaturesAddInBetweenRow = (config) => {
-    const input = document.createElement('input'),
-      wrapper = document.createElement('div'),
-      td = document.createElement("td"),
-      row = document.createElement('tr');
+    const input = document.createElement('input');
+    const wrapper = document.createElement('div');
+    const td = document.createElement('td');
+    const row = document.createElement('tr');
 
     input.classList.add('paragraphs-features__add-in-between__button', 'button--small', 'js-show', 'button', 'js-form-submit', 'form-submit');
     input.type = 'submit';
     input.value = config.text;
     wrapper.classList.add('paragraphs-features__add-in-between__wrapper');
     wrapper.appendChild(input);
-    td.setAttribute('colspan', '100%')
+    td.setAttribute('colspan', '100%');
     td.appendChild(wrapper);
     row.classList.add('paragraphs-features__add-in-between__row');
     row.appendChild(td);
@@ -67,17 +67,20 @@
   /**
    * Init paragraphs widget with add in between functionality.
    *
-   * @param {array} paragraphsWidgetId
-   *   Paragraphs Widget ID.
+   * @param {HTMLDocument|HTMLElement} [context=document]
+   *   An element to attach behaviors to.
+   * @param {array} field
+   *   The paragraphs field config.
    */
   Drupal.paragraphs_features.add_in_between.initParagraphsWidget = function (context, field) {
     const [wrapper] = once('paragraphs-features-add-in-between-init', '#' + field.wrapperId, context);
+    if (!wrapper) {
+      return;
+    }
 
-    if (!wrapper) return;
-
-    const table = wrapper.querySelector('.field-multiple-table'),
-          addModalBlock = wrapper.querySelector('.paragraphs-add-wrapper'),
-          addModalButton = addModalBlock.querySelector('.paragraph-type-add-modal-button');
+    const table = wrapper.querySelector('.field-multiple-table');
+    const addModalBlock = wrapper.querySelector('.paragraphs-add-wrapper');
+    const addModalButton = addModalBlock.querySelector('.paragraph-type-add-modal-button');
 
     // Ensure that paragraph list uses modal dialog.
     if (!addModalButton) {
@@ -89,7 +92,7 @@
 
     const buttonRowElement = () => {
       return Drupal.theme('paragraphsFeaturesAddInBetweenRow', {text: Drupal.t('+ Add')});
-    }
+    };
 
     // Add buttons and adjust drag-drop functionality.
     let tableBody = table.querySelector(':scope > tbody');
@@ -196,7 +199,7 @@
     // Helper function to create sequence execution of two bool functions.
     const sequenceBoolFunctions = (originalFn, newFn) => {
       // Arrow functions do not support arguments.
-      return function() {
+      return function () {
         let result = originalFn.apply(this, arguments);
 
         if (result) {
@@ -218,12 +221,12 @@
 
     // provide custom .onSwap() handler to reorder "Add" buttons.
     rowObject.prototype.onSwap = (row) => {
-      const table = row.closest('table'),
-        allDrags = table.querySelectorAll(':scope > tbody > tr.draggable'),
-        allAdds = table.querySelectorAll(':scope > tbody > tr.paragraphs-features__add-in-between__row');
+      const table = row.closest('table');
+      const allDrags = table.querySelectorAll(':scope > tbody > tr.draggable');
+      const allAdds = table.querySelectorAll(':scope > tbody > tr.paragraphs-features__add-in-between__row');
 
       // We have to re-stripe add in between rows.
-      allDrags.forEach( (dragElem, index) => {
+      allDrags.forEach((dragElem, index) => {
         if (allAdds.item(index)) {
           dragElem.insertAdjacentElement('beforebegin', allAdds.item(index));
         }
