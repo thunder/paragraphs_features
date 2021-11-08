@@ -84,22 +84,19 @@
    *   the add modal block element.
    */
   Drupal.paragraphs_features.add_in_between.getAddModalBlock = (table) => {
-    let sibling = table.parentNode.firstChild;
-    while (sibling) {
-      if (sibling.nodeType === 1 && sibling !== table) {
-        const addModalBlock = sibling.querySelector('.paragraphs-add-wrapper');
-        if (addModalBlock) {
-          return addModalBlock;
+    const fromParent = (elem) => {
+      let sibling = elem.parentNode.firstChild;
+      while (sibling) {
+        if (sibling.nodeType === 1 && sibling !== elem) {
+          const addModalBlock = sibling.querySelector('.paragraphs-add-wrapper');
+          if (addModalBlock) {
+            return addModalBlock;
+          }
         }
+        sibling = sibling.nextSibling;
       }
-      sibling = sibling.nextSibling;
-    }
-
-    // var $addModalBlock = $table.siblings('.form-actions, .clearfix');
-    // if ($addModalBlock.length === 0) {
-    //   $addModalBlock = $table.parents('.layer-wrapper').first().siblings('.form-actions');
-    // }
-    // return $addModalBlock;
+    };
+    return fromParent(table) || fromParent(table.parentNode);
   };
 
   /**
