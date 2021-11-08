@@ -65,6 +65,44 @@
   };
 
   /**
+   * Get paragraphs add modal block in various themes structures.
+   *
+   *  gin:
+   *   .layer-wrapper table
+   *   .form-actions
+   * claro:
+   *   table
+   *   .form-actions
+   * thunder-admin / seven:
+   *   table
+   *   .clearfix
+   *
+   * @param {HTMLElement} table
+   * The table element.
+   *
+   * @return {HTMLElement} addModalBlock
+   *   the add modal block element.
+   */
+  Drupal.paragraphs_features.add_in_between.getAddModalBlock = (table) => {
+    let sibling = table.parentNode.firstChild;
+    while (sibling) {
+      if (sibling.nodeType === 1 && sibling !== table) {
+        const addModalBlock = sibling.querySelector('.paragraphs-add-wrapper');
+        if (addModalBlock) {
+          return addModalBlock;
+        }
+      }
+      sibling = sibling.nextSibling;
+    }
+
+    // var $addModalBlock = $table.siblings('.form-actions, .clearfix');
+    // if ($addModalBlock.length === 0) {
+    //   $addModalBlock = $table.parents('.layer-wrapper').first().siblings('.form-actions');
+    // }
+    // return $addModalBlock;
+  };
+
+  /**
    * Init paragraphs widget with add in between functionality.
    *
    * @param {HTMLDocument|HTMLElement} [context=document]
@@ -79,7 +117,7 @@
     }
 
     const table = wrapper.querySelector('.field-multiple-table');
-    const addModalBlock = wrapper.querySelector('.paragraphs-add-wrapper');
+    const addModalBlock = Drupal.paragraphs_features.add_in_between.getAddModalBlock(table);
     const addModalButton = addModalBlock.querySelector('.paragraph-type-add-modal-button');
 
     // Ensure that paragraph list uses modal dialog.
@@ -130,7 +168,7 @@
     attach: (context) => {
       once('paragraphs-features-add-in-between', '.paragraphs-features__add-in-between__button', context).forEach((button) => {
         button.addEventListener('click', (event) => {
-          const dialog = button.closest('table').parentNode.querySelector('.paragraphs-add-wrapper').querySelector('.paragraphs-add-dialog');
+          const dialog = Drupal.paragraphs_features.add_in_between.getAddModalBlock(button.closest('table')).querySelector('.paragraphs-add-dialog');
           const row = button.closest('tr');
           const delta = Array.prototype.indexOf.call(row.parentNode.children, row) / 2;
 
