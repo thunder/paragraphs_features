@@ -173,6 +173,7 @@ abstract class ParagraphsFeaturesJavascriptTestBase extends WebDriverTestBase {
         ->executeScript('
           var element = document.evaluate(\'' . addcslashes($locator, '\'') . '\', document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;
           element.scrollIntoView({block: "center"});
+          element.focus({preventScroll:true});
         ');
     }
     else {
