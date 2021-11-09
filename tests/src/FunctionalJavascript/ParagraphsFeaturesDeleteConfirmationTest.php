@@ -96,7 +96,7 @@ class ParagraphsFeaturesDeleteConfirmationTest extends ParagraphsFeaturesJavascr
 
     // 3b) Instant removal.
     $page->find('xpath', '//button[contains(@class, "paragraphs-dropdown-toggle")]')->click();
-    $page->find('xpath', '//input[@data-drupal-selector="field-paragraphs-0-remove"]')->click();
+    $this->scrollClick('xpath', '//input[@data-drupal-selector="field-paragraphs-0-remove"]');
     $this->assertSession()->assertWaitOnAjaxRequest();
 
     // Paragraph is gone.
