@@ -185,12 +185,15 @@ abstract class ParagraphsFeaturesJavascriptTestBase extends WebDriverTestBase {
   }
 
   /**
-   * Scroll element in middle of browser view.
+   * Scroll element in middle of browser view and click it.
    *
    * @param string $selector
    *   Selector engine name.
    * @param string|array $locator
    *   Selector locator.
+   *
+   * @throws \Behat\Mink\Exception\DriverException
+   * @throws \Behat\Mink\Exception\UnsupportedDriverActionException
    */
   public function scrollClick($selector, $locator) {
     $this->scrollElementInView($selector, $locator);
