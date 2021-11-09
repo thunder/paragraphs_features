@@ -29,6 +29,7 @@
         "drupal/paragraphs": "^1.12"
     },
     "require-dev": {
-        "drupal/gin": "^3.0"
+        "drupal/gin": "^3.0",
+        "drupal/thunder_admin": "^4.0"
     }
 }
