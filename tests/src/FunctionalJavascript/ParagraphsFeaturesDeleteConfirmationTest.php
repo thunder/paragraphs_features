@@ -141,7 +141,7 @@ class ParagraphsFeaturesDeleteConfirmationTest extends ParagraphsFeaturesJavascr
     );
 
     // 1c) Trigger delete confirmation message.
-    $this->scrollClick(('xpath', '//button[contains(@class, "paragraphs-dropdown-toggle")]');
+    $this->scrollClick('xpath', '//button[contains(@class, "paragraphs-dropdown-toggle")]');
     $this->scrollClick('xpath', '//button[contains(@class, "paragraphs-features__delete-confirm")]');
 
     // 1d) Cancel remove paragraph.
