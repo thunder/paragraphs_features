@@ -34,7 +34,7 @@ class ParagraphsFeaturesDeleteConfirmationTest extends ParagraphsFeaturesJavascr
     $this->assertSession()->elementExists('xpath', '//button[contains(@class, "paragraphs-features__delete-confirm")]');
 
     // 1b) Trigger delete confirmation message.
-    $driver->click('xpath', '//button[contains(@class, "paragraphs-dropdown-toggle")]');
+    $driver->click('//button[contains(@class, "paragraphs-dropdown-toggle")]');
     $this->scrollClick('xpath', '//button[contains(@class, "paragraphs-features__delete-confirm")]');
     // Message and buttons are shown, paragraphs inner form elements should be
     // hidden.
@@ -141,7 +141,7 @@ class ParagraphsFeaturesDeleteConfirmationTest extends ParagraphsFeaturesJavascr
     );
 
     // 1c) Trigger delete confirmation message.
-    $driver->click('xpath', '//button[contains(@class, "paragraphs-dropdown-toggle")]');
+    $driver->click('//button[contains(@class, "paragraphs-dropdown-toggle")]');
     $this->scrollClick('xpath', '//button[contains(@class, "paragraphs-features__delete-confirm")]');
 
     // 1d) Cancel remove paragraph.
