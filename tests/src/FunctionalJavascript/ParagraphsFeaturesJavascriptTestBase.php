@@ -184,4 +184,22 @@ abstract class ParagraphsFeaturesJavascriptTestBase extends WebDriverTestBase {
     }
   }
 
+  /**
+   * Scroll element in middle of browser view.
+   *
+   * @param string $selector
+   *   Selector engine name.
+   * @param string|array $locator
+   *   Selector locator.
+   */
+  public function scrollClick($selector, $locator) {
+    $this->scrollElementInView($selector, $locator);
+    if ($selector === 'xpath') {
+      $this->getSession()->getDriver()->click($locator);
+    }
+    else {
+      $this->click($locator);
+    }
+  }
+
 }

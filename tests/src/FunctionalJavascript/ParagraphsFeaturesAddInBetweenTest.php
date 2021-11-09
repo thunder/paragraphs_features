@@ -113,8 +113,7 @@ class ParagraphsFeaturesAddInBetweenTest extends ParagraphsFeaturesJavascriptTes
     $this->assertSession()->assertWaitOnAjaxRequest();
 
     // Check last add in between button.
-    $this->scrollElementInView('xpath', '(//*[contains(@class, "paragraphs-features__add-in-between__button")])[last()]');
-    $driver->click('(//*[contains(@class, "paragraphs-features__add-in-between__button")])[last()]');
+    $this->scrollClick('xpath', '(//*[contains(@class, "paragraphs-features__add-in-between__button")])[last()]');
     $this->assertSession()->assertWaitOnAjaxRequest();
     $this->assertSession()->hiddenFieldValueEquals('field_paragraphs[add_more][add_modal_form_area][add_more_delta]', '2');
     $page->find('xpath', '//*[contains(@class, "paragraphs-add-dialog") and contains(@class, "ui-dialog-content")]//*[contains(@name, "test_1")]')->click();
@@ -185,7 +184,7 @@ class ParagraphsFeaturesAddInBetweenTest extends ParagraphsFeaturesJavascriptTes
     $this->assertSession()->assertWaitOnAjaxRequest();
 
     // Check last add in between button.
-    $page->find('xpath', '(//*[contains(@class, "paragraphs-features__add-in-between__button")])[last()]')->click();
+    $this->scrollClick('xpath', '(//*[contains(@class, "paragraphs-features__add-in-between__button")])[last()]');
     $this->assertSession()->assertWaitOnAjaxRequest();
     $this->assertSession()->hiddenFieldValueEquals('field_paragraphs[0][subform][field_paragraphs][add_more][add_modal_form_area][add_more_delta]', '1');
     $page->find('xpath', '//*[contains(@class, "paragraphs-add-dialog") and contains(@class, "ui-dialog-content")]//*[contains(@name, "test_1")]')->click();

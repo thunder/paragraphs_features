@@ -67,7 +67,7 @@ class ParagraphsFeaturesDeleteConfirmationTest extends ParagraphsFeaturesJavascr
     $page = $session->getPage();
 
     // 2a) Add nested paragraph.
-    $page->find('xpath', '//input[@data-drupal-selector="field-paragraphs-test-nested-add-more"]')->click();
+    $this->scrollClick('xpath', '//input[@data-drupal-selector="field-paragraphs-test-nested-add-more"]');
     $this->assertSession()->assertWaitOnAjaxRequest();
 
     // 2b) Trigger confirmation.
