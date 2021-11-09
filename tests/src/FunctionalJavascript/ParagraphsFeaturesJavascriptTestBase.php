@@ -160,17 +160,28 @@ abstract class ParagraphsFeaturesJavascriptTestBase extends WebDriverTestBase {
   }
 
   /**
-   * Scroll element with defined css selector in middle of browser view.
+   * Scroll element in middle of browser view.
    *
-   * @param string $cssSelector
-   *   CSS Selector for element that should be centralized.
+   * @param string $selector
+   *   Selector engine name.
+   * @param string|array $locator
+   *   Selector locator.
    */
-  public function scrollElementInView($cssSelector) {
-    $this->getSession()
-      ->executeScript('
-        var element = document.querySelector(\'' . addcslashes($cssSelector, '\'') . '\');
-        element.scrollIntoView({block: "center"});
-      ');
+  public function scrollElementInView($selector, $locator) {
+    if ($selector === 'xpath') {
+      $this->getSession()
+        ->executeScript('
+          var element = document.evaluate(\'' . addcslashes($locator, '\'') . '\', document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;
+          element.scrollIntoView({block: "center"});
+        ');
+    }
+    else {
+      $this->getSession()
+        ->executeScript('
+          var element = document.querySelector(\'' . addcslashes($locator, '\'') . '\');
+          element.scrollIntoView({block: "center"});
+        ');
+    }
   }
 
 }

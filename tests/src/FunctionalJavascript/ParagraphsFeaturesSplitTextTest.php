@@ -331,7 +331,7 @@ class ParagraphsFeaturesSplitTextTest extends ParagraphsFeaturesJavascriptTestBa
     );
 
     // And then original collapsed paragraph.
-    $this->scrollElementInView('[name=field_paragraphs_0_edit]');
+    $this->scrollElementInView('css', '[name=field_paragraphs_0_edit]');
     $page->pressButton('field_paragraphs_0_edit');
     $this->assertSession()->assertWaitOnAjaxRequest();
 
