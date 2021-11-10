@@ -25,6 +25,7 @@ class ParagraphsFeaturesDeleteConfirmationTest extends ParagraphsFeaturesJavascr
     $this->drupalGet("node/add/$content_type");
     $session = $this->getSession();
     $page = $session->getPage();
+    $driver = $session->getDriver();
 
     // 1a) Check that custom remove button is present and the original remove
     // action is hidden.
@@ -33,8 +34,8 @@ class ParagraphsFeaturesDeleteConfirmationTest extends ParagraphsFeaturesJavascr
     $this->assertSession()->elementExists('xpath', '//button[contains(@class, "paragraphs-features__delete-confirm")]');
 
     // 1b) Trigger delete confirmation message.
-    $page->find('xpath', '//button[contains(@class, "paragraphs-dropdown-toggle")]')->click();
-    $page->find('xpath', '//button[contains(@class, "paragraphs-features__delete-confirm")]')->click();
+    $driver->click('//button[contains(@class, "paragraphs-dropdown-toggle")]');
+    $this->scrollClick('xpath', '//button[contains(@class, "paragraphs-features__delete-confirm")]');
     // Message and buttons are shown, paragraphs inner form elements should be
     // hidden.
     $this->assertSession()->elementExists('css', 'div.paragraphs-features__delete-confirmation');
@@ -53,7 +54,7 @@ class ParagraphsFeaturesDeleteConfirmationTest extends ParagraphsFeaturesJavascr
 
     // 1d) Trigger delete confirmation message, remove paragraph.
     $page->find('xpath', '//button[contains(@class, "paragraphs-dropdown-toggle")]')->click();
-    $page->find('xpath', '//button[contains(@class, "paragraphs-features__delete-confirm")]')->click();
+    $this->scrollClick('xpath', '//button[contains(@class, "paragraphs-features__delete-confirm")]');
     $page->find('xpath', '//button[contains(@class, "paragraphs-features__delete-confirmation__remove-button")]')->click();
     $this->assertSession()->assertWaitOnAjaxRequest();
 
@@ -67,7 +68,7 @@ class ParagraphsFeaturesDeleteConfirmationTest extends ParagraphsFeaturesJavascr
     $page = $session->getPage();
 
     // 2a) Add nested paragraph.
-    $page->find('xpath', '//input[@data-drupal-selector="field-paragraphs-test-nested-add-more"]')->click();
+    $this->scrollClick('xpath', '//input[@data-drupal-selector="field-paragraphs-test-nested-add-more"]');
     $this->assertSession()->assertWaitOnAjaxRequest();
 
     // 2b) Trigger confirmation.
@@ -95,7 +96,7 @@ class ParagraphsFeaturesDeleteConfirmationTest extends ParagraphsFeaturesJavascr
 
     // 3b) Instant removal.
     $page->find('xpath', '//button[contains(@class, "paragraphs-dropdown-toggle")]')->click();
-    $page->find('xpath', '//input[@data-drupal-selector="field-paragraphs-0-remove"]')->click();
+    $this->scrollClick('xpath', '//input[@data-drupal-selector="field-paragraphs-0-remove"]');
     $this->assertSession()->assertWaitOnAjaxRequest();
 
     // Paragraph is gone.
@@ -140,8 +141,8 @@ class ParagraphsFeaturesDeleteConfirmationTest extends ParagraphsFeaturesJavascr
     );
 
     // 1c) Trigger delete confirmation message.
-    $page->find('xpath', '//button[contains(@class, "paragraphs-dropdown-toggle")]')->click();
-    $page->find('xpath', '//button[contains(@class, "paragraphs-features__delete-confirm")]')->click();
+    $this->scrollClick('xpath', '//button[contains(@class, "paragraphs-dropdown-toggle")]');
+    $this->scrollClick('xpath', '//button[contains(@class, "paragraphs-features__delete-confirm")]');
 
     // 1d) Cancel remove paragraph.
     $page->find('xpath', '//button[contains(@class, "paragraphs-features__delete-confirmation__cancel-button")]')->click();
