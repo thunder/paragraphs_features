@@ -69,6 +69,30 @@ abstract class ParagraphsFeaturesJavascriptTestBase extends WebDriverTestBase {
   }
 
   /**
+   * {@inheritdoc}
+   */
+  protected function initFrontPage() {
+    parent::initFrontPage();
+    // Set a standard window size so that all javascript tests start with the
+    // same viewport.
+    $windowSize = $this->getWindowSize();
+    $this->getSession()->resizeWindow($windowSize['width'], $windowSize['height']);
+  }
+
+  /**
+   * Get base window size.
+   *
+   * @return array
+   *   Return
+   */
+  protected function getWindowSize() {
+    return [
+      'width' => 1280,
+      'height' => 768,
+    ];
+  }
+
+  /**
    * Create content type with paragraph field and additional paragraph types.
    *
    * Paragraph types are prefixed with "test_" and for text types index will be
