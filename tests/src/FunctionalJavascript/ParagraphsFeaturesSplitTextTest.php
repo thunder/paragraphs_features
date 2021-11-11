@@ -28,7 +28,7 @@ class ParagraphsFeaturesSplitTextTest extends ParagraphsFeaturesJavascriptTestBa
     $page = $session->getPage();
     $driver = $session->getDriver();
 
-    $page->find('xpath', '(//*[contains(@class, "paragraph-type-add-modal-button")])[1]')->click();
+    $this->scrollClick('xpath', '(//*[contains(@class, "paragraph-type-add-modal-button")])[1]');
     $this->assertSession()->assertWaitOnAjaxRequest();
     $page->find('xpath', '//*[contains(@class, "paragraphs-add-dialog") and contains(@class, "ui-dialog-content")]//*[contains(@name, "test_1")]')->click();
     $this->assertSession()->assertWaitOnAjaxRequest();
@@ -331,8 +331,7 @@ class ParagraphsFeaturesSplitTextTest extends ParagraphsFeaturesJavascriptTestBa
     );
 
     // And then original collapsed paragraph.
-    $this->scrollElementInView('[name=field_paragraphs_0_edit]');
-    $page->pressButton('field_paragraphs_0_edit');
+    $this->scrollClick('css', '[name=field_paragraphs_0_edit]');
     $this->assertSession()->assertWaitOnAjaxRequest();
 
     $ck_editor_id_0 = $this->getCkEditorId(0);
