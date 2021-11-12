@@ -7,7 +7,8 @@ drupal.paragraphs_features.add_in_between:
       css/paragraphs-features.add-in-between.css: {}
   dependencies:
     - core/drupal
-    - core/jquery.once
+    - core/jquery
+    - core/once
     - paragraphs/drupal.paragraphs.modal
 
 drupal.paragraphs_features.delete_confirmation:
