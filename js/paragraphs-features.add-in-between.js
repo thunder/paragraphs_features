@@ -199,7 +199,7 @@
    */
   Drupal.behaviors.paragraphsFeaturesAddInBetweenTableDragDrop = {
     attach: (context, settings) => {
-      for (const tableId in settings.tableDrag) {
+      Object.keys(settings.tableDrag || {}).forEach((tableId) => {
         Drupal.paragraphs_features.add_in_between.adjustDragDrop(tableId);
         // Show / hide row weights.
         once('in-between-buttons-columnschange', '#' + tableId, context).forEach((table) => {
@@ -208,7 +208,7 @@
             Drupal.paragraphs_features.add_in_between.adjustDragDrop(this.id);
           });
         });
-      }
+      });
     }
   };
 
