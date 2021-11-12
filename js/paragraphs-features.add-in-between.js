@@ -9,9 +9,7 @@
   /**
    * Ensure namespace for paragraphs features exists.
    */
-  if (typeof Drupal.paragraphs_features === 'undefined') {
-    Drupal.paragraphs_features = {};
-  }
+  Drupal.paragraphs_features = Drupal.paragraphs_features || {};
 
   /**
    * Namespace for add in between paragraphs feature.
@@ -58,7 +56,7 @@
    */
   Drupal.behaviors.paragraphsFeaturesAddInBetweenInit = {
     attach: (context, settings) => {
-      Object.values(settings.paragraphs_features.add_in_between || {}).forEach(function (field) {
+      Object.values(settings.paragraphs_features.add_in_between || {}).forEach((field) => {
         Drupal.paragraphs_features.add_in_between.initParagraphsWidget(context, field);
       });
     }
@@ -134,9 +132,8 @@
 
     // Add a new button for adding a new paragraph to the end of the list.
     if (!tableBody) {
-      table.insertAdjacentHTML('beforeend', '<tbody></tbody>');
-
-      tableBody = table.querySelector(':scope > tbody');
+      tableBody = document.createElement('tbody');
+      table.append(tableBody);
     }
 
     tableBody.querySelectorAll(':scope > tr').forEach((rowElement) => {
@@ -152,7 +149,7 @@
       });
     }
 
-    // Trigger attaching of behaviours for added buttons.
+    // Trigger attaching of behaviors for added buttons.
     Drupal.behaviors.paragraphsFeaturesAddInBetweenRegister.attach(table);
   };
 
@@ -203,16 +200,14 @@
   Drupal.behaviors.paragraphsFeaturesAddInBetweenTableDragDrop = {
     attach: (context, settings) => {
       for (const tableId in settings.tableDrag) {
-        if (Object.prototype.hasOwnProperty.call(settings.tableDrag, tableId)) {
-          Drupal.paragraphs_features.add_in_between.adjustDragDrop(tableId);
-          // Show / hide row weights.
-          once('in-between-buttons-columnschange', '#' + tableId, context).forEach((table) => {
-            // drupal tabledrag uses jquery events.
-            $(table).on('columnschange', () => {
-              Drupal.paragraphs_features.add_in_between.adjustDragDrop(this.id);
-            });
+        Drupal.paragraphs_features.add_in_between.adjustDragDrop(tableId);
+        // Show / hide row weights.
+        once('in-between-buttons-columnschange', '#' + tableId, context).forEach((table) => {
+          // drupal tabledrag uses jquery events.
+          $(table).on('columnschange', () => {
+            Drupal.paragraphs_features.add_in_between.adjustDragDrop(this.id);
           });
-        }
+        });
       }
     }
   };
@@ -222,7 +217,7 @@
    * buttons.
    *
    * @param {string} tableId
-   *   Table ID for paragraphs table with adjusted drag-drop behaviour.
+   *   Table ID for paragraphs table with adjusted drag-drop behavior.
    */
   Drupal.paragraphs_features.add_in_between.adjustDragDrop = (tableId) => {
     // Ensure that function changes are executed only once.
