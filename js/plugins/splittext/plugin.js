@@ -250,7 +250,7 @@
       }
 
       // Get module path necessary for button icons.
-      var modulePath = drupalSettings.paragraphs_features.split_text._path;
+      var modulePath = drupalSettings.paragraphs_features._path;
 
       editor.addCommand('splitText', {
         exec: function (editor) {

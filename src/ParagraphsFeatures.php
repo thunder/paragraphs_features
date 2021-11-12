@@ -56,18 +56,17 @@ class ParagraphsFeatures {
    *   Field Wrapper ID, usually provided by ::getWrapperId().
    */
   public static function registerFormWidgetFeatures(array &$elements, ParagraphsWidget $widget, $fieldWrapperId) {
-    if (!in_array(
-      \Drupal::theme()->getActiveTheme()->getName(),
-      ['claro', 'gin']
-    )) {
+    if (!in_array(\Drupal::theme()->getActiveTheme()->getName(),
+      ['claro', 'gin'])) {
       return;
     }
     foreach (static::$availableFeatures as $feature) {
       if ($widget->getThirdPartySetting('paragraphs_features', $feature)) {
         $elements['add_more']['#attached']['library'][] = 'paragraphs_features/' . $feature;
-        $elements['add_more']['#attached']['drupalSettings']['paragraphs_features'][$feature][$fieldWrapperId] = TRUE;
-        $elements['add_more']['#attached']['drupalSettings']['paragraphs_features'][$feature]['_path'] = drupal_get_path('module', 'paragraphs_features');
+        $elements['add_more']['#attached']['drupalSettings']['paragraphs_features'][$feature][$fieldWrapperId] = ['wrapperId' => $fieldWrapperId];
       }
+      // Set module path for split_text feature.
+      $elements['add_more']['#attached']['drupalSettings']['paragraphs_features']['_path'] = drupal_get_path('module', 'paragraphs_features');
     }
 
     $elements['add_more']['#attached']['library'][] = 'paragraphs_features/drupal.paragraphs_features.scroll_to_element';
@@ -118,10 +117,8 @@ class ParagraphsFeatures {
   public static function getThirdPartyForm(WidgetInterface $plugin, $field_name) {
     $elements = [];
     $disabled = FALSE;
-    if (!in_array(
-      \Drupal::theme()->getActiveTheme()->getName(),
-      ['claro', 'gin']
-    )) {
+    if (!in_array(\Drupal::theme()->getActiveTheme()->getName(),
+      ['claro', 'gin'])) {
       $disabled = TRUE;
     }
 
