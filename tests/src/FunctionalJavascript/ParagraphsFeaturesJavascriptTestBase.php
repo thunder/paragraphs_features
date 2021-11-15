@@ -69,6 +69,30 @@ abstract class ParagraphsFeaturesJavascriptTestBase extends WebDriverTestBase {
   }
 
   /**
+   * {@inheritdoc}
+   */
+  protected function initFrontPage() {
+    parent::initFrontPage();
+    // Set a standard window size so that all javascript tests start with the
+    // same viewport.
+    $windowSize = $this->getWindowSize();
+    $this->getSession()->resizeWindow($windowSize['width'], $windowSize['height']);
+  }
+
+  /**
+   * Get base window size.
+   *
+   * @return array
+   *   Return
+   */
+  protected function getWindowSize() {
+    return [
+      'width' => 1280,
+      'height' => 768,
+    ];
+  }
+
+  /**
    * Create content type with paragraph field and additional paragraph types.
    *
    * Paragraph types are prefixed with "test_" and for text types index will be
@@ -160,17 +184,50 @@ abstract class ParagraphsFeaturesJavascriptTestBase extends WebDriverTestBase {
   }
 
   /**
-   * Scroll element with defined css selector in middle of browser view.
+   * Scroll element in middle of browser view.
    *
-   * @param string $cssSelector
-   *   CSS Selector for element that should be centralized.
+   * @param string $selector
+   *   Selector engine name.
+   * @param string|array $locator
+   *   Selector locator.
    */
-  public function scrollElementInView($cssSelector) {
-    $this->getSession()
-      ->executeScript('
-        var element = document.querySelector(\'' . addcslashes($cssSelector, '\'') . '\');
-        element.scrollIntoView({block: "center"});
-      ');
+  public function scrollElementInView($selector, $locator) {
+    if ($selector === 'xpath') {
+      $this->getSession()
+        ->executeScript('
+          var element = document.evaluate(\'' . addcslashes($locator, '\'') . '\', document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;
+          element.scrollIntoView({block: "center"});
+          element.focus({preventScroll:true});
+        ');
+    }
+    else {
+      $this->getSession()
+        ->executeScript('
+          var element = document.querySelector(\'' . addcslashes($locator, '\'') . '\');
+          element.scrollIntoView({block: "center"});
+        ');
+    }
+  }
+
+  /**
+   * Scroll element in middle of browser view and click it.
+   *
+   * @param string $selector
+   *   Selector engine name.
+   * @param string|array $locator
+   *   Selector locator.
+   *
+   * @throws \Behat\Mink\Exception\DriverException
+   * @throws \Behat\Mink\Exception\UnsupportedDriverActionException
+   */
+  public function scrollClick($selector, $locator) {
+    $this->scrollElementInView($selector, $locator);
+    if ($selector === 'xpath') {
+      $this->getSession()->getDriver()->click($locator);
+    }
+    else {
+      $this->click($locator);
+    }
   }
 
 }

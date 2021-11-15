@@ -4,14 +4,12 @@
 
 (($, Drupal, once) => {
 
-  // 'use strict';
+  'use strict';
 
   /**
    * Ensure namespace for paragraphs features exists.
    */
-  if (typeof Drupal.paragraphs_features === 'undefined') {
-    Drupal.paragraphs_features = {};
-  }
+  Drupal.paragraphs_features = Drupal.paragraphs_features || {};
 
   /**
    * Namespace for add in between paragraphs feature.
@@ -30,17 +28,17 @@
    *   Returns element for add in between row.
    */
   Drupal.theme.paragraphsFeaturesAddInBetweenRow = (config) => {
-    const input = document.createElement('input'),
-      wrapper = document.createElement('div'),
-      td = document.createElement("td"),
-      row = document.createElement('tr');
+    const input = document.createElement('input');
+    const wrapper = document.createElement('div');
+    const td = document.createElement('td');
+    const row = document.createElement('tr');
 
     input.classList.add('paragraphs-features__add-in-between__button', 'button--small', 'js-show', 'button', 'js-form-submit', 'form-submit');
     input.type = 'submit';
     input.value = config.text;
     wrapper.classList.add('paragraphs-features__add-in-between__wrapper');
     wrapper.appendChild(input);
-    td.setAttribute('colspan', '100%')
+    td.setAttribute('colspan', '100%');
     td.appendChild(wrapper);
     row.classList.add('paragraphs-features__add-in-between__row');
     row.appendChild(td);
@@ -49,35 +47,70 @@
   };
 
   /**
-   * Attach add in between buttons on paragraphs table.
+   * Init add in between buttons for paragraphs table.
    *
-   * @type {Drupal~behavior}
-   *
-   * @prop {Drupal~behaviorAttach} attach
-   *   Attaches the behavior.
+   * @type {Object}
    */
   Drupal.behaviors.paragraphsFeaturesAddInBetweenInit = {
     attach: (context, settings) => {
-      Object.values(settings.paragraphs_features.add_in_between || {}).forEach(function (field) {
+      Object.values(settings.paragraphs_features.add_in_between || {}).forEach((field) => {
         Drupal.paragraphs_features.add_in_between.initParagraphsWidget(context, field);
       });
     }
   };
 
   /**
+   * Get paragraphs add modal block in various themes structures.
+   *
+   *  gin:
+   *   .layer-wrapper table
+   *   .form-actions
+   * claro:
+   *   table
+   *   .form-actions
+   * thunder-admin / seven:
+   *   table
+   *   .clearfix
+   *
+   * @param {HTMLElement} table
+   * The table element.
+   *
+   * @return {HTMLElement} addModalBlock
+   *   the add modal block element.
+   */
+  Drupal.paragraphs_features.add_in_between.getAddModalBlock = (table) => {
+    const fromParent = (elem) => {
+      let sibling = elem.parentNode.firstChild;
+      while (sibling) {
+        if (sibling.nodeType === 1 && sibling !== elem) {
+          const addModalBlock = sibling.querySelector('.paragraphs-add-wrapper');
+          if (addModalBlock) {
+            return addModalBlock;
+          }
+        }
+        sibling = sibling.nextSibling;
+      }
+    };
+    return fromParent(table) || fromParent(table.parentNode);
+  };
+
+  /**
    * Init paragraphs widget with add in between functionality.
    *
-   * @param {array} paragraphsWidgetId
-   *   Paragraphs Widget ID.
+   * @param {HTMLDocument|HTMLElement} [context=document]
+   *   An element to attach behaviors to.
+   * @param {array} field
+   *   The paragraphs field config.
    */
   Drupal.paragraphs_features.add_in_between.initParagraphsWidget = function (context, field) {
     const [wrapper] = once('paragraphs-features-add-in-between-init', '#' + field.wrapperId, context);
+    if (!wrapper) {
+      return;
+    }
 
-    if (!wrapper) return;
-
-    const table = wrapper.querySelector('.field-multiple-table'),
-          addModalBlock = wrapper.querySelector('.paragraphs-add-wrapper'),
-          addModalButton = addModalBlock.querySelector('.paragraph-type-add-modal-button');
+    const table = wrapper.querySelector('.field-multiple-table');
+    const addModalBlock = Drupal.paragraphs_features.add_in_between.getAddModalBlock(table);
+    const addModalButton = addModalBlock.querySelector('.paragraph-type-add-modal-button');
 
     // Ensure that paragraph list uses modal dialog.
     if (!addModalButton) {
@@ -89,16 +122,15 @@
 
     const buttonRowElement = () => {
       return Drupal.theme('paragraphsFeaturesAddInBetweenRow', {text: Drupal.t('+ Add')});
-    }
+    };
 
     // Add buttons and adjust drag-drop functionality.
     let tableBody = table.querySelector(':scope > tbody');
 
     // Add a new button for adding a new paragraph to the end of the list.
     if (!tableBody) {
-      table.insertAdjacentHTML('beforeend', '<tbody></tbody>');
-
-      tableBody = table.querySelector(':scope > tbody');
+      tableBody = document.createElement('tbody');
+      table.append(tableBody);
     }
 
     tableBody.querySelectorAll(':scope > tr').forEach((rowElement) => {
@@ -114,7 +146,7 @@
       });
     }
 
-    // Trigger attaching of behaviours for added buttons.
+    // Trigger attaching of behaviors for added buttons.
     Drupal.behaviors.paragraphsFeaturesAddInBetweenRegister.attach(table);
   };
 
@@ -127,7 +159,7 @@
     attach: (context) => {
       once('paragraphs-features-add-in-between', '.paragraphs-features__add-in-between__button', context).forEach((button) => {
         button.addEventListener('click', (event) => {
-          const dialog = button.closest('table').parentNode.querySelector('.paragraphs-add-wrapper').querySelector('.paragraphs-add-dialog');
+          const dialog = Drupal.paragraphs_features.add_in_between.getAddModalBlock(button.closest('table')).querySelector('.paragraphs-add-dialog');
           const row = button.closest('tr');
           const delta = Array.prototype.indexOf.call(row.parentNode.children, row) / 2;
 
@@ -164,18 +196,16 @@
    */
   Drupal.behaviors.paragraphsFeaturesAddInBetweenTableDragDrop = {
     attach: (context, settings) => {
-      for (const tableId in settings.tableDrag) {
-        if (Object.prototype.hasOwnProperty.call(settings.tableDrag, tableId)) {
-          Drupal.paragraphs_features.add_in_between.adjustDragDrop(tableId);
-          // Show / hide row weights.
-          once('in-between-buttons-columnschange', '#' + tableId, context).forEach((table) => {
-            // drupal tabledrag uses jquery events.
-            $(table).on('columnschange', () => {
-              Drupal.paragraphs_features.add_in_between.adjustDragDrop(this.id);
-            });
+      Object.keys(settings.tableDrag || {}).forEach((tableId) => {
+        Drupal.paragraphs_features.add_in_between.adjustDragDrop(tableId);
+        // Show / hide row weights.
+        once('in-between-buttons-columnschange', '#' + tableId, context).forEach((table) => {
+          // drupal tabledrag uses jquery events.
+          $(table).on('columnschange', () => {
+            Drupal.paragraphs_features.add_in_between.adjustDragDrop(this.id);
           });
-        }
-      }
+        });
+      });
     }
   };
 
@@ -184,7 +214,7 @@
    * buttons.
    *
    * @param {string} tableId
-   *   Table ID for paragraphs table with adjusted drag-drop behaviour.
+   *   Table ID for paragraphs table with adjusted drag-drop behavior.
    */
   Drupal.paragraphs_features.add_in_between.adjustDragDrop = (tableId) => {
     // Ensure that function changes are executed only once.
@@ -196,7 +226,7 @@
     // Helper function to create sequence execution of two bool functions.
     const sequenceBoolFunctions = (originalFn, newFn) => {
       // Arrow functions do not support arguments.
-      return function() {
+      return function () {
         let result = originalFn.apply(this, arguments);
 
         if (result) {
@@ -218,12 +248,12 @@
 
     // provide custom .onSwap() handler to reorder "Add" buttons.
     rowObject.prototype.onSwap = (row) => {
-      const table = row.closest('table'),
-        allDrags = table.querySelectorAll(':scope > tbody > tr.draggable'),
-        allAdds = table.querySelectorAll(':scope > tbody > tr.paragraphs-features__add-in-between__row');
+      const table = row.closest('table');
+      const allDrags = table.querySelectorAll(':scope > tbody > tr.draggable');
+      const allAdds = table.querySelectorAll(':scope > tbody > tr.paragraphs-features__add-in-between__row');
 
       // We have to re-stripe add in between rows.
-      allDrags.forEach( (dragElem, index) => {
+      allDrags.forEach((dragElem, index) => {
         if (allAdds.item(index)) {
           dragElem.insertAdjacentElement('beforebegin', allAdds.item(index));
         }
