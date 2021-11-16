@@ -147,14 +147,6 @@ class ParagraphsFeatures {
       '#default_value' => $plugin->getThirdPartySetting('paragraphs_features', 'add_in_between_link_count', 3),
       '#min' => 0,
       '#attributes' => ['class' => ['paragraphs-features__add-in-between__option']],
-//      '#states' => [
-//        'enabled' => [
-//          ':input[name="fields[' . $field_name . '][settings_edit_form][third_party_settings][paragraphs_features][add_in_between]"]' => [
-//            'checked' => TRUE,
-//          ]
-//        ],
-//        'visible' => $modal_related_options_rule,
-//      ],
       '#states' => [
         'enabled' => [
           ':input[name="fields[' . $field_name . '][settings_edit_form][third_party_settings][paragraphs_features][add_in_between]"]' => [
