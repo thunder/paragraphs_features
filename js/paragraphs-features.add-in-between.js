@@ -68,7 +68,27 @@
     button.classList.add('paragraphs-features__add-in-between__button', 'button--small', 'js-show', 'button', 'js-form-submit', 'form-submit');
 
     return button;
-  }
+  };
+
+  /**
+   * Define add in between more button template.
+   *
+   * @param {object} config
+   *   Configuration for add in between button.
+   *
+   * @return {HTMLElement}
+   *   Returns element for add in between button.
+   */
+  Drupal.theme.paragraphsFeaturesAddInBetweenMoreButton = (config) => {
+    const button = document.createElement('input');
+
+    button.type = 'submit';
+    button.value = Drupal.t('@title', {'@title': config.title}, {context: 'Paragraphs Features'});
+    button.title = Drupal.t('@title', {'@title': config.title}, {context: 'Paragraphs Features'});
+    button.classList.add('paragraphs-features__add-in-between__button', 'button--small', 'js-show', 'button', 'js-form-submit', 'form-submit');
+
+    return button;
+  };
 
   /**
    * Init add in between buttons for paragraphs table.
@@ -126,7 +146,7 @@
    * @param {array} field
    *   The paragraphs field config.
    */
-  Drupal.paragraphs_features.add_in_between.initParagraphsWidget =  (context, field) => {
+  Drupal.paragraphs_features.add_in_between.initParagraphsWidget = (context, field) => {
     const [wrapper] = once('paragraphs-features-add-in-between-init', '#' + field.wrapperId, context);
     if (!wrapper) {
       return;
@@ -152,7 +172,7 @@
       addButtons.slice(0, field.linkCount).forEach((addButton) => {
         // Create a remote button triggering original add button in dialog.
         addButton.parentElement.style.display = 'none';
-        const button = Drupal.theme('paragraphsFeaturesAddInBetweenButton', {'title': addButton.value});
+        const button = Drupal.theme('paragraphsFeaturesAddInBetweenButton', {title: addButton.value});
 
         button.addEventListener('click', (event) => {
           event.preventDefault();
@@ -170,10 +190,9 @@
         buttons.push(button);
       });
 
-      // Add more (...) triggering dialog open.
+      // Add more (...) button triggering dialog open.
       if (addButtons.length > field.linkCount) {
-        const li = document.createElement('li');
-        const button = Drupal.theme('paragraphsFeaturesAddInBetweenButton', {'title': 'More'});
+        const button = Drupal.theme('paragraphsFeaturesAddInBetweenMoreButton', {title: '...'});
 
         button.addEventListener('click', (event) => {
           event.preventDefault();
@@ -192,7 +211,7 @@
       }
 
       return Drupal.theme('paragraphsFeaturesAddInBetweenRow', buttons);
-    }
+    };
 
     let tableBody = table.querySelector(':scope > tbody');
 
