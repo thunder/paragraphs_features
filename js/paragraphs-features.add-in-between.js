@@ -192,7 +192,8 @@
 
       // Add more (...) button triggering dialog open.
       if (addButtons.length > field.linkCount) {
-        const button = Drupal.theme('paragraphsFeaturesAddInBetweenMoreButton', {title: '...'});
+        const title = field.linkCount === 0 ? '+ Add' : '...';
+        const button = Drupal.theme('paragraphsFeaturesAddInBetweenMoreButton', {title: title});
 
         button.addEventListener('click', (event) => {
           event.preventDefault();
