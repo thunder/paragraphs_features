@@ -21,7 +21,7 @@
   /**
    * Define add in between row template.
    *
-   * @param {Array} buttons
+   * @param {array} buttons
    *   Array of button elements for add in between row template.
    *
    * @return {HTMLElement}
@@ -60,11 +60,8 @@
    *   Returns element for add in between button.
    */
   Drupal.theme.paragraphsFeaturesAddInBetweenButton = (config) => {
-    const button = document.createElement('input');
-
-    button.type = 'submit';
-    button.value = Drupal.t('+ @title', {'@title': config.title}, {context: 'Paragraphs Features'});
-    button.title = Drupal.t('Add @title', {'@title': config.title}, {context: 'Paragraphs Features'});
+    const button = document.createElement('button');
+    button.innerText = Drupal.t('Add @title', {'@title': config.title}, {context: 'Paragraphs Features'});
     button.classList.add('paragraphs-features__add-in-between__button', 'button--small', 'js-show', 'button', 'js-form-submit', 'form-submit');
 
     return button;
@@ -80,15 +77,37 @@
    *   Returns element for add in between button.
    */
   Drupal.theme.paragraphsFeaturesAddInBetweenMoreButton = (config) => {
-    const button = document.createElement('input');
-
-    button.type = 'submit';
-    button.value = Drupal.t('@title', {'@title': config.title}, {context: 'Paragraphs Features'});
-    button.title = Drupal.t('@title', {'@title': config.title}, {context: 'Paragraphs Features'});
+    const button = document.createElement('button');
+    button.innerText = Drupal.t('@title', {'@title': config.title}, {context: 'Paragraphs Features'});
     button.classList.add('paragraphs-features__add-in-between__button', 'button--small', 'js-show', 'button', 'js-form-submit', 'form-submit');
 
     return button;
   };
+
+  /**
+   * Add listener for triggering drupal inputs.
+   *
+   * @param {HTMLElement} button
+   * @param {HTMLElement=} addButton
+   */
+  Drupal.paragraphs_features.addEventListenerToButton = (button, addButton) => {
+    button.addEventListener('click', (event) => {
+      event.preventDefault();
+      event.stopPropagation();
+
+      const dialog = Drupal.paragraphs_features.add_in_between.getAddModalBlock(event.target.closest('table')).querySelector('.paragraphs-add-dialog');
+      const row = event.target.closest('tr');
+      const delta = Array.prototype.indexOf.call(row.parentNode.children, row) / 2;
+
+      // Set delta where new paragraph should be inserted.
+      Drupal.paragraphs_features.add_in_between.setDelta(dialog, delta);
+
+      // Trigger event on original button or open modal.
+      (addButton) ?
+        addButton.dispatchEvent(new MouseEvent('mousedown')) :
+        Drupal.paragraphsAddModal.openDialog(dialog, Drupal.t('Add In Between'), {}, {context: 'Paragraphs Features'});
+    });
+  }
 
   /**
    * Init add in between buttons for paragraphs table.
@@ -143,7 +162,7 @@
    *
    * @param {HTMLDocument|HTMLElement} [context=document]
    *   An element to attach behaviors to.
-   * @param {array} field
+   * @param {{wrapperId:string, linkCount:number}} field
    *   The paragraphs field config.
    */
   Drupal.paragraphs_features.add_in_between.initParagraphsWidget = (context, field) => {
@@ -174,40 +193,18 @@
         addButton.parentElement.style.display = 'none';
         const button = Drupal.theme('paragraphsFeaturesAddInBetweenButton', {title: addButton.value});
 
-        button.addEventListener('click', (event) => {
-          event.preventDefault();
-          event.stopPropagation();
-
-          const dialog = Drupal.paragraphs_features.add_in_between.getAddModalBlock(event.target.closest('table')).querySelector('.paragraphs-add-dialog');
-          const row = event.target.closest('tr');
-          const delta = Array.prototype.indexOf.call(row.parentNode.children, row) / 2;
-
-          // Set delta and trigger event on original button.
-          Drupal.paragraphs_features.add_in_between.setDelta(dialog, delta);
-          addButton.dispatchEvent(new MouseEvent('mousedown'));
-        });
-
+        Drupal.paragraphs_features.addEventListenerToButton(button, addButton);
         buttons.push(button);
       });
 
       // Add more (...) button triggering dialog open.
       if (addButtons.length > field.linkCount) {
-        const title = field.linkCount === 0 ? '+ Add' : '...';
+        const title = field.linkCount === 0 ?
+          Drupal.t('+ Add', {}, {context: 'Paragraphs Features'}) :
+          Drupal.t('...', {}, {context: 'Paragraphs Features'});
         const button = Drupal.theme('paragraphsFeaturesAddInBetweenMoreButton', {title: title});
 
-        button.addEventListener('click', (event) => {
-          event.preventDefault();
-          event.stopPropagation();
-
-          const dialog = Drupal.paragraphs_features.add_in_between.getAddModalBlock(event.target.closest('table')).querySelector('.paragraphs-add-dialog');
-          const row = event.target.closest('tr');
-          const delta = Array.prototype.indexOf.call(row.parentNode.children, row) / 2;
-
-          // Set delta and open of dialog.
-          Drupal.paragraphs_features.add_in_between.setDelta(dialog, delta);
-          Drupal.paragraphsAddModal.openDialog(dialog, Drupal.t('Add In Between'), {}, {context: 'Paragraphs Features'});
-        });
-
+        Drupal.paragraphs_features.addEventListenerToButton(button);
         buttons.push(button);
       }
 
