@@ -32,7 +32,7 @@ class ParagraphsFeaturesAddInBetweenTest extends ParagraphsFeaturesJavascriptTes
     $this->assertSession()->assertWaitOnAjaxRequest();
 
     // By default a non modal add mode should be selected.
-    $is_option_visible = $session->evaluateScript("jQuery('.paragraphs-features__add-in-between__option:visible').length === 0");
+    $is_option_visible = $session->evaluateScript("Array.from(document.querySelectorAll('.paragraphs-features__add-in-between__option')).filter((item) => { return item.offsetParent }).length === 0");
     $this->assertEquals(TRUE, $is_option_visible, 'By default "add in between" option should not be visible.');
 
     // Check that add in between option is available for modal add mode.
@@ -40,7 +40,7 @@ class ParagraphsFeaturesAddInBetweenTest extends ParagraphsFeaturesJavascriptTes
     $session->executeScript("jQuery('[name=\"fields[field_paragraphs][settings_edit_form][settings][add_mode]\"]').trigger('change');");
     $this->assertSession()->assertWaitOnAjaxRequest();
 
-    $is_option_visible = $session->evaluateScript("jQuery('.paragraphs-features__add-in-between__option:visible').length === 2");
+    $is_option_visible = $session->evaluateScript("Array.from(document.querySelectorAll('.paragraphs-features__add-in-between__option')).filter((item) => { return !item.disabled }).length === 1");
     $this->assertEquals(TRUE, $is_option_visible, 'After modal add mode is selected, "add in between" option should be available.');
     $page->checkField('fields[field_paragraphs][settings_edit_form][third_party_settings][paragraphs_features][add_in_between]');
     $page->fillField('fields[field_paragraphs][settings_edit_form][third_party_settings][paragraphs_features][add_in_between_link_count]', 0);
@@ -52,7 +52,7 @@ class ParagraphsFeaturesAddInBetweenTest extends ParagraphsFeaturesJavascriptTes
     $session->executeScript("jQuery('[name=\"fields[field_paragraphs][settings_edit_form][settings][add_mode]\"]').trigger('change');");
     $this->assertSession()->assertWaitOnAjaxRequest();
 
-    $is_option_visible = $session->evaluateScript("jQuery('.paragraphs-features__add-in-between__option:visible').length === 0");
+    $is_option_visible = $session->evaluateScript("Array.from(document.querySelectorAll('.paragraphs-features__add-in-between__option')).filter((item) => { return item.offsetParent }).length === 0");
     $this->assertEquals(TRUE, $is_option_visible, 'After add mode is change to non modal, "add in between" option should not be visible.');
     $is_disabled = $session->evaluateScript("jQuery('.paragraphs-features__add-in-between__option').is(':disabled')");
     $this->assertEquals(TRUE, $is_disabled, 'After add mode is change to non modal, "add in between" option should be disabled.');
@@ -71,7 +71,7 @@ class ParagraphsFeaturesAddInBetweenTest extends ParagraphsFeaturesJavascriptTes
     // Check that default add mode functionality is used.
     $this->drupalGet("node/add/$content_type");
     $this->assertEquals(TRUE, $driver->isVisible('//*[@name="button_add_modal"]'), 'Default "Add Paragraph" button should be visible.');
-    $this->assertSession()->elementNotExists('xpath', '//input[contains(concat(" ", normalize-space(@class), " "), " paragraphs-features__add-in-between__button ")]');
+    $this->assertSession()->elementNotExists('xpath', '//button[contains(concat(" ", normalize-space(@class), " "), " paragraphs-features__add-in-between__button ")]');
 
     // Set modal add mode with add in between option.
     $this->drupalGet("admin/structure/types/manage/$content_type/form-display");
@@ -88,7 +88,7 @@ class ParagraphsFeaturesAddInBetweenTest extends ParagraphsFeaturesJavascriptTes
     // Check that add in between functionality is used.
     $this->drupalGet("node/add/$content_type");
     $this->assertEquals(FALSE, $driver->isVisible('//*[@name="button_add_modal"]'), 'Default "Add Paragraph" button should be hidden.');
-    $this->assertEquals(TRUE, $driver->isVisible('//input[contains(concat(" ", normalize-space(@class), " "), " paragraphs-features__add-in-between__button ")]'), 'New add in between button should be visible.');
+    $this->assertEquals(TRUE, $driver->isVisible('//button[contains(concat(" ", normalize-space(@class), " "), " paragraphs-features__add-in-between__button ")]'), 'New add in between button should be visible.');
 
     // Add a nested paragraph and check that add in between is used only for
     // base paragraphs field, but not for the nested paragraph.
