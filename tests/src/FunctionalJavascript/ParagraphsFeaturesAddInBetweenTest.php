@@ -9,14 +9,12 @@ namespace Drupal\Tests\paragraphs_features\FunctionalJavascript;
  *
  * @group paragraphs_features
  */
-class ParagraphsFeaturesAddInBetweenTest extends ParagraphsFeaturesJavascriptTestBase
-{
+class ParagraphsFeaturesAddInBetweenTest extends ParagraphsFeaturesJavascriptTestBase {
 
   /**
    * Tests the add widget button with modal form.
    */
-  public function testAddInBetweenFeature()
-  {
+  public function testAddInBetweenFeature() {
     // Create paragraph types and content types with required configuration for
     // testing of add in between feature.
     $content_type = 'test_modal_delta';
@@ -227,6 +225,36 @@ class ParagraphsFeaturesAddInBetweenTest extends ParagraphsFeaturesJavascriptTes
     $this->assertEquals(0, count($nested_buttons), "There should be no add in between button for nested paragraph.");
     $nested_default_button = $page->findAll('xpath', '//*[contains(@class, "paragraph-type-add-modal-button") and ancestor::div[contains(@class, "paragraphs-nested")]]');
     $this->assertEquals(0, count($nested_default_button), "There should be no default button for nested paragraph.");
+  }
+
+  /**
+   * Tests multiple add buttons.
+   */
+  public function testAddInBetweenLinkCountFeature() {
+    // Create paragraph types and content types with required configuration for
+    // testing of add in between feature.
+    $content_type = 'test_modal_delta';
+
+    // Create nested paragraph with addition of one text test paragraph.
+    $this->createTestConfiguration($content_type, 3);
+
+    $display_repository = $this->container->get('entity_display.repository');
+
+    $form_display = $display_repository->getFormDisplay('node', $content_type, 'default');
+    $field_config = $form_display->getComponent('field_paragraphs');
+    $field_config['settings']['add_mode'] = 'modal';
+    $field_config['third_party_settings']['paragraphs_features']['add_in_between'] = TRUE;
+    $field_config['third_party_settings']['paragraphs_features']['add_in_between_link_count'] = 1;
+    $form_display->setComponent('field_paragraphs', $field_config)->save();
+
+    $this->drupalGet("node/add/$content_type");
+    $this->assertJsCondition("document.querySelectorAll('.paragraphs-features__add-in-between__button').length === 2");
+    $this->getSession()->getDriver()->click('(//*[contains(concat(" ", normalize-space(@class), " "), " paragraphs-features__add-in-between__button ")])[2]');
+    $this->assertSession()->waitForElementVisible('xpath', '//*[contains(@class, "paragraphs-add-dialog") and contains(@class, "ui-dialog-content")]//*[contains(@name, "test_nested")]');
+    $this->assertJsCondition('Array.from(document.querySelectorAll(".paragraphs-add-dialog.ui-dialog-content input")).filter((item) => { return item.offsetParent }).length === 3');
+    $this->getSession()->getDriver()->click('//*[contains(@class, "ui-dialog")]//button[contains(@class, "dialog-titlebar-close")]');
+    $this->getSession()->getDriver()->click('(//*[contains(concat(" ", normalize-space(@class), " "), " paragraphs-features__add-in-between__button ")])[1]');
+    $this->assertSession()->waitForElementVisible('xpath', '//*[data-drupal-selector="edit-field-paragraphs-0-subform-text-1-wrapper"]');
   }
 
 }
