@@ -56,7 +56,7 @@ class ParagraphsFeaturesExtendedParagraphsWidgetTest extends ParagraphsFeaturesJ
     // Check that add in between functionality is used.
     $this->drupalGet("node/add/$content_type");
     $this->assertEquals(FALSE, $driver->isVisible('//*[@name="button_add_modal"]'), 'Default "Add Paragraph" button should be hidden.');
-    $this->assertEquals(TRUE, $driver->isVisible('//input[contains(@class, "paragraphs-features__add-in-between__button")]'), 'New add in between button should be visible.');
+    $this->assertEquals(TRUE, $driver->isVisible('//button[contains(@class, "paragraphs-features__add-in-between__button")]'), 'New add in between button should be visible.');
 
     // Add a nested paragraph and check that add in between is used only for
     // base paragraphs field, but not for the nested paragraph.
