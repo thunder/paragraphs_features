@@ -88,7 +88,9 @@
    * Add listener for triggering drupal inputs.
    *
    * @param {HTMLElement} button
+   *   The button to add the event on.
    * @param {HTMLElement=} addButton
+   *   The original button to click.
    */
   Drupal.paragraphs_features.addEventListenerToButton = (button, addButton) => {
     button.addEventListener('click', (event) => {
@@ -103,11 +105,11 @@
       Drupal.paragraphs_features.add_in_between.setDelta(dialog, delta);
 
       // Trigger event on original button or open modal.
-      (addButton) ?
+      addButton ?
         addButton.dispatchEvent(new MouseEvent('mousedown')) :
         Drupal.paragraphsAddModal.openDialog(dialog, Drupal.t('Add In Between'), {}, {context: 'Paragraphs Features'});
     });
-  }
+  };
 
   /**
    * Init add in between buttons for paragraphs table.

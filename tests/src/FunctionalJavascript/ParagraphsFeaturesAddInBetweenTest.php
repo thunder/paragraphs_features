@@ -9,12 +9,14 @@ namespace Drupal\Tests\paragraphs_features\FunctionalJavascript;
  *
  * @group paragraphs_features
  */
-class ParagraphsFeaturesAddInBetweenTest extends ParagraphsFeaturesJavascriptTestBase {
+class ParagraphsFeaturesAddInBetweenTest extends ParagraphsFeaturesJavascriptTestBase
+{
 
   /**
    * Tests the add widget button with modal form.
    */
-  public function testAddInBetweenFeature() {
+  public function testAddInBetweenFeature()
+  {
     // Create paragraph types and content types with required configuration for
     // testing of add in between feature.
     $content_type = 'test_modal_delta';
