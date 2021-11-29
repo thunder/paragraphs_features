@@ -251,7 +251,7 @@
 
     // provide custom .onSwap() handler to reorder "Add" buttons.
     rowObject.prototype.onSwap = (row) => {
-      const table = row.closest('table');
+      const [table] = row.closest('table');
       const allDrags = table.querySelectorAll(':scope > tbody > tr.draggable');
       const allAdds = table.querySelectorAll(':scope > tbody > tr.paragraphs-features__add-in-between__row');
 
