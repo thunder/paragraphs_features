@@ -19,11 +19,11 @@
             // We have to remove the once flag right before reattaching the behaviors,
             // because otherwise they would be automatically attached in the swapping process.
             $table.data('jquery-once-init-in-between-buttons', false);
-            Drupal.behaviors.initInBetweenButtons.attach();
+            Drupal.behaviors.initInBetweenButtons.attach(context, settings);
           }
           else {
             $table.data('jquery-once-paragraphs-features-add-in-between-init', false);
-            Drupal.behaviors.paragraphsFeaturesAddInBetweenInit.attach();
+            Drupal.behaviors.paragraphsFeaturesAddInBetweenInit.attach(context, settings);
           }
         });
       }
