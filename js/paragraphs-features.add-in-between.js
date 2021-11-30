@@ -173,7 +173,7 @@
       return;
     }
 
-    const [table] = ]once('paragraphs-features-add-in-between-init', '.field-multiple-table', wrapper)
+    const [table] = once('paragraphs-features-add-in-between-init', '.field-multiple-table', wrapper);
     const addModalBlock = Drupal.paragraphs_features.add_in_between.getAddModalBlock(table);
     const addModalButton = addModalBlock.querySelector('.paragraph-type-add-modal-button');
     const dialog = addModalBlock.querySelector('.paragraphs-add-dialog');
