@@ -106,12 +106,12 @@
    *   The paragraphs field config.
    */
   Drupal.paragraphs_features.add_in_between.initParagraphsWidget = function (context, field) {
-    const [wrapper] = once('paragraphs-features-add-in-between-init', '#' + field.wrapperId, context);
+    const wrapper = context.querySelector('#' + field.wrapperId);
     if (!wrapper) {
       return;
     }
 
-    const table = wrapper.querySelector('.field-multiple-table');
+    const [table] = once('paragraphs-features-add-in-between-init', '.field-multiple-table', wrapper);
     const addModalBlock = Drupal.paragraphs_features.add_in_between.getAddModalBlock(table);
     const addModalButton = addModalBlock.querySelector('.paragraph-type-add-modal-button');
 
@@ -204,8 +204,8 @@
         // Show / hide row weights.
         once('in-between-buttons-columnschange', '#' + tableId, context).forEach((table) => {
           // drupal tabledrag uses jquery events.
-          $(table).on('columnschange', () => {
-            Drupal.paragraphs_features.add_in_between.adjustDragDrop(this.id);
+          $(table).on('columnschange', (event) => {
+            Drupal.paragraphs_features.add_in_between.adjustDragDrop(event.target.id);
           });
         });
       });
