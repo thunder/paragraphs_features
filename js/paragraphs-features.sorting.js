@@ -14,7 +14,7 @@
 
         $table.on('tabledrag-checkbox-end', function (e) {
           $table.data('jquery-once-paragraphs-features-add-in-between-init', false);
-          once.remove('paragraphs-features-add-in-between-init', $table[0])
+          once.remove('paragraphs-features-add-in-between-init', $table[0]);
           Drupal.behaviors.paragraphsFeaturesAddInBetweenInit.attach(context, settings);
         });
       }
