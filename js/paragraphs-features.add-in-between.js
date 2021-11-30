@@ -261,8 +261,8 @@
         // Show / hide row weights.
         once('in-between-buttons-columnschange', '#' + tableId, context).forEach((table) => {
           // drupal tabledrag uses jquery events.
-          $(table).on('columnschange', () => {
-            Drupal.paragraphs_features.add_in_between.adjustDragDrop(this.id);
+          $(table).on('columnschange', (event) => {
+            Drupal.paragraphs_features.add_in_between.adjustDragDrop(event.target.id);
           });
         });
       });
