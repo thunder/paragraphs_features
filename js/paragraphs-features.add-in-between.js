@@ -168,71 +168,72 @@
    *   The paragraphs field config.
    */
   Drupal.paragraphs_features.add_in_between.initParagraphsWidget = (context, field) => {
-    const [wrapper] = once('paragraphs-features-add-in-between-init', '#' + field.wrapperId, context);
+    const wrapper = context.querySelector('#' + field.wrapperId);
     if (!wrapper) {
       return;
     }
 
-    const table = wrapper.querySelector('.field-multiple-table');
-    const addModalBlock = Drupal.paragraphs_features.add_in_between.getAddModalBlock(table);
-    const addModalButton = addModalBlock.querySelector('.paragraph-type-add-modal-button');
-    const dialog = addModalBlock.querySelector('.paragraphs-add-dialog');
+    once('paragraphs-features-add-in-between-init', '.field-multiple-table', wrapper).forEach((table) => {
+      const addModalBlock = Drupal.paragraphs_features.add_in_between.getAddModalBlock(table);
+      const addModalButton = addModalBlock.querySelector('.paragraph-type-add-modal-button');
+      const dialog = addModalBlock.querySelector('.paragraphs-add-dialog');
 
-    // Ensure that paragraph list uses modal dialog.
-    if (!addModalButton) {
-      return;
-    }
-
-    // A new button for adding at the end of the list is used.
-    addModalBlock.style.display = 'none';
-
-    const rowButtonElement = () => {
-      const buttons = [];
-      const addButtons = Array.from(dialog.querySelectorAll('input'));
-
-      addButtons.slice(0, field.linkCount).forEach((addButton) => {
-        // Create a remote button triggering original add button in dialog.
-        addButton.parentElement.style.display = 'none';
-        const button = Drupal.theme('paragraphsFeaturesAddInBetweenButton', {title: addButton.value});
-
-        Drupal.paragraphs_features.addEventListenerToButton(button, addButton);
-        buttons.push(button);
-      });
-
-      // Add more (...) button triggering dialog open.
-      if (addButtons.length > field.linkCount) {
-        const title = field.linkCount === 0 ?
-          Drupal.t('+ Add', {}, {context: 'Paragraphs Features'}) :
-          Drupal.t('...', {}, {context: 'Paragraphs Features'});
-        const button = Drupal.theme('paragraphsFeaturesAddInBetweenMoreButton', {title: title});
-
-        Drupal.paragraphs_features.addEventListenerToButton(button);
-        buttons.push(button);
+      // Ensure that paragraph list uses modal dialog.
+      if (!addModalButton) {
+        return;
       }
 
-      return Drupal.theme('paragraphsFeaturesAddInBetweenRow', buttons);
-    };
+      // A new button for adding at the end of the list is used.
+      addModalBlock.style.display = 'none';
 
-    let tableBody = table.querySelector(':scope > tbody');
+      const rowButtonElement = () => {
+        const buttons = [];
+        const addButtons = Array.from(dialog.querySelectorAll('input'));
 
-    // Add a new button for adding a new paragraph to the end of the list.
-    if (!tableBody) {
-      tableBody = document.createElement('tbody');
-      table.append(tableBody);
-    }
+        addButtons.slice(0, field.linkCount).forEach((addButton) => {
+          // Create a remote button triggering original add button in dialog.
+          addButton.parentElement.style.display = 'none';
+          const button = Drupal.theme('paragraphsFeaturesAddInBetweenButton', {title: addButton.value});
 
-    tableBody.querySelectorAll(':scope > tr').forEach((rowElement) => {
-      rowElement.insertAdjacentElement('beforebegin', rowButtonElement());
-    });
-    tableBody.appendChild(rowButtonElement());
+          Drupal.paragraphs_features.addEventListenerToButton(button, addButton);
+          buttons.push(button);
+        });
 
-    // Adding of a new paragraph can be disabled for some reason.
-    if (addModalButton.getAttribute('disabled')) {
-      tableBody.querySelectorAll('.paragraphs-features__add-in-between__button').forEach((button) => {
-        button.setAttribute('disabled', 'disabled');
-        button.classList.add('is-disabled');
+        // Add more (...) button triggering dialog open.
+        if (addButtons.length > field.linkCount) {
+          const title = field.linkCount === 0 ?
+            Drupal.t('+ Add', {}, {context: 'Paragraphs Features'}) :
+            Drupal.t('...', {}, {context: 'Paragraphs Features'});
+          const button = Drupal.theme('paragraphsFeaturesAddInBetweenMoreButton', {title: title});
+
+          Drupal.paragraphs_features.addEventListenerToButton(button);
+          buttons.push(button);
+        }
+
+        return Drupal.theme('paragraphsFeaturesAddInBetweenRow', buttons);
+      };
+
+      let tableBody = table.querySelector(':scope > tbody');
+
+      // Add a new button for adding a new paragraph to the end of the list.
+      if (!tableBody) {
+        tableBody = document.createElement('tbody');
+        table.append(tableBody);
+      }
+
+      tableBody.querySelectorAll(':scope > tr').forEach((rowElement) => {
+        rowElement.insertAdjacentElement('beforebegin', rowButtonElement());
       });
-    }
+      tableBody.appendChild(rowButtonElement());
+
+      // Adding of a new paragraph can be disabled for some reason.
+      if (addModalButton.getAttribute('disabled')) {
+        tableBody.querySelectorAll('.paragraphs-features__add-in-between__button').forEach((button) => {
+          button.setAttribute('disabled', 'disabled');
+          button.classList.add('is-disabled');
+        });
+      }
+    });
   };
 
   /**
