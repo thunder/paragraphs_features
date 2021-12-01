@@ -2,7 +2,7 @@
  * @file thunder-paragraph-features.add-in-between.js
  */
 
-(function ($, Drupal, drupalSettings) {
+(($, Drupal, once) => {
 
   'use strict';
 
