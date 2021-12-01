@@ -113,16 +113,14 @@
       return;
     }
     const addModalBlock = Drupal.paragraphs_features.add_in_between.getAddModalBlock(table);
-    const addModalButton = addModalBlock.querySelector('.paragraph-type-add-modal-button');
-
     // Ensure that paragraph list uses modal dialog.
-    if (!addModalButton) {
+    if (!addModalBlock) {
       return;
     }
-
     // A new button for adding at the end of the list is used.
     addModalBlock.style.display = 'none';
 
+    const addModalButton = addModalBlock.querySelector('.paragraph-type-add-modal-button');
     const buttonRowElement = () => {
       return Drupal.theme('paragraphsFeaturesAddInBetweenRow', {text: Drupal.t('+ Add')});
     };
