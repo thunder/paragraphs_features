@@ -119,7 +119,9 @@
   Drupal.behaviors.paragraphsFeaturesAddInBetweenInit = {
     attach: (context, settings) => {
       Object.values(settings.paragraphs_features.add_in_between || {}).forEach((field) => {
-        Drupal.paragraphs_features.add_in_between.initParagraphsWidget(context, field);
+        document.querySelectorAll('#' + field.wrapperId).forEach((wrapper) => {
+          Drupal.paragraphs_features.add_in_between.initParagraphsWidget(wrapper, field);
+        });
       });
     }
   };
@@ -167,24 +169,21 @@
    * @param {{wrapperId:string, linkCount:number}} field
    *   The paragraphs field config.
    */
-  Drupal.paragraphs_features.add_in_between.initParagraphsWidget = (context, field) => {
-    const wrapper = context.querySelector('#' + field.wrapperId);
-    if (!wrapper) {
+  Drupal.paragraphs_features.add_in_between.initParagraphsWidget = function (context, field) {
+    const [table] = once('paragraphs-features-add-in-between-init', '.field-multiple-table', context);
+    if (!table) {
       return;
     }
-
-    const [table] = once('paragraphs-features-add-in-between-init', '.field-multiple-table', wrapper);
     const addModalBlock = Drupal.paragraphs_features.add_in_between.getAddModalBlock(table);
-    const addModalButton = addModalBlock.querySelector('.paragraph-type-add-modal-button');
-    const dialog = addModalBlock.querySelector('.paragraphs-add-dialog');
-
     // Ensure that paragraph list uses modal dialog.
-    if (!addModalButton) {
+    if (!addModalBlock) {
       return;
     }
-
     // A new button for adding at the end of the list is used.
     addModalBlock.style.display = 'none';
+
+    const addModalButton = addModalBlock.querySelector('.paragraph-type-add-modal-button');
+    const dialog = addModalBlock.querySelector('.paragraphs-add-dialog');
 
     const rowButtonElement = () => {
       const buttons = [];
