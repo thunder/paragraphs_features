@@ -61,7 +61,7 @@
    */
   Drupal.theme.paragraphsFeaturesAddInBetweenButton = (config) => {
     const button = document.createElement('button');
-    button.innerText = Drupal.t('Add @title', {'@title': config.title}, {context: 'Paragraphs Features'});
+    button.innerText = Drupal.t('+ @title', {'@title': config.title}, {context: 'Paragraphs Features'});
     button.classList.add('paragraphs-features__add-in-between__button', 'button--small', 'js-show', 'button', 'js-form-submit', 'form-submit');
 
     return button;
