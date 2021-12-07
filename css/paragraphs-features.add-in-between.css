@@ -1,8 +1,16 @@
 /*
  * 1. "+ Add" button is left aligned and we want it in middle.
  */
-.js .paragraphs-features__add-in-between__wrapper .paragraphs-features__add-in-between__button {
+.paragraphs-features__add-in-between__wrapper {
+  text-align: center; /* 1 */
+}
+.paragraphs-features__add-in-between__button-list {
   margin: 0 auto; /* 1 */
+  list-style: none;
+}
+.paragraphs-features__add-in-between__button-list li {
+  display: inline-block;
+  margin: 0 5px;
 }
 @media screen and (max-width: 600px) {
   /*
