@@ -200,9 +200,9 @@
 
       // Add more (...) button triggering dialog open.
       if (addButtons.length > field.linkCount) {
-        const title = field.linkCount === 0 ?
-          Drupal.t('+ Add', {}, {context: 'Paragraphs Features'}) :
-          Drupal.t('...', {}, {context: 'Paragraphs Features'});
+        const title = field.linkCount ?
+          Drupal.t('...', {}, {context: 'Paragraphs Features'}) :
+          Drupal.t('+ Add', {}, {context: 'Paragraphs Features'});
         const button = Drupal.theme('paragraphsFeaturesAddInBetweenMoreButton', {title: title});
 
         Drupal.paragraphs_features.addEventListenerToButton(button);
