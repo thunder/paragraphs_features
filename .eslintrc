@@ -67,7 +67,7 @@
     "no-trailing-spaces": "error",
     "no-undef-init": "error",
     "no-undefined": "error",
-    "no-unused-expressions": "error",
+    "no-unused-expressions": ["error", {"allowTernary": true }],
     "no-unused-vars": ["error", {"vars": "all", "args": "none"}],
     "no-with": "error",
     "object-curly-spacing": ["error", "never"],

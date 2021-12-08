@@ -13,6 +13,9 @@ paragraphs_features_third_party:
     add_in_between:
       type: boolean
       label: 'Flag for add in between feature'
+    add_in_between_link_count:
+      type: integer
+      label: 'Number of add in between links'
     delete_confirmation:
       type: boolean
       label: 'Flag for delete confirmation feature'
