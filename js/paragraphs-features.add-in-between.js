@@ -170,7 +170,7 @@
    *   The paragraphs field config.
    */
   Drupal.paragraphs_features.add_in_between.initParagraphsWidget = function (context, field) {
-    const [table] = once('paragraphs-features-add-in-between-init', '.field-multiple-table', context);
+    const [table] = once('paragraphs-features-add-in-between-init', context.querySelector('.field-multiple-table'));
     if (!table) {
       return;
     }
