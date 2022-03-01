@@ -243,7 +243,7 @@
    *   Integer value for delta position where a new paragraph should be added.
    */
   Drupal.paragraphs_features.add_in_between.setDelta = (dialog, delta) => {
-    let deltaInput = dialog.closest('.paragraphs-add-wrapper').querySelector('.paragraph-type-add-modal-delta');
+    let deltaInput = dialog.closest('.paragraphs-add-wrapper').querySelector('.paragraph-type-add-delta.modal');
 
     deltaInput.value = delta;
   };
