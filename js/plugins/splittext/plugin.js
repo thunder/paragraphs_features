@@ -46,9 +46,9 @@
     var $paragraphRow = $('#' + editor.name).closest('.paragraphs-subform').closest('tr');
     var paragraphType = $paragraphRow.find('[data-paragraphs-split-text-type]').attr('data-paragraphs-split-text-type');
     var $deltaField = function ($paragraphRow) {
-      var $deltaField = $paragraphRow.closest('table').siblings().find('input.paragraph-type-add-modal-delta');
+      var $deltaField = $paragraphRow.closest('table').siblings().find('input.paragraph-type-add-delta.modal');
       if ($deltaField.length === 0) {
-        $deltaField = $paragraphRow.closest('.layer-wrapper').siblings().find('input.paragraph-type-add-modal-delta');
+        $deltaField = $paragraphRow.closest('.layer-wrapper').siblings().find('input.paragraph-type-add-delta.modal');
       }
       return $deltaField;
     }($paragraphRow);
@@ -64,7 +64,7 @@
     var insertionDelta = $paragraphRow.parent().find('> tr.draggable').index($paragraphRow) + 1;
     $deltaField.val(insertionDelta);
 
-    var paragraphTypeButtonSelector = $deltaField.attr('data-drupal-selector').substr('edit-'.length).replace(/-add-more-add-modal-form-area-add-more-delta$/, '-' + paragraphType + '-add-more').replace(/_/g, '-');
+    var paragraphTypeButtonSelector = $deltaField.attr('data-drupal-selector').substr('edit-'.length).replace(/-add-more-add-more-delta$/, '-' + paragraphType + '-add-more').replace(/_/g, '-');
     var $actionButton = $('[data-drupal-selector^="' + paragraphTypeButtonSelector + '"]');
 
     // Triggering element name is required for proper handling of ajax response.
@@ -149,7 +149,7 @@
 
     // Delta field has to be cleaned up for proper working of add button. It
     // will not make any impact on non modal add mode.
-    $originalRow.closest('table').siblings().find('input.paragraph-type-add-modal-delta').val('');
+    $originalRow.closest('table').siblings().find('input.paragraph-type-add-delta.modal').val('');
   };
 
   /**
