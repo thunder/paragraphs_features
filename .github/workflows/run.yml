@@ -24,7 +24,7 @@ jobs:
     strategy:
       matrix:
         THEME: ['claro', 'gin']
-        DRUPAL_TESTING_DRUPAL_VERSION: ['~9.2.0']
+        DRUPAL_TESTING_DRUPAL_VERSION: ['~9.3.0']
         PHP: ['8.0']
 
     steps:
