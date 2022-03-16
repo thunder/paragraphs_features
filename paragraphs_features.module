@@ -49,6 +49,31 @@ function paragraphs_features_paragraphs_widget_actions_alter(array &$widget_acti
   /** @var \Drupal\paragraphs\Entity\Paragraph $paragraphs_entity */
   $paragraphs_entity = $context['paragraphs_entity'];
 
+  // Switch paragraphs content/behavior tabs to a behaviors action button.
+  // @todo Remove dependency of $widget_actions['actions']['collapse_button'].
+  if (isset($widget_actions['actions']['collapse_button'])) {
+    $widget_actions['actions']['behaviors_button'] = [
+      '#type' => 'button',
+      '#value' => t('Settings'),
+      '#name' => str_replace('_collapse', '_behaviors', $widget_actions['actions']['collapse_button']['#name']),
+      '#weight' => -100,
+      '#limit_validation_errors' => [],
+      '#delta' => $context['delta'],
+      '#access' => \Drupal::currentUser()->hasPermission('edit behavior plugin settings'),
+      '#attributes' => [
+        'class' => [
+          'js-paragraphs-button-behaviors'
+        ],
+        'title' => t('Settings'),
+      ],
+      '#attached' => [
+        'library' => [
+          'paragraphs_features/add_behaviors_action_button',
+        ],
+      ],
+    ];
+  }
+
   foreach ($widget_actions as $grouping => $buttons) {
     foreach ($buttons as $button_id => $button_element) {
       if ($button_id === 'remove_button') {

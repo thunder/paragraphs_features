@@ -1,3 +1,13 @@
+add_behaviors_action_button:
+  css:
+    theme:
+      css/paragraphs-features.add-behaviors-action-button.css: {}
+  js:
+    js/paragraphs-features.add-behaviors-action-button.js: {}
+  dependencies:
+    - core/drupal
+    - core/jquery
+    - core/jquery.once
 
 drupal.paragraphs_features.add_in_between:
   js:
