@@ -66,7 +66,8 @@ class ParagraphsFeatures {
           $widget->getThirdPartySetting('paragraphs_features', 'add_in_between_link_count');
       }
       if ($feature === 'behaviors_action_button') {
-        // Remove paragraphs tabs, @see ParagraphsWidget->formMultipleElements().
+        // Remove paragraphs tabs.
+        // @see ParagraphsWidget->formMultipleElements().
         $elements['#prefix'] = '<div class="is-horizontal paragraphs-tabs-wrapper" id="' . $fieldWrapperId . '">';
         // Add a button for each subform.
         foreach (Element::children($elements) as $key) {

@@ -1,4 +1,6 @@
-(function($, Drupal, drupalSettings) {
+(function ($, Drupal, drupalSettings) {
+
+  'use strict';
 
   /**
    * Click handler for paragraphs behavior action buttons.
@@ -6,46 +8,47 @@
    * @type {Object}
    */
   Drupal.behaviors.paragraphBehaviorsToggle = {
-    attach(context) {
+    attach: function (context) {
       $(context)
-        .find(".js-paragraphs-button-behaviors")
-        .once("add-click-handler")
+        .find('.js-paragraphs-button-behaviors')
+        .once('add-click-handler')
         .each((index, element) => {
           const $button = $(element);
-          const $parWidget = $button.closest(".paragraph-top").parent();
+          const $parWidget = $button.closest('.paragraph-top').parent();
 
-          $button.addClass("content-active");
-          $parWidget.addClass("content-active");
+          $button.addClass('content-active');
+          $parWidget.addClass('content-active');
 
-          $button.on("click", event => {
+          $button.on('click', event => {
             const $trigger = $(event.target);
 
             const $currentParWidget = $trigger
-              .closest(".paragraph-top")
+              .closest('.paragraph-top')
               .parent();
 
-            if ($currentParWidget.hasClass("content-active")) {
+            if ($currentParWidget.hasClass('content-active')) {
               $trigger
-                .removeClass("content-active")
-                .addClass("behavior-active");
-              event.target.value = "Content";
+                .removeClass('content-active')
+                .addClass('behavior-active');
+              event.target.value = 'Content';
 
-              $currentParWidget.find(".paragraphs-behavior").show();
-              $currentParWidget.find(".paragraphs-subform").hide();
+              $currentParWidget.find('.paragraphs-behavior').show();
+              $currentParWidget.find('.paragraphs-subform').hide();
               $currentParWidget
-                .removeClass("content-active")
-                .addClass("behavior-active");
-            } else {
+                .removeClass('content-active')
+                .addClass('behavior-active');
+            }
+            else {
               $trigger
-                .removeClass("behavior-active")
-                .addClass("content-active");
-              event.target.value = "Settings";
+                .removeClass('behavior-active')
+                .addClass('content-active');
+              event.target.value = 'Settings';
 
-              $currentParWidget.find(".paragraphs-behavior").hide();
-              $currentParWidget.find(".paragraphs-subform").show();
+              $currentParWidget.find('.paragraphs-behavior').hide();
+              $currentParWidget.find('.paragraphs-subform').show();
               $currentParWidget
-                .removeClass("behavior-active")
-                .addClass("content-active");
+                .removeClass('behavior-active')
+                .addClass('content-active');
             }
 
             event.preventDefault();
