@@ -23,6 +23,7 @@ class ParagraphsFeatures {
    */
   public static $availableFeatures = [
     'add_in_between',
+    'behaviors_action_button',
     'delete_confirmation',
     'split_text',
   ];
@@ -64,6 +65,30 @@ class ParagraphsFeatures {
         $elements['add_more']['#attached']['drupalSettings']['paragraphs_features'][$feature][$fieldWrapperId]['linkCount'] =
           $widget->getThirdPartySetting('paragraphs_features', 'add_in_between_link_count');
       }
+      if ($feature === 'behaviors_action_button') {
+        // Remove paragraphs tabs, @see ParagraphsWidget->formMultipleElements().
+        $elements['#prefix'] = '<div class="is-horizontal paragraphs-tabs-wrapper" id="' . $fieldWrapperId . '">';
+        // Add a button for each subform.
+        foreach (Element::children($elements) as $key) {
+          if (isset($elements[$key]['behavior_plugins']) && Element::children($elements[$key]['behavior_plugins'])) {
+            $elements[$key]['top']['actions']['actions']['behaviors_button'] = [
+              '#type' => 'button',
+              '#value' => t('Settings'),
+              '#weight' => -100,
+              '#limit_validation_errors' => [],
+              '#delta' => $elements[$key]['#delta'],
+              '#access' => \Drupal::currentUser()->hasPermission('edit behavior plugin settings'),
+              '#attributes' => [
+                'class' => [
+                  'js-paragraphs-button-behaviors',
+                ],
+                'title' => t('Settings'),
+              ],
+            ];
+          }
+        }
+      }
+
       // Set module path for split_text feature.
       $elements['add_more']['#attached']['drupalSettings']['paragraphs_features']['_path'] = drupal_get_path('module', 'paragraphs_features');
     }
@@ -177,6 +202,13 @@ class ParagraphsFeatures {
       '#type' => 'checkbox',
       '#title' => t('Show drag & drop button'),
       '#default_value' => $plugin->getThirdPartySetting('paragraphs_features', 'show_drag_and_drop', TRUE),
+      '#access' => !empty($library),
+    ];
+
+    $elements['behaviors_action_button'] = [
+      '#type' => 'checkbox',
+      '#title' => t('Switch paragraphs content/behavior tabs to a behaviors action button'),
+      '#default_value' => $plugin->getThirdPartySetting('paragraphs_features', 'behaviors_action_button', FALSE),
       '#access' => !empty($library),
     ];
 

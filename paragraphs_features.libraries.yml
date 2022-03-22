@@ -1,14 +1,3 @@
-add_behaviors_action_button:
-  css:
-    theme:
-      css/paragraphs-features.add-behaviors-action-button.css: {}
-  js:
-    js/paragraphs-features.add-behaviors-action-button.js: {}
-  dependencies:
-    - core/drupal
-    - core/jquery
-    - core/jquery.once
-
 drupal.paragraphs_features.add_in_between:
   js:
     js/paragraphs-features.add-in-between.js: {}
@@ -20,6 +9,18 @@ drupal.paragraphs_features.add_in_between:
     - core/jquery
     - core/once
     - paragraphs/drupal.paragraphs.modal
+
+drupal.paragraphs_features.behaviors_action_button:
+  css:
+    theme:
+      css/paragraphs-features.behaviors-action-button.css: {}
+  js:
+    js/paragraphs-features.behaviors-action-button.js: {}
+  dependencies:
+    - core/drupal
+    - core/once
+    - core/jquery
+    - core/jquery.once
 
 drupal.paragraphs_features.delete_confirmation:
   js:

@@ -25,6 +25,9 @@ paragraphs_features_third_party:
     show_drag_and_drop:
       type: boolean
       label: 'Flag for showing drag & drop button'
+    behaviors_action_button:
+      type: boolean
+      label: 'Flag for switching to behaviors action button'
 
 field.widget.third_party.paragraphs_features:
   type: paragraphs_features_third_party
