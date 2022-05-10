@@ -22,19 +22,6 @@ delete_confirmation:
     - core/drupal
     - core/jquery.once
 
-sorting:
-  js:
-    js/paragraphs-features.sorting.js: {}
-    js/tabledrag.checkbox.js: {}
-  css:
-    theme:
-      css/paragraphs-features.sorting.css: {}
-  dependencies:
-    - core/drupal
-    - core/jquery.once
-    - core/drupal.tabledrag
-    - paragraphs_features/widget
-
 split_text:
   js:
     js/paragraphs-features.split-text.js: {}
@@ -47,7 +34,7 @@ widget:
     theme:
       css/paragraphs-features.widget.css: { }
 
-drupal.paragraphs_features.scroll_to_element:
+scroll_to_element:
   js:
     js/paragraphs-features.scroll-to-element.js: {}
   dependencies:
