@@ -24,8 +24,8 @@ jobs:
     strategy:
       matrix:
         THEME: ['claro', 'gin']
-        DRUPAL_TESTING_DRUPAL_VERSION: ['~9.3.0']
-        PHP: ['8.0']
+        DRUPAL_TESTING_DRUPAL_VERSION: ['~9.4.0']
+        PHP: ['8.1']
 
     steps:
     - uses: actions/checkout@v1
@@ -49,7 +49,9 @@ jobs:
         restore-keys: ${{ runner.os }}-composer-cache-
 
     - name: Get build environment
-      run: composer global require thunder/drupal-testing
+      run: |
+        composer global config --no-plugins allow-plugins.dealerdirect/phpcodesniffer-composer-installer true
+        composer global require thunder/drupal-testing
 
     - name: Prepare the build
       run: test-drupal-project prepare_build
