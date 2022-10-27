@@ -54,7 +54,7 @@
     }($paragraphRow);
 
     // Stop splitting functionality if add button is disabled or not available.
-    var $addButton = $deltaField.siblings('.paragraph-type-add-modal-button');
+    var $addButton = $deltaField.siblings().find('.paragraph-type-add-modal-button');
     if ($addButton.length === 0 || $addButton.is(':disabled')) {
       return;
     }
