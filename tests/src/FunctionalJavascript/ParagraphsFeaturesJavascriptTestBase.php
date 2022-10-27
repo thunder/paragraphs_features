@@ -60,7 +60,6 @@ abstract class ParagraphsFeaturesJavascriptTestBase extends WebDriverTestBase {
         ->set('admin', $theme)
         ->save();
     }
-
   }
 
   /**
