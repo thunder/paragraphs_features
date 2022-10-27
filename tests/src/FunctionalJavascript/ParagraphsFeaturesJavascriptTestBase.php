@@ -61,11 +61,6 @@ abstract class ParagraphsFeaturesJavascriptTestBase extends WebDriverTestBase {
         ->save();
     }
 
-    // Place the breadcrumb, tested in fieldUIAddNewField().
-    $this->drupalPlaceBlock('system_breadcrumb_block');
-    $this->drupalPlaceBlock('local_tasks_block');
-    $this->drupalPlaceBlock('local_actions_block');
-    $this->drupalPlaceBlock('page_title_block');
   }
 
   /**
