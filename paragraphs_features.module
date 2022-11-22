@@ -48,7 +48,6 @@ function paragraphs_features_field_widget_third_party_settings_form(WidgetInterf
 function paragraphs_features_paragraphs_widget_actions_alter(array &$widget_actions, array &$context) {
   /** @var \Drupal\paragraphs\Entity\Paragraph $paragraphs_entity */
   $paragraphs_entity = $context['paragraphs_entity'];
-
   foreach ($widget_actions as $grouping => $buttons) {
     foreach ($buttons as $button_id => $button_element) {
       if ($button_id === 'remove_button') {
