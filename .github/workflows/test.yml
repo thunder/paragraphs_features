@@ -27,7 +27,7 @@ jobs:
       matrix:
         THEME: ['claro', 'gin']
         DRUPAL_TESTING_DRUPAL_VERSION: ['~9.4.0']
-        PHP: ['8.1']
+        PHP_VERSION: ['8.1']
 
     steps:
     - uses: actions/checkout@v1
@@ -35,7 +35,7 @@ jobs:
     - uses: shivammathur/setup-php@v2
       with:
         coverage: none
-        php-version: ${{ matrix.PHP }}
+        php-version: ${{ matrix.PHP_VERSION }}
         extensions: Imagick, gd, pdo_mysql
 
     - name: Start MySql service
