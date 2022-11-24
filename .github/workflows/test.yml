@@ -83,4 +83,4 @@ jobs:
       run: test-drupal-project
       env:
         THEME: ${{ matrix.THEME }}
-        DRUPAL_TESTING_SELENIUM_CHROME_VERSION: '105'
+        DRUPAL_TESTING_SELENIUM_CHROME_VERSION: '105.0'
