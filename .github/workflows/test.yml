@@ -15,6 +15,8 @@ env:
    DRUPAL_TESTING_DATABASE_USER: root
    DRUPAL_TESTING_DATABASE_PASSWORD: root
    DRUPAL_TESTING_DATABASE_ENGINE: mysql
+   DRUPAL_TESTING_HTTP_PORT: 8888
+   DRUPAL_TESTING_PARALLEL_TESTING: true
 
 jobs:
   build:
@@ -70,7 +72,14 @@ jobs:
       env:
         DRUPAL_TESTING_TEST_DEPRECATION: false
 
-    - name: Start webserver and run the tests
+    - name: Setup Apache
+      uses: thunder/apache-shiva-php-action@v1
+      with:
+        php-version: ${{ matrix.PHP_VERSION }}
+        site-directory: /tmp/test/paragraphs_features/install/web
+        http-port: ${{ env.DRUPAL_TESTING_HTTP_PORT }}
+
+    - name: Run the tests
       run: test-drupal-project
       env:
         THEME: ${{ matrix.THEME }}
