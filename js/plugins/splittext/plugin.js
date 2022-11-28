@@ -186,7 +186,7 @@
     }
 
     // After ajax response correct values should be placed in text editors.
-    $(document).once('ajax-paragraph').ajaxComplete(onAjaxSplit);
+    $(document).once('ajax-paragraph').ajaxComplete((...args) => setTimeout(() => onAjaxSplit(...args)));
 
     createNewParagraphOverModal(editor);
   };
