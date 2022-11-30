@@ -24,7 +24,6 @@ class ParagraphsFeatures {
   public static $availableFeatures = [
     'add_in_between',
     'delete_confirmation',
-    'split_text',
   ];
 
   /**
@@ -68,8 +67,6 @@ class ParagraphsFeatures {
         $elements['add_more']['#attached']['drupalSettings']['paragraphs_features'][$feature][$fieldWrapperId]['linkCount'] =
           $widget->getThirdPartySetting('paragraphs_features', 'add_in_between_link_count');
       }
-      // Set module path for split_text feature.
-      $elements['add_more']['#attached']['drupalSettings']['paragraphs_features']['_path'] = drupal_get_path('module', 'paragraphs_features');
     }
 
     $elements['add_more']['#attached']['library'][] = 'paragraphs_features/scroll_to_element';
@@ -165,17 +162,6 @@ class ParagraphsFeatures {
         'visible' => $modal_related_options_rule,
       ],
       '#description' => t('Set the number of buttons available to directly add a paragraph.'),
-    ];
-
-    $elements['split_text'] = [
-      '#type' => 'checkbox',
-      '#title' => t('Enable split text for text paragraphs'),
-      '#default_value' => $plugin->getThirdPartySetting('paragraphs_features', 'split_text'),
-      '#attributes' => ['class' => ['paragraphs-features__split-text__option']],
-      '#states' => [
-        'enabled' => $modal_related_options_rule,
-        'visible' => $modal_related_options_rule,
-      ],
     ];
 
     // Only show the drag & drop feature if we can find the sortable library.

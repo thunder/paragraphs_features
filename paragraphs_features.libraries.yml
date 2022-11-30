@@ -22,13 +22,6 @@ delete_confirmation:
     - core/drupal
     - core/jquery.once
 
-split_text:
-  js:
-    js/paragraphs-features.split-text.js: {}
-  dependencies:
-    - core/drupal
-    - core/jquery.once
-
 widget:
   css:
     theme:
