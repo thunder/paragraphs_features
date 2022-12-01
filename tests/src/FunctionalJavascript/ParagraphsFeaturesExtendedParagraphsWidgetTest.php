@@ -47,10 +47,10 @@ class ParagraphsFeaturesExtendedParagraphsWidgetTest extends ParagraphsFeaturesJ
     $is_checked = $session->evaluateScript("document.querySelector('.paragraphs-features__add-in-between__option').checked");
     $this->assertEquals(TRUE, $is_checked, 'Checkbox should be checked.');
 
-    $this->drupalPostForm(NULL, [], 'Update');
+    $this->submitForm([], 'Update');
     $this->assertSession()->assertWaitOnAjaxRequest();
 
-    $this->drupalPostForm(NULL, [], $this->t('Save'));
+    $this->submitForm([], $this->t('Save'));
 
     // Check that add in between functionality is used.
     $this->drupalGet("node/add/$content_type");

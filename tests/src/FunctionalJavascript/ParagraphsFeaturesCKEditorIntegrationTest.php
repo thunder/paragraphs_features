@@ -14,6 +14,6 @@ class ParagraphsFeaturesCKEditorIntegrationTest extends CKEditorIntegrationTest 
   /**
    * {@inheritdoc}
    */
-  public static $modules = ['paragraphs_features'];
+  protected static $modules = ['paragraphs_features'];
 
 }

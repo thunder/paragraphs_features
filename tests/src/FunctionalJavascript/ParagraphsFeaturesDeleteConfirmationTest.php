@@ -226,9 +226,9 @@ class ParagraphsFeaturesDeleteConfirmationTest extends ParagraphsFeaturesJavascr
 
     $action = "{$op}Field";
     $page->$action('fields[field_paragraphs][settings_edit_form][third_party_settings][paragraphs_features][delete_confirmation]');
-    $this->drupalPostForm(NULL, [], 'Update');
+    $this->submitForm([], 'Update');
     $this->assertSession()->assertWaitOnAjaxRequest();
-    $this->drupalPostForm(NULL, [], $this->t('Save'));
+    $this->submitForm([], $this->t('Save'));
   }
 
 }

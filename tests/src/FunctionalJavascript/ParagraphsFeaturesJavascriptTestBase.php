@@ -49,7 +49,7 @@ abstract class ParagraphsFeaturesJavascriptTestBase extends WebDriverTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp() {
+  protected function setUp(): void {
     parent::setUp();
 
     if ($theme = getenv('THEME')) {
