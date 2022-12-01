@@ -1,0 +1,32 @@
+<?php
+
+/**
+ * @file
+ * Contains update hooks for Paragraphs Feature module.
+ */
+
+/**
+ * Remove split_text key from all entity form displays.
+ */
+function paragraphs_features_update_9001() {
+
+  // Remove split_text key from all entity form displays.
+  $entity_form_display_storage = \Drupal::entityTypeManager()->getStorage('entity_form_display');
+  $entity_form_display_ids = $entity_form_display_storage->getQuery()->execute();
+  $entity_form_displays = $entity_form_display_storage->loadMultiple($entity_form_display_ids);
+  foreach ($entity_form_displays as $entity_form_display) {
+    $content = $entity_form_display->get('content');
+    foreach ($content as $field_name => $field) {
+      // Continue if the field is not a paragraphs field.
+      if ($field['type'] !== 'paragraphs') {
+        continue;
+      }
+      if (isset($field['third_party_settings']['paragraphs_features']['split_text'])) {
+        unset($content[$field_name]['third_party_settings']['paragraphs_features']['split_text']);
+      }
+    }
+    $entity_form_display->set('content', $content);
+    $entity_form_display->save();
+  }
+
+}
