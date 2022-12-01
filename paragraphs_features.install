@@ -18,7 +18,7 @@ function paragraphs_features_update_9001() {
     $content = $entity_form_display->get('content');
     foreach ($content as $field_name => $field) {
       // Continue if the field is not a paragraphs field.
-      if ($field['type'] !== 'paragraphs') {
+      if (!isset($field['type']) || $field['type'] !== 'paragraphs') {
         continue;
       }
       if (isset($field['third_party_settings']['paragraphs_features']['split_text'])) {
