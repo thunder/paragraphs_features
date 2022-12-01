@@ -19,9 +19,6 @@ paragraphs_features_third_party:
     delete_confirmation:
       type: boolean
       label: 'Flag for delete confirmation feature'
-    split_text:
-      type: boolean
-      label: 'Flag for paragraphs split text feature'
     show_drag_and_drop:
       type: boolean
       label: 'Flag for showing drag & drop button'

@@ -63,13 +63,6 @@ This feature provides additional buttons between paragraphs for paragraphs
 experimental widget UI. That allows easier adding of a new paragraph to the
 specific position in the list of paragraphs.
 
-##### Split Text for Paragraphs text field:
-
-Split Text feature for paragraphs is available for all direct text fields of a
-paragraph where CKEditor is used. It's sufficient to enable the feature for
-paragraphs field experimental widget UI. Modal add mode is required for split
-text feature to work.
-
 ##### Reduce actions drop-down to a button:
 
 Paragraphs actions are rendered as drop-down also when there is only one option.
