@@ -13,6 +13,7 @@ function paragraphs_features_update_9001() {
   $entity_form_display_storage = \Drupal::entityTypeManager()->getStorage('entity_form_display');
   $entity_form_displays = $entity_form_display_storage->loadMultiple();
   foreach ($entity_form_displays as $entity_form_display) {
+    $save = FALSE;
     $content = $entity_form_display->get('content');
     foreach ($content as $field_name => $field) {
       // Continue if the field is not a paragraphs field.
@@ -21,10 +22,13 @@ function paragraphs_features_update_9001() {
       }
       if (isset($field['third_party_settings']['paragraphs_features']['split_text'])) {
         unset($content[$field_name]['third_party_settings']['paragraphs_features']['split_text']);
+        $save = TRUE;
       }
     }
-    $entity_form_display->set('content', $content);
-    $entity_form_display->save();
+    if ($save) {
+      $entity_form_display->set('content', $content);
+      $entity_form_display->save();
+    }
   }
 
 }
