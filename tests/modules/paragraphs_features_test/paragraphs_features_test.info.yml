@@ -3,5 +3,5 @@ type: module
 description: 'Provides Test scaffolds for Paragraphs Features module.'
 package: Testing
 dependencies:
-  - drupal:ckeditor
+  - drupal:ckeditor5
   - paragraphs_features:paragraphs_features
