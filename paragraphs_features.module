@@ -15,7 +15,7 @@ use Drupal\paragraphs_features\ParagraphsFeatures;
 /**
  * Implements hook_field_widget_complete_form_alter().
  */
-function paragraphs_features_field_widget_complete_form_alter(&$field_widget_complete_form, \Drupal\Core\Form\FormStateInterface $form_state, $context) {
+function paragraphs_features_field_widget_complete_form_alter(&$field_widget_complete_form, FormStateInterface $form_state, $context) {
   /** @var \Drupal\paragraphs\Plugin\Field\FieldWidget\ParagraphsWidget $widget */
   $widget = $context['widget'];
   if (!($widget instanceof ParagraphsWidget)) {
