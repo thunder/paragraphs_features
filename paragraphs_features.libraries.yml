@@ -20,7 +20,8 @@ delete_confirmation:
       css/paragraphs-features.delete-confirmation.css: {}
   dependencies:
     - core/drupal
-    - core/jquery.once
+    - core/jquery
+    - core/once
 
 widget:
   css:

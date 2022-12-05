@@ -38,7 +38,7 @@ abstract class ParagraphsFeaturesJavascriptTestBase extends WebDriverTestBase {
     'field_ui',
     'link',
     'node',
-    'ckeditor',
+    'ckeditor5',
     'paragraphs',
     'paragraphs_test',
     'paragraphs_features',
@@ -49,7 +49,7 @@ abstract class ParagraphsFeaturesJavascriptTestBase extends WebDriverTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp() {
+  protected function setUp(): void {
     parent::setUp();
 
     if ($theme = getenv('THEME')) {
@@ -155,7 +155,7 @@ abstract class ParagraphsFeaturesJavascriptTestBase extends WebDriverTestBase {
 
     Editor::create([
       'format' => 'filtered_html',
-      'editor' => 'ckeditor',
+      'editor' => 'ckeditor5',
     ])->save();
 
     // After createTestConfiguration, $this->admin_user will be created by

@@ -2,12 +2,16 @@
 
 namespace Drupal\Tests\paragraphs_features\FunctionalJavascript;
 
+use Drupal\Tests\ckeditor5\Traits\CKEditor5TestTrait;
+
 /**
  * Test display delete confirmation.
  *
  * @group paragraphs_features
  */
 class ParagraphsFeaturesDeleteConfirmationTest extends ParagraphsFeaturesJavascriptTestBase {
+
+  use CKEditor5TestTrait;
 
   /**
    * Test display of delete confirmation.
@@ -131,13 +135,12 @@ class ParagraphsFeaturesDeleteConfirmationTest extends ParagraphsFeaturesJavascr
     $page = $session->getPage();
 
     // 1a) Fill "some" text in paragraphs text field.
-    $ck_editor_id_0 = $this->getCkEditorId(0);
-    $driver->executeScript("CKEDITOR.instances['$ck_editor_id_0'].setData('$unique_comparison_text');");
+    $driver->executeScript("Drupal.CKEditor5Instances.get(Drupal.CKEditor5Instances.keys().next().value).setData('$unique_comparison_text');");
 
     // 1b) Check that text inside CKEditor iframe is correct.
     static::assertEquals(
       "<p>$unique_comparison_text</p>",
-      $driver->evaluateScript("jQuery('#' + CKEDITOR.instances['$ck_editor_id_0'].id + '_contents').find('iframe').contents().find('body').html();")
+      $this->getEditorDataAsHtmlString()
     );
 
     // 1c) Trigger delete confirmation message.
@@ -151,9 +154,9 @@ class ParagraphsFeaturesDeleteConfirmationTest extends ParagraphsFeaturesJavascr
     // initialized too.
     static::assertEquals(
       "<p>$unique_comparison_text</p>",
-      $driver->evaluateScript("jQuery('#' + CKEDITOR.instances['$ck_editor_id_0'].id + '_contents').find('iframe').contents().find('body').html();")
+      $this->getEditorDataAsHtmlString()
     );
-    static::assertTrue($driver->evaluateScript("typeof CKEDITOR.instances['$ck_editor_id_0'].document.getWindow().$ !== 'undefined';"));
+    $this->waitForEditor();
   }
 
   /**
@@ -226,9 +229,9 @@ class ParagraphsFeaturesDeleteConfirmationTest extends ParagraphsFeaturesJavascr
 
     $action = "{$op}Field";
     $page->$action('fields[field_paragraphs][settings_edit_form][third_party_settings][paragraphs_features][delete_confirmation]');
-    $this->drupalPostForm(NULL, [], 'Update');
+    $this->submitForm([], 'Update');
     $this->assertSession()->assertWaitOnAjaxRequest();
-    $this->drupalPostForm(NULL, [], $this->t('Save'));
+    $this->submitForm([], $this->t('Save'));
   }
 
 }
