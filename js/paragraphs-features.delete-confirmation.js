@@ -110,8 +110,8 @@
           }
           // Hide original Button
           $(this).wrap('<div class="visually-hidden"></div>');
-        })
-      })
+        });
+      });
     }
   };
 }(jQuery, Drupal, once));
