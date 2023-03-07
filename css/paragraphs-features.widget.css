@@ -4,7 +4,3 @@
 .paragraphs-features__add-in-between__row td {
   height: auto;
 }
-/* gin specific margin override */
-.field--widget-paragraphs .paragraphs-tabs-wrapper .field-multiple-table .draggable {
-  margin-top: 0;
-}
