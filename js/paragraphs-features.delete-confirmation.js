@@ -16,8 +16,8 @@
    * @param {object} options
    *   Options for delete confirmation button.
    *
-   * @return {string}
-   *   Returns markup.
+   * @return {HTMLElement}
+   *   Returns element.
    */
   Drupal.theme.paragraphsFeaturesDeleteConfirmationButton = function (options) {
     return '<button type="button" class="paragraphs-features__delete-confirm button--extrasmall ' + options.class + '">' + Drupal.t('Remove') + '</button>';

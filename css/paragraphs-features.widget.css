@@ -5,6 +5,6 @@
   height: auto;
 }
 /* gin specific margin override */
-.field--widget-paragraphs .paragraphs-tabs-wrapper .field-multiple-table .draggable {
+.field--widget-paragraphs .paragraphs-tabs-wrapper .field-multiple-table tr[class*='paragraph-type--'] {
   margin-top: 0;
 }
