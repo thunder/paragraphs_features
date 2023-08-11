@@ -280,7 +280,7 @@
     if (!Drupal.tableDrag[tableId] || Drupal.tableDrag[tableId].paragraphsDragDrop) {
       return;
     }
-    Drupal.tableDrag[tableId].paragraphsDragDrop = TRUE;
+    Drupal.tableDrag[tableId].paragraphsDragDrop = true;
 
     // Helper function to create sequence execution of two bool functions.
     const sequenceBoolFunctions = (originalFn, newFn) => {
