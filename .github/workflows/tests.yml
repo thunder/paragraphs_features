@@ -20,6 +20,7 @@ env:
    DRUPAL_TESTING_SELENIUM_PORT: 9515
    DRUPAL_TESTING_PARALLEL_TESTING: false
    MINK_DRIVER_ARGS_WEBDRIVER: '["chrome", {"browserName":"chrome","chromeOptions":{"args":["--disable-gpu","--headless", "--no-sandbox", "--disable-dev-shm-usage"]}}, "http://127.0.0.1:9515"]'
+   SIMPLETEST_BASE_URL: http://module-testing:8888
 
 jobs:
   build:
@@ -29,7 +30,7 @@ jobs:
     services:
       chrome:
         image: drupalci/chromedriver:production
-        options: --add-host=thunder-testing:host-gateway --name chrome
+        options: --add-host=module-testing:host-gateway --name chrome
         ports:
           - 9515:9515
 
