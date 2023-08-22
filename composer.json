@@ -33,7 +33,7 @@
     },
     "extra": {
         "patches": {
-            "gin": {
+            "drupal/gin": {
                 "Issue #3375350: gin-table-scroll-wrapper prevents nested paragraph buttons from being clickable": "https://git.drupalcode.org/project/gin/-/merge_requests/281.diff"
             }
         }
