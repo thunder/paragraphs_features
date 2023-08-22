@@ -29,6 +29,11 @@
         "drupal/paragraphs": "^1.13"
     },
     "require-dev": {
-        "drupal/gin": "dev-3.x"
+        "drupal/gin": "3.0-rc5"
+    },
+    "extra": {
+        "patches": {
+            "Issue #3375350: gin-table-scroll-wrapper prevents nested paragraph buttons from being clickable": "https://git.drupalcode.org/project/gin/-/merge_requests/281.diff"
+        }
     }
 }
