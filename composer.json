@@ -29,6 +29,6 @@
         "drupal/paragraphs": "^1.13"
     },
     "require-dev": {
-        "drupal/gin": "^3.0"
+        "drupal/gin": "dev-3.x"
     }
 }
