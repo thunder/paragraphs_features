@@ -10,6 +10,23 @@ export default class SplitParagraphCommand extends Command {
     const { model, sourceElement } = this.editor;
     const [splitElement, splitText] = model.document.selection.getFirstPosition().path;
     const elements = (new DOMParser()).parseFromString(this.editor.getData(), 'text/html').body.children;
+
+    // cursor is at the start
+    if (splitElement === 0 && splitText === 0) {
+      return;
+    }
+
+    // all lines are empty
+    if (elements.length === 0) {
+      return;
+    }
+
+    // cursor is at the end
+    const sanitizedInnerTextOfLastElement = elements[elements.length - 1].innerText.replace(String.fromCharCode(160), '').length;
+    if (splitElement === elements.length - 1 && splitText === sanitizedInnerTextOfLastElement) {
+      return;
+    }
+
     const elementsBefore = [];
     const elementsAfter = [];
     const nodeArrayToHTML = (nodeArray) => nodeArray.reduce((data, element) => data + element.outerHTML, '');
@@ -21,7 +38,7 @@ export default class SplitParagraphCommand extends Command {
       }
 
       if (i === splitElement) {
-        const [nodeBefore, nodeAfter] = this.splitNode(el, splitText);
+        const [nodeBefore, nodeAfter] = SplitParagraphCommand.splitNode(el, splitText);
 
         if (nodeBefore) {
           elementsBefore.push(nodeBefore);
@@ -38,6 +55,12 @@ export default class SplitParagraphCommand extends Command {
       i += 1;
     });
 
+    // get paragraph type and position
+    const findParagraphClass = p => [...p.classList].find(c => /^paragraph-type/.test(c));
+    const paragraph = sourceElement.closest('[class*="paragraph-type--"]');
+    const paragraphType = findParagraphClass(paragraph).replace('paragraph-type--','').replace('-', '_');
+    const paragraphDelta = [...paragraph.parentNode.children].filter(findParagraphClass).indexOf(paragraph) + 1;
+
     // store the value of the paragraphs
     const firstData = nodeArrayToHTML(elementsBefore);
     const secondData = nodeArrayToHTML(elementsAfter);
@@ -49,8 +72,9 @@ export default class SplitParagraphCommand extends Command {
       selector: sourceElement.dataset.drupalSelector,
     };
 
-    // add new paragraph below
-    sourceElement.closest('.paragraph-type--text').nextElementSibling.querySelector('.paragraphs-features__add-in-between__button').click();
+    // add new paragragraph after current
+    document.querySelector('input.paragraph-type-add-delta.modal').value = paragraphDelta;
+    document.getElementsByName(`field_paragraphs_${paragraphType}_add_more`)[0].dispatchEvent(new Event('mousedown'));
   }
 
   refresh() {
