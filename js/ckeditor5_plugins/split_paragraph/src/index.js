@@ -11,7 +11,7 @@ import icon from '../../../../icons/split.svg';
 class SplitParagraph extends Plugin {
   init() {
     // Only split paragraphs.
-    if (this.editor.sourceElement.closest('[class*="paragraph-type--"]') == null) {
+    if (this.editor.sourceElement.closest('.paragraphs-container').querySelector('input.paragraph-type-add-delta.modal') == null) {
       return;
     }
 
@@ -43,12 +43,13 @@ class SplitParagraph extends Plugin {
   }
 
   afterInit() {
-    // set value of the new paragraph
+    // Set value of the new paragraph.
     if (window._splitParagraph) {
       if (typeof window._splitParagraph.data.second === 'string') {
-        const previousParagraph = this.editor.sourceElement.closest('[class*="paragraph-type--"]')?.previousElementSibling?.previousElementSibling;
+        const paragraph = this.editor.sourceElement.closest('.paragraphs-subform').closest('tr');
+        const previousParagraph = paragraph?.previousElementSibling?.previousElementSibling;
         if (previousParagraph && previousParagraph.querySelector(`[data-drupal-selector="${window._splitParagraph.selector}"]`)) {
-          // defer to wait until init is complete
+          // Defer to wait until init is complete.
           setTimeout(() => {
             this.editor.setData(window._splitParagraph.data.second);
             window._splitParagraph.data.second = null;
@@ -58,7 +59,7 @@ class SplitParagraph extends Plugin {
 
       if (typeof window._splitParagraph.data.first === 'string') {
         if (this.editor.sourceElement.dataset.drupalSelector === window._splitParagraph.selector) {
-          // defer to wait until init is complete
+          // Defer to wait until init is complete.
           setTimeout(() => {
             this.editor.setData(window._splitParagraph.data.first);
             window._splitParagraph.data.first = null;

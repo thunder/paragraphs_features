@@ -11,17 +11,17 @@ export default class SplitParagraphCommand extends Command {
     const [splitElement, splitText] = model.document.selection.getFirstPosition().path;
     const elements = (new DOMParser()).parseFromString(this.editor.getData(), 'text/html').body.children;
 
-    // cursor is at the start
+    // Cursor is at the start.
     if (splitElement === 0 && splitText === 0) {
       return;
     }
 
-    // all lines are empty
+    // All lines are empty.
     if (elements.length === 0) {
       return;
     }
 
-    // cursor is at the end
+    // Cursor is at the end.
     const sanitizedInnerTextOfLastElement = elements[elements.length - 1].innerText.replace(String.fromCharCode(160), '').length;
     if (splitElement === elements.length - 1 && splitText === sanitizedInnerTextOfLastElement) {
       return;
@@ -55,13 +55,12 @@ export default class SplitParagraphCommand extends Command {
       i += 1;
     });
 
-    // get paragraph type and position
-    const findParagraphClass = p => [...p.classList].find(c => /^paragraph-type/.test(c));
-    const paragraph = sourceElement.closest('[class*="paragraph-type--"]');
-    const paragraphType = findParagraphClass(paragraph).replace('paragraph-type--','').replace('-', '_');
-    const paragraphDelta = [...paragraph.parentNode.children].filter(findParagraphClass).indexOf(paragraph) + 1;
+    // Get paragraph type and position.
+    const paragraph = sourceElement.closest('.paragraphs-subform').closest('tr');
+    const paragraphType = paragraph.querySelector('[data-paragraphs-split-text-type]').dataset.paragraphsSplitTextType;
+    const paragraphDelta = [...paragraph.parentNode.children].filter(el => el.querySelector('.paragraphs-subform')).indexOf(paragraph) + 1;
 
-    // store the value of the paragraphs
+    // Store the value of the paragraphs.
     const firstData = nodeArrayToHTML(elementsBefore);
     const secondData = nodeArrayToHTML(elementsAfter);
     window._splitParagraph = {
@@ -72,9 +71,9 @@ export default class SplitParagraphCommand extends Command {
       selector: sourceElement.dataset.drupalSelector,
     };
 
-    // add new paragragraph after current
-    document.querySelector('input.paragraph-type-add-delta.modal').value = paragraphDelta;
-    document.getElementsByName(`field_paragraphs_${paragraphType}_add_more`)[0].dispatchEvent(new Event('mousedown'));
+    // Add new paragragraph after current.
+    sourceElement.closest('.paragraphs-container').querySelector('input.paragraph-type-add-delta.modal').value = paragraphDelta;
+    sourceElement.closest('.paragraphs-container').querySelector(`input[data-paragraph-type="${paragraphType}"].field-add-more-submit`).dispatchEvent(new Event('mousedown'));
   }
 
   refresh() {
@@ -86,7 +85,7 @@ export default class SplitParagraphCommand extends Command {
 
     const nestedSplitter = (n) => {
       if (n.nodeType === Node.TEXT_NODE) {
-        // split position within text node
+        // Split position within text node.
         if (n.data.length > splitAt - characterCount) {
           const textBeforeSplit = n.data.substring(0, splitAt - characterCount);
           const textAfterSplit = n.data.substring(splitAt - characterCount);
@@ -104,7 +103,7 @@ export default class SplitParagraphCommand extends Command {
       const childNodesBefore = [];
       const childNodesAfter = [];
       n.childNodes.forEach((childNode) => {
-        // split not yet reached
+        // Split not yet reached.
         if (childNodesAfter.length === 0) {
           const [childNodeBefore, childNodeAfter] = nestedSplitter(childNode);
 
@@ -120,7 +119,7 @@ export default class SplitParagraphCommand extends Command {
         }
       });
 
-      // node was not split
+      // Node was not split.
       if (childNodesAfter.length === 0) {
         return [n, null];
       }
