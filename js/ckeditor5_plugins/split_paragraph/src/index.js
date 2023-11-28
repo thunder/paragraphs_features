@@ -11,7 +11,7 @@ import icon from '../../../../icons/split.svg';
 class SplitParagraph extends Plugin {
   init() {
     // Only split paragraphs.
-    if (this.editor.sourceElement.closest('.paragraphs-container').querySelector('input.paragraph-type-add-delta.modal') == null) {
+    if (this.editor.sourceElement.closest('.paragraphs-container')?.querySelector('input.paragraph-type-add-delta.modal') == null) {
       return;
     }
 
