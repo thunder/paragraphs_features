@@ -87,7 +87,7 @@ class ParagraphsFeatures {
       $elements['header_actions']['dropdown_actions']['collapse_all']['#access'] = (bool) $widget->getThirdPartySetting('paragraphs_features', 'show_collapse_all', TRUE);
     }
     if (!empty($elements['header_actions']['actions']['collapse_all'])) {
-      $elements['header_actions']['actions']['collapse_all']['#access'] = (bool) $widget->getThirdPartySetting('paragraphs_features', 'show_collapse_all', TRUE);;
+      $elements['header_actions']['actions']['collapse_all']['#access'] = (bool) $widget->getThirdPartySetting('paragraphs_features', 'show_collapse_all', TRUE);
     }
   }
 
@@ -138,7 +138,6 @@ class ParagraphsFeatures {
       '#states' => [
         'enabled' => [
           ':input[name="fields[' . $field_name . '][settings_edit_form][settings][features][collapse_edit_all]"]' => [
-            #':input[name="fields[' . $field_name . '][settings_edit_form][third_party_settings][paragraphs_features][add_in_between]"]' => [
             'checked' => TRUE,
           ],
         ],
