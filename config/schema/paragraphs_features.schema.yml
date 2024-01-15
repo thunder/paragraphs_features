@@ -4,7 +4,7 @@ paragraphs_features.settings:
   mapping:
     dropdown_to_button:
       type: boolean
-      label: 'Flag for reduce actions dropdown to a button when there is only one option'
+      label: 'Flag to reduce actions dropdown to a button when there is only one option'
 
 paragraphs_features_third_party:
   type: mapping
@@ -22,6 +22,9 @@ paragraphs_features_third_party:
     show_drag_and_drop:
       type: boolean
       label: 'Flag for showing drag & drop button'
+    show_collapse_all:
+      type: boolean
+      label: 'Flag to disable collapse all button'
 
 field.widget.third_party.paragraphs_features:
   type: paragraphs_features_third_party

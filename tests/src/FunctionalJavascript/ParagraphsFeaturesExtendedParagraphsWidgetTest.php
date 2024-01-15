@@ -43,7 +43,7 @@ class ParagraphsFeaturesExtendedParagraphsWidgetTest extends ParagraphsFeaturesJ
     $is_option_visible = $session->evaluateScript("Array.from(document.querySelectorAll('.paragraphs-features__add-in-between__option')).filter((item) => { return item.offsetParent }).length === 2");
     $this->assertEquals(TRUE, $is_option_visible, 'After modal add mode is selected, "add in between" option should be available.');
     $page->checkField('fields[field_paragraphs][settings_edit_form][third_party_settings][paragraphs_features][add_in_between]');
-    $page->fillField('fields[field_paragraphs][settings_edit_form][third_party_settings][paragraphs_features][add_in_between_link_count]', 0);
+    $page->fillField('fields[field_paragraphs][settings_edit_form][third_party_settings][paragraphs_features][add_in_between_link_count]', '0');
     $is_checked = $session->evaluateScript("document.querySelector('.paragraphs-features__add-in-between__option').checked");
     $this->assertEquals(TRUE, $is_checked, 'Checkbox should be checked.');
 
