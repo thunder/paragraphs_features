@@ -3,8 +3,7 @@
 namespace Drupal\Tests\paragraphs_features\FunctionalJavascript;
 
 /**
- * Test display of collapse all button according to the show_collapse_all
- * setting.
+ * Test the show_collapse_all setting.
  *
  * @group paragraphs_features
  */
