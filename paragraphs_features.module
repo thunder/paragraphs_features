@@ -46,6 +46,19 @@ function paragraphs_features_field_widget_third_party_settings_form(WidgetInterf
  * Implements hook_paragraphs_widget_actions_alter().
  */
 function paragraphs_features_paragraphs_widget_actions_alter(array &$widget_actions, array &$context) {
+  /** @var \Drupal\paragraphs\Entity\Paragraph $paragraphs_entity */
+  $paragraphs_entity = $context['paragraphs_entity'];
+
+  foreach ($widget_actions as $grouping => $buttons) {
+    foreach ($buttons as $button_id => $button_element) {
+      if ($button_id === 'remove_button') {
+        $widget_actions[$grouping][$button_id]['#attributes']['data-paragraphs-split-text-type'] = $paragraphs_entity->getType();
+
+        break 2;
+      }
+    }
+  }
+
   /* Render single option for dropdown as button. */
 
   // Get configuration setting for reducing dropdown to button on single option.
