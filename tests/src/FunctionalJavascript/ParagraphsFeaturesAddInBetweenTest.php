@@ -66,7 +66,7 @@ class ParagraphsFeaturesAddInBetweenTest extends ParagraphsFeaturesJavascriptTes
 
     $this->submitForm([], 'Update');
     $this->assertSession()->assertWaitOnAjaxRequest();
-    $this->submitForm([], $this->t('Save'));
+    $this->submitForm([], 'Save');
 
     // Check that default add mode functionality is used.
     $this->drupalGet("node/add/$content_type");

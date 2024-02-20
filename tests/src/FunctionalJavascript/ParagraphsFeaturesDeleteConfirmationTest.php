@@ -231,7 +231,7 @@ class ParagraphsFeaturesDeleteConfirmationTest extends ParagraphsFeaturesJavascr
     $page->$action('fields[field_paragraphs][settings_edit_form][third_party_settings][paragraphs_features][delete_confirmation]');
     $this->submitForm([], 'Update');
     $this->assertSession()->assertWaitOnAjaxRequest();
-    $this->submitForm([], $this->t('Save'));
+    $this->submitForm([], 'Save');
   }
 
 }
