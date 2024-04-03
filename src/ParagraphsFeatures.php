@@ -72,7 +72,8 @@ class ParagraphsFeatures {
     $elements['add_more']['#attached']['library'][] = 'paragraphs_features/scroll_to_element';
     foreach (Element::children($elements['add_more']) as $button) {
       $elements['add_more'][$button]['#ajax']['callback'] = [
-        static::class, 'addMoreAjax',
+        static::class,
+        'addMoreAjax',
       ];
     }
     // This feature is not part of of the foreach above, since it is not a
@@ -80,6 +81,13 @@ class ParagraphsFeatures {
     // feature is not set, it defaults back to paragraphs behavior.
     if (!empty($elements['header_actions']['dropdown_actions']['dragdrop_mode'])) {
       $elements['header_actions']['dropdown_actions']['dragdrop_mode']['#access'] = (bool) $widget->getThirdPartySetting('paragraphs_features', 'show_drag_and_drop', TRUE);
+    }
+
+    if (!empty($elements['header_actions']['dropdown_actions']['collapse_all'])) {
+      $elements['header_actions']['dropdown_actions']['collapse_all']['#access'] = (bool) $widget->getThirdPartySetting('paragraphs_features', 'show_collapse_all', TRUE);
+    }
+    if (!empty($elements['header_actions']['actions']['collapse_all'])) {
+      $elements['header_actions']['actions']['collapse_all']['#access'] = (bool) $widget->getThirdPartySetting('paragraphs_features', 'show_collapse_all', TRUE);
     }
   }
 
@@ -121,6 +129,25 @@ class ParagraphsFeatures {
       ['claro', 'gin'])) {
       $disabled = TRUE;
     }
+
+    $elements['show_collapse_all'] = [
+      '#type' => 'checkbox',
+      '#title' => t('Show collapse all button'),
+      '#default_value' => $plugin->getThirdPartySetting('paragraphs_features', 'show_collapse_all', TRUE),
+      '#description' => t('Disable the collapse all button when using inline entity forms in your paragraph types.'),
+      '#states' => [
+        'enabled' => [
+          ':input[name="fields[' . $field_name . '][settings_edit_form][settings][features][collapse_edit_all]"]' => [
+            'checked' => TRUE,
+          ],
+        ],
+        'visible' => [
+          ':input[name="fields[' . $field_name . '][settings_edit_form][settings][features][collapse_edit_all]"]' => [
+            'checked' => TRUE,
+          ],
+        ],
+      ],
+    ];
 
     $elements['delete_confirmation'] = [
       '#type' => 'checkbox',

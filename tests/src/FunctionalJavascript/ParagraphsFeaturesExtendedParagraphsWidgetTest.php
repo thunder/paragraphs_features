@@ -43,14 +43,14 @@ class ParagraphsFeaturesExtendedParagraphsWidgetTest extends ParagraphsFeaturesJ
     $is_option_visible = $session->evaluateScript("Array.from(document.querySelectorAll('.paragraphs-features__add-in-between__option')).filter((item) => { return item.offsetParent }).length === 2");
     $this->assertEquals(TRUE, $is_option_visible, 'After modal add mode is selected, "add in between" option should be available.');
     $page->checkField('fields[field_paragraphs][settings_edit_form][third_party_settings][paragraphs_features][add_in_between]');
-    $page->fillField('fields[field_paragraphs][settings_edit_form][third_party_settings][paragraphs_features][add_in_between_link_count]', 0);
+    $page->fillField('fields[field_paragraphs][settings_edit_form][third_party_settings][paragraphs_features][add_in_between_link_count]', '0');
     $is_checked = $session->evaluateScript("document.querySelector('.paragraphs-features__add-in-between__option').checked");
     $this->assertEquals(TRUE, $is_checked, 'Checkbox should be checked.');
 
     $this->submitForm([], 'Update');
     $this->assertSession()->assertWaitOnAjaxRequest();
 
-    $this->submitForm([], $this->t('Save'));
+    $this->submitForm([], 'Save');
 
     // Check that add in between functionality is used.
     $this->drupalGet("node/add/$content_type");
@@ -60,7 +60,6 @@ class ParagraphsFeaturesExtendedParagraphsWidgetTest extends ParagraphsFeaturesJ
     // Add a nested paragraph and check that add in between is used only for
     // base paragraphs field, but not for the nested paragraph.
     $session->executeScript("document.querySelector('.paragraphs-features__add-in-between__button').click()");
-    $this->assertSession()->assertWaitOnAjaxRequest();
     $page->find('xpath', '//*[contains(@class, "paragraphs-add-dialog") and contains(@class, "ui-dialog-content")]//*[contains(@name, "test_nested")]')->click();
     $this->assertSession()->assertWaitOnAjaxRequest();
 

@@ -27,7 +27,6 @@ class ParagraphsFeaturesAddInBetweenTest extends ParagraphsFeaturesJavascriptTes
     $session = $this->getSession();
     $page = $session->getPage();
     $driver = $session->getDriver();
-
     $page->pressButton('field_paragraphs_settings_edit');
     $this->assertSession()->assertWaitOnAjaxRequest();
 
@@ -43,7 +42,7 @@ class ParagraphsFeaturesAddInBetweenTest extends ParagraphsFeaturesJavascriptTes
     $is_option_visible = $session->evaluateScript("Array.from(document.querySelectorAll('.paragraphs-features__add-in-between__option')).filter((item) => { return !item.disabled }).length === 1");
     $this->assertEquals(TRUE, $is_option_visible, 'After modal add mode is selected, "add in between" option should be available.');
     $page->checkField('fields[field_paragraphs][settings_edit_form][third_party_settings][paragraphs_features][add_in_between]');
-    $page->fillField('fields[field_paragraphs][settings_edit_form][third_party_settings][paragraphs_features][add_in_between_link_count]', 0);
+    $page->fillField('fields[field_paragraphs][settings_edit_form][third_party_settings][paragraphs_features][add_in_between_link_count]', '0');
     $is_checked = $session->evaluateScript("document.querySelector('.paragraphs-features__add-in-between__option').checked");
     $this->assertEquals(TRUE, $is_checked, 'Checkbox should be checked.');
 
@@ -66,7 +65,7 @@ class ParagraphsFeaturesAddInBetweenTest extends ParagraphsFeaturesJavascriptTes
 
     $this->submitForm([], 'Update');
     $this->assertSession()->assertWaitOnAjaxRequest();
-    $this->submitForm([], $this->t('Save'));
+    $this->submitForm([], 'Save');
 
     // Check that default add mode functionality is used.
     $this->drupalGet("node/add/$content_type");
@@ -79,11 +78,11 @@ class ParagraphsFeaturesAddInBetweenTest extends ParagraphsFeaturesJavascriptTes
     $this->assertSession()->assertWaitOnAjaxRequest();
 
     $page->checkField('fields[field_paragraphs][settings_edit_form][third_party_settings][paragraphs_features][add_in_between]');
-    $page->fillField('fields[field_paragraphs][settings_edit_form][third_party_settings][paragraphs_features][add_in_between_link_count]', 0);
+    $page->fillField('fields[field_paragraphs][settings_edit_form][third_party_settings][paragraphs_features][add_in_between_link_count]', '0');
 
     $this->submitForm([], 'Update');
     $this->assertSession()->assertWaitOnAjaxRequest();
-    $this->submitForm([], $this->t('Save'));
+    $this->submitForm([], 'Save');
 
     // Check that add in between functionality is used.
     $this->drupalGet("node/add/$content_type");
@@ -93,7 +92,6 @@ class ParagraphsFeaturesAddInBetweenTest extends ParagraphsFeaturesJavascriptTes
     // Add a nested paragraph and check that add in between is used only for
     // base paragraphs field, but not for the nested paragraph.
     $session->executeScript("document.querySelector('.paragraphs-features__add-in-between__button').click()");
-    $this->assertSession()->assertWaitOnAjaxRequest();
     $page->find('xpath', '//*[contains(@class, "paragraphs-add-dialog") and contains(@class, "ui-dialog-content")]//*[contains(@name, "test_nested")]')->click();
     $this->assertSession()->assertWaitOnAjaxRequest();
 
@@ -145,7 +143,7 @@ class ParagraphsFeaturesAddInBetweenTest extends ParagraphsFeaturesJavascriptTes
     $page->uncheckField('fields[field_paragraphs][settings_edit_form][third_party_settings][paragraphs_features][add_in_between]');
     $this->submitForm([], 'Update');
     $this->assertSession()->assertWaitOnAjaxRequest();
-    $this->submitForm([], $this->t('Save'));
+    $this->submitForm([], 'Save');
 
     // Set modal add mode with add in between option for nested paragraph.
     $this->drupalGet("admin/structure/paragraphs_type/test_nested/form-display");
@@ -155,17 +153,16 @@ class ParagraphsFeaturesAddInBetweenTest extends ParagraphsFeaturesJavascriptTes
     $session->executeScript("jQuery('[name=\"fields[field_paragraphs][settings_edit_form][settings][add_mode]\"]').trigger('change');");
     $this->assertSession()->assertWaitOnAjaxRequest();
     $page->checkField('fields[field_paragraphs][settings_edit_form][third_party_settings][paragraphs_features][add_in_between]');
-    $page->fillField('fields[field_paragraphs][settings_edit_form][third_party_settings][paragraphs_features][add_in_between_link_count]', 0);
+    $page->fillField('fields[field_paragraphs][settings_edit_form][third_party_settings][paragraphs_features][add_in_between_link_count]', '0');
     $this->submitForm([], 'Update');
     $this->assertSession()->assertWaitOnAjaxRequest();
-    $this->submitForm([], $this->t('Save'));
+    $this->submitForm([], 'Save');
 
     // Check that add in between functionality is not available for base
     // paragraphs and it's used for nested paragraph.
     $this->drupalGet("node/add/$content_type");
 
     $session->executeScript("document.querySelector('.paragraph-type-add-modal-button').click()");
-    $this->assertSession()->assertWaitOnAjaxRequest();
     $page->find('xpath', '//*[contains(@class, "paragraphs-add-dialog") and contains(@class, "ui-dialog-content")]//*[contains(@name, "test_nested")]')->click();
     $this->assertSession()->assertWaitOnAjaxRequest();
 
