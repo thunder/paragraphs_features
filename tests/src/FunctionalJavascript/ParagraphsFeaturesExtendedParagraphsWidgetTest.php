@@ -50,7 +50,7 @@ class ParagraphsFeaturesExtendedParagraphsWidgetTest extends ParagraphsFeaturesJ
     $this->submitForm([], 'Update');
     $this->assertSession()->assertWaitOnAjaxRequest();
 
-    $this->submitForm([], $this->t('Save'));
+    $this->submitForm([], 'Save');
 
     // Check that add in between functionality is used.
     $this->drupalGet("node/add/$content_type");
@@ -60,7 +60,6 @@ class ParagraphsFeaturesExtendedParagraphsWidgetTest extends ParagraphsFeaturesJ
     // Add a nested paragraph and check that add in between is used only for
     // base paragraphs field, but not for the nested paragraph.
     $session->executeScript("document.querySelector('.paragraphs-features__add-in-between__button').click()");
-    $this->assertSession()->assertWaitOnAjaxRequest();
     $page->find('xpath', '//*[contains(@class, "paragraphs-add-dialog") and contains(@class, "ui-dialog-content")]//*[contains(@name, "test_nested")]')->click();
     $this->assertSession()->assertWaitOnAjaxRequest();
 

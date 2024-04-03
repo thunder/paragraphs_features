@@ -39,7 +39,7 @@ class ParagraphsFeatureCollapseAllTest extends ParagraphsFeaturesJavascriptTestB
     $page->uncheckField('fields[field_paragraphs][settings_edit_form][third_party_settings][paragraphs_features][show_collapse_all]');
     $this->submitForm([], 'Update');
     $this->assertSession()->assertWaitOnAjaxRequest();
-    $this->submitForm([], $this->t('Save'));
+    $this->submitForm([], 'Save');
 
     // Check that Edit all button is and Collapse all button is not present.
     $this->drupalGet("node/add/$content_type");
