@@ -38,9 +38,11 @@ export default class SplitParagraphCommand extends Command {
       selector: sourceElement.dataset.drupalSelector,
     };
 
-    // Add new paragragraph after current.
-    sourceElement.closest('.paragraphs-container').querySelector('input.paragraph-type-add-delta.modal').value = paragraphDelta;
-    sourceElement.closest('.paragraphs-container').querySelector(`input[data-paragraph-type="${paragraphType}"].field-add-more-submit`).dispatchEvent(new Event('mousedown'));
+    // Add new paragraph after current.
+    const deltaField = sourceElement.closest('.paragraphs-container').querySelector('input.paragraph-type-add-delta.modal');
+    deltaField.value = paragraphDelta;
+    const paragraphTypeButtonSelector = deltaField.getAttribute('data-drupal-selector').substr('edit-'.length).replace(/-add-more-add-more-delta$/, '-' + paragraphType + '-add-more').replace(/_/g, '-');
+    sourceElement.closest('.paragraphs-container').querySelector('[data-drupal-selector^="' + paragraphTypeButtonSelector + '"]').dispatchEvent(new Event('mousedown'));
   }
 
   refresh() {
