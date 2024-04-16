@@ -10,11 +10,6 @@ import icon from '../../../../icons/split.svg';
 
 class SplitParagraph extends Plugin {
   init() {
-    // Only split paragraphs.
-    if (this.editor.sourceElement.closest('.paragraphs-container')?.querySelector('input.paragraph-type-add-delta.modal') == null) {
-      return;
-    }
-
     // Register splitParagraph toolbar button.
     this.editor.ui.componentFactory.add('splitParagraph', (locale) => {
       const command = this.editor.commands.get('splitParagraph');
@@ -22,7 +17,7 @@ class SplitParagraph extends Plugin {
 
       // Create toolbar button.
       buttonView.set({
-        label: this.editor.t('Simple Split Paragraph'),
+        label: this.editor.t('Split Paragraph'),
         icon,
         tooltip: true,
       });
@@ -34,7 +29,6 @@ class SplitParagraph extends Plugin {
 
       return buttonView;
     });
-
     // Add toolbar button.
     this.editor.commands.add(
       'splitParagraph',
@@ -46,8 +40,9 @@ class SplitParagraph extends Plugin {
     // Set value of the new paragraph.
     if (window._splitParagraph) {
       if (typeof window._splitParagraph.data.second === 'string') {
-        const paragraph = this.editor.sourceElement.closest('.paragraphs-subform').closest('tr');
-        const previousParagraph = paragraph?.previousElementSibling?.previousElementSibling;
+        const paragraph = this.editor.sourceElement.closest('tr');
+        // closest('.field--widget-paragraphs').querySelector('tr');
+        const previousParagraph = paragraph?.previousElementSibling;
         if (previousParagraph && previousParagraph.querySelector(`[data-drupal-selector="${window._splitParagraph.selector}"]`)) {
           // Defer to wait until init is complete.
           setTimeout(() => {

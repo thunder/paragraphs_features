@@ -39,14 +39,15 @@ export default class SplitParagraphCommand extends Command {
     };
 
     // Add new paragraph after current.
-    const deltaField = sourceElement.closest('.paragraphs-container').querySelector('input.paragraph-type-add-delta.modal');
+    const deltaField = sourceElement.closest('.field--widget-paragraphs').querySelector('input.paragraph-type-add-delta.modal');
     deltaField.value = paragraphDelta;
     const paragraphTypeButtonSelector = deltaField.getAttribute('data-drupal-selector').substr('edit-'.length).replace(/-add-more-add-more-delta$/, '-' + paragraphType + '-add-more').replace(/_/g, '-');
-    sourceElement.closest('.paragraphs-container').querySelector('[data-drupal-selector^="' + paragraphTypeButtonSelector + '"]').dispatchEvent(new Event('mousedown'));
+    sourceElement.closest('.field--widget-paragraphs').querySelector('[data-drupal-selector^="' + paragraphTypeButtonSelector + '"]').dispatchEvent(new Event('mousedown'));
   }
 
   refresh() {
-    this.isEnabled = true;
+    // Disable "Split Paragraph" button when not in paragraphs context.
+    this.isEnabled = !!this.editor.sourceElement.closest('.field--widget-paragraphs')?.querySelector('input.paragraph-type-add-delta.modal');
   }
 
   static splitNode(node, splitMarker) {
