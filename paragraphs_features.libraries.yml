@@ -39,6 +39,7 @@ splitParagraph:
     js/build/split_paragraph.js: { preprocess: false, minified: true }
   dependencies:
     - core/ckeditor5
+    - core/drupal
 
 splitParagraph.admin:
   css:
