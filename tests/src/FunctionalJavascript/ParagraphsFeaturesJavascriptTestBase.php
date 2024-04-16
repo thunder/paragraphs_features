@@ -104,6 +104,7 @@ abstract class ParagraphsFeaturesJavascriptTestBase extends WebDriverTestBase {
     $this->addParagraphedContentType($content_type);
     $this->loginAsAdmin([
       "administer content types",
+      "administer filters",
       "administer node form display",
       "edit any $content_type content",
       "create $content_type content",
@@ -174,7 +175,7 @@ abstract class ParagraphsFeaturesJavascriptTestBase extends WebDriverTestBase {
    *   Returns Id for CKEditor.
    */
   protected function getCkEditorId($paragraph_index) {
-    return $this->getSession()->getPage()->find('xpath', '//*[@data-drupal-selector="edit-field-paragraphs-' . $paragraph_index . '"]//textarea')->getAttribute('id');
+    return $this->getSession()->getPage()->find('xpath', '//*[@data-drupal-selector="edit-field-paragraphs-' . $paragraph_index . '"]//textarea')->getAttribute('data-ckeditor5-id');
   }
 
   /**
