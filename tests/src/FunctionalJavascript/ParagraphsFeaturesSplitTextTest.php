@@ -428,7 +428,6 @@ JS;
       $driver->evaluateScript("Drupal.CKEditor5Instances.get('$ck_editor_id_para_1_text_2').getData();")
     );
 
-    // @todo Fix closed mode
     // Case 7 - simple text split with auto-collapse.
     // 7.1 - Enable auto-collapse.
     $this->drupalGet("admin/structure/types/manage/$content_type/form-display");
@@ -458,6 +457,74 @@ JS;
     // Check that split text functionality is used.
     $this->drupalGet("node/add/$content_type");
     $ck_editor_id = $this->createNewTextParagraph(0, $paragraph_content_0 . $paragraph_content_1);
+
+    // Make split of created text paragraph.
+    $script = <<<JS
+  (function (editorId) {
+    const editor = Drupal.CKEditor5Instances.get(editorId);
+    console.log(editorId);
+    editor.model.change( writer => {
+      let newPosition;
+      const selection = writer.createSelection(editor.model.document.getRoot(), 'in');
+      for (const item of selection.getFirstRange().getItems({ direction: 'backward' })) {
+        newPosition = writer.createPositionAt(item, 'before');
+        break;
+      }
+      const newRange = writer.createRange( newPosition );
+      writer.setSelection( newRange );
+      editor.focus()
+    })
+  })('{$ck_editor_id}')
+JS;
+    $driver->executeScript($script);
+
+    $this->getEditorButton("Split Paragraph")->click();
+    $this->assertSession()->assertWaitOnAjaxRequest();
+
+    // Validate split results. First newly created paragraph.
+    $ck_editor_id_1 = $this->getCkEditorId(1);
+    static::assertEquals(
+      $paragraph_content_1,
+      $driver->evaluateScript("Drupal.CKEditor5Instances.get('$ck_editor_id_1').getData();")
+    );
+
+    // And then original collapsed paragraph.
+    $this->scrollClick('css', '[name=field_paragraphs_0_edit]');
+    $this->assertSession()->assertWaitOnAjaxRequest();
+
+    $ck_editor_id_0 = $this->getCkEditorId(0);
+    static::assertEquals(
+      $paragraph_content_0,
+      $driver->evaluateScript("Drupal.CKEditor5Instances.get('$ck_editor_id_0').getData();")
+    );
+
+    // Case 8 - simple text split with add-in-between.
+    // 8.1 - Enable add-in-between.
+    $this->drupalGet("admin/structure/types/manage/$content_type/form-display");
+
+    // Edit form display settings.
+    $page->pressButton('field_paragraphs_settings_edit');
+    $this->assertSession()->assertWaitOnAjaxRequest();
+
+    $page->checkField('fields[field_paragraphs][settings_edit_form][third_party_settings][paragraphs_features][add_in_between]');
+    $this->assertEquals(TRUE, $session->evaluateScript("document.querySelector('.paragraphs-features__add-in-between__option').checked"), 'Checkbox should be checked.');
+
+    $this->submitForm([], 'Update');
+    $this->assertSession()->assertWaitOnAjaxRequest();
+    $this->submitForm([], 'Save');
+
+    // 8.2 - Test that simple text split works with add-in-between.
+    $paragraph_content_0 = '<p>Content that will be in the first paragraph after the split.</p>';
+    $paragraph_content_1 = '<p>Content that will be in the second paragraph after the split.</p>';
+
+    // Check that split text functionality is used.
+    $this->drupalGet("node/add/$content_type");
+    $this->scrollClick('xpath', '(//*[contains(@class, "paragraphs-features__add-in-between__button ")])[1]');
+    $this->assertSession()->assertWaitOnAjaxRequest();
+
+    $ck_editor_id = $this->getCkEditorId(0);
+
+    $driver->executeScript("Drupal.CKEditor5Instances.get('$ck_editor_id').setData('$paragraph_content_0$paragraph_content_1');");
 
     // Make split of created text paragraph.
     $script = <<<JS
