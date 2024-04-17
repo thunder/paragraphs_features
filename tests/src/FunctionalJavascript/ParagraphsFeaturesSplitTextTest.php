@@ -2,7 +2,6 @@
 
 namespace Drupal\Tests\paragraphs_features\FunctionalJavascript;
 
-use Drupal\FunctionalJavascriptTests\Tests\JSInteractionTest;
 use Drupal\Tests\ckeditor5\Traits\CKEditor5TestTrait;
 
 /**
@@ -16,6 +15,7 @@ class ParagraphsFeaturesSplitTextTest extends ParagraphsFeaturesJavascriptTestBa
 
   /**
    * Trigger a keyup event on the selected element.
+   *
    * Copied from CKEditor5TestBase class.
    *
    * @param string $selector
@@ -23,7 +23,7 @@ class ParagraphsFeaturesSplitTextTest extends ParagraphsFeaturesJavascriptTestBa
    * @param string $key
    *   The keyCode.
    */
-  function triggerKeyUp(string $selector, string $key) {
+  protected function triggerKeyUp(string $selector, string $key) {
 
     $script = <<<JS
 (function (selector, key) {
@@ -103,20 +103,10 @@ JS;
     $page->pressButton('field_paragraphs_settings_edit');
     $this->assertSession()->assertWaitOnAjaxRequest();
 
-    // By default a non modal add mode should be selected.
-//    $is_option_visible = $session->evaluateScript("jQuery('.paragraphs-features__split-text__option:visible').length === 0");
-//    $this->assertEquals(TRUE, $is_option_visible, 'By default "split text" option should not be visible.');
-
     // Check that split text option is available for modal add mode.
     $page->selectFieldOption('fields[field_paragraphs][settings_edit_form][settings][add_mode]', 'modal');
     $session->executeScript("jQuery('[name=\"fields[field_paragraphs][settings_edit_form][settings][add_mode]\"]').trigger('change');");
     $this->assertSession()->assertWaitOnAjaxRequest();
-
-//    $is_option_visible = $session->evaluateScript("jQuery('.paragraphs-features__split-text__option:visible').length === 1");
-//    $this->assertEquals(TRUE, $is_option_visible, 'After modal add mode is selected, "split text" option should be available.');
-//    $page->checkField('fields[field_paragraphs][settings_edit_form][third_party_settings][paragraphs_features][split_text]');
-//    $is_checked = $session->evaluateScript("jQuery('.paragraphs-features__split-text__option').is(':checked')");
-//    $this->assertEquals(TRUE, $is_checked, 'Checkbox should be checked.');
 
     $this->submitForm([], 'Update');
     $this->assertSession()->assertWaitOnAjaxRequest();
