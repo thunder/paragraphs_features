@@ -403,7 +403,6 @@ JS;
     $ck_editor_id_para_1_text_0 = $page->find('xpath', '(//*[@data-drupal-selector="edit-field-paragraphs-1"]//textarea)[1]')->getAttribute('data-ckeditor5-id');
     $ck_editor_id_para_1_text_1 = $page->find('xpath', '(//*[@data-drupal-selector="edit-field-paragraphs-1"]//textarea)[2]')->getAttribute('data-ckeditor5-id');
     $ck_editor_id_para_1_text_2 = $page->find('xpath', '(//*[@data-drupal-selector="edit-field-paragraphs-1"]//textarea)[3]')->getAttribute('data-ckeditor5-id');
-
     static::assertEquals(
       $paragraph_content_0_text_0,
       $driver->evaluateScript("Drupal.CKEditor5Instances.get('$ck_editor_id_para_0_text_0').getData();")
@@ -417,15 +416,11 @@ JS;
       $driver->evaluateScript("Drupal.CKEditor5Instances.get('$ck_editor_id_para_0_text_2').getData();")
     );
     static::assertEquals(
-      // @todo Fix me, order should be different.
-      // '',
-      $paragraph_content_1,
+      '',
       $driver->evaluateScript("Drupal.CKEditor5Instances.get('$ck_editor_id_para_1_text_0').getData();")
     );
     static::assertEquals(
-      // Fix me, order should be different.
-      // $paragraph_content_1,
-      '',
+      $paragraph_content_1,
       $driver->evaluateScript("Drupal.CKEditor5Instances.get('$ck_editor_id_para_1_text_1').getData();")
     );
     static::assertEquals(

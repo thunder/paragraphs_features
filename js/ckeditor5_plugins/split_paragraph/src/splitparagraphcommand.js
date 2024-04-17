@@ -25,7 +25,7 @@ export default class SplitParagraphCommand extends Command {
     }
 
     // Get paragraph type and position.
-    const paragraph = sourceElement.closest('.paragraphs-subform').closest('tr');
+    const paragraph = sourceElement.closest('.paragraphs-subform').closest('tr.draggable');
     const paragraphType = paragraph.querySelector('[data-paragraphs-split-text-type]').dataset.paragraphsSplitTextType;
     const paragraphDelta = [...paragraph.parentNode.children].filter(el => el.querySelector('.paragraphs-actions')).indexOf(paragraph) + 1;
 
