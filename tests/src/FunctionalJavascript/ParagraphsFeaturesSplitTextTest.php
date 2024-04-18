@@ -364,7 +364,6 @@ JS;
     $script = <<<JS
   (function (editorId) {
     const editor = Drupal.CKEditor5Instances.get(editorId);
-    console.log(editorId);
     editor.model.change( writer => {
       let newPosition;
       const selection = writer.createSelection(editor.model.document.getRoot(), 'in');
@@ -452,7 +451,6 @@ JS;
     $script = <<<JS
   (function (editorId) {
     const editor = Drupal.CKEditor5Instances.get(editorId);
-    console.log(editorId);
     editor.model.change( writer => {
       let newPosition;
       const selection = writer.createSelection(editor.model.document.getRoot(), 'in');
@@ -499,6 +497,16 @@ JS;
     $page->checkField('fields[field_paragraphs][settings_edit_form][third_party_settings][paragraphs_features][add_in_between]');
     $this->assertEquals(TRUE, $session->evaluateScript("document.querySelector('.paragraphs-features__add-in-between__option').checked"), 'Checkbox should be checked.');
 
+    // Disable auto-collapse.
+    $page->selectFieldOption('fields[field_paragraphs][settings_edit_form][settings][autocollapse]', 'none');
+    $session->executeScript("jQuery('[name=\"fields[field_paragraphs][settings_edit_form][settings][autocollapse]\"]').trigger('change');");
+    $this->assertSession()->assertWaitOnAjaxRequest();
+
+    // Set edit mode to open.
+    $page->selectFieldOption('fields[field_paragraphs][settings_edit_form][settings][edit_mode]', 'open');
+    $session->executeScript("jQuery('[name=\"fields[field_paragraphs][settings_edit_form][settings][edit_mode]\"]').trigger('change');");
+    $this->assertSession()->assertWaitOnAjaxRequest();
+
     $this->submitForm([], 'Update');
     $this->assertSession()->assertWaitOnAjaxRequest();
     $this->submitForm([], 'Save');
@@ -520,7 +528,6 @@ JS;
     $script = <<<JS
   (function (editorId) {
     const editor = Drupal.CKEditor5Instances.get(editorId);
-    console.log(editorId);
     editor.model.change( writer => {
       let newPosition;
       const selection = writer.createSelection(editor.model.document.getRoot(), 'in');
@@ -545,10 +552,6 @@ JS;
       $paragraph_content_1,
       $driver->evaluateScript("Drupal.CKEditor5Instances.get('$ck_editor_id_1').getData();")
     );
-
-    // And then original collapsed paragraph.
-    $this->scrollClick('css', '[name=field_paragraphs_0_edit]');
-    $this->assertSession()->assertWaitOnAjaxRequest();
 
     $ck_editor_id_0 = $this->getCkEditorId(0);
     static::assertEquals(

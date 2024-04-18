@@ -7,3 +7,5 @@ sites/**/libraries/**/*
 profiles/**/libraries/**/*
 **/js_test_files/**/*
 js/build/*
+js/ckeditor5_plugins/**/*
+webpack.config.js

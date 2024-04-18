@@ -39,14 +39,18 @@ class SplitParagraph extends Plugin {
   afterInit() {
     // Set value of the new paragraph.
     if (window._splitParagraph) {
-      console.log(this.editor.sourceElement.dataset.drupalSelector);
-      console.log(this.editor.sourceElement.dataset.drupalSelector.match(window._splitParagraph.selector.replace(/-[0-9]+-?/, '-[0-9]+-')));
       if (typeof window._splitParagraph.data.second === 'string') {
         const paragraph = this.editor.sourceElement.closest('tr.draggable');
-        // this.editor.sourceElement.
-        // closest('.field--widget-paragraphs').querySelector('tr');
-        const previousParagraph = paragraph?.previousElementSibling;
-        if (previousParagraph && this.editor.sourceElement.dataset.drupalSelector.match(window._splitParagraph.selector.replace(/-[0-9]+-?/, '-[0-9]+-'))) {
+        let previousParagraph = paragraph?.previousElementSibling;
+
+        while (previousParagraph) {
+          if (previousParagraph.matches("tr.draggable")) break;
+          previousParagraph = previousParagraph.previousElementSibling;
+        }
+
+        if (
+          previousParagraph &&
+          this.editor.sourceElement.dataset.drupalSelector.match(window._splitParagraph.selector.replace(/-[0-9]+-?/, '-[0-9]+-'))) {
           // Defer to wait until init is complete.
           setTimeout(() => {
             this.editor.setData(window._splitParagraph.data.second);
