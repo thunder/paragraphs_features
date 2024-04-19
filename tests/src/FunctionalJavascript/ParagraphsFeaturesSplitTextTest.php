@@ -676,7 +676,7 @@ JS;
     // Make split of created text paragraph.
     $this->setEditorSelection($ck_editor_id_1, 'third');
     $this->clickParagraphSplitButton($ck_editor_id_1);
-    sleep(20);
+
     $ck_editor_id_2 = $this->getCkEditorId(2);
     static::assertEquals(
       $paragraph_content_0,
