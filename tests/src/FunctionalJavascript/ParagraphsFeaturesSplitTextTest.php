@@ -23,7 +23,7 @@ class ParagraphsFeaturesSplitTextTest extends ParagraphsFeaturesJavascriptTestBa
    * @param string $key
    *   The keyCode.
    */
-  protected function triggerKeyUp(string $selector, string $key) {
+  protected function triggerKeyUp(string $selector, string $key): void {
 
     $script = <<<JS
 (function (selector, key) {
@@ -56,7 +56,7 @@ JS;
    * @throws \Behat\Mink\Exception\DriverException
    * @throws \Behat\Mink\Exception\UnsupportedDriverActionException
    */
-  protected function createNewTextParagraph($index, $text) {
+  protected function createNewTextParagraph($index, $text): string {
     $session = $this->getSession();
     $page = $session->getPage();
     $driver = $session->getDriver();
@@ -73,14 +73,52 @@ JS;
   /**
    * Click on split text button for paragraphs text field.
    *
-   * @param int $ck_editor_index
-   *   Index of CKEditor field in paragraphs.
+   * @param int $ck_editor_id
+   *   Id of CKEditor field in paragraphs.
    */
-  protected function clickParagraphSplitButton($ck_editor_index) {
-    $this->getSession()->executeScript("jQuery('.cke_button__splittext:nth($ck_editor_index)').trigger('click');");
+  protected function clickParagraphSplitButton($ck_editor_id): void {
+    $button = $this->assertSession()
+      ->waitForElementVisible('xpath', '//textarea[@data-ckeditor5-id="'.$ck_editor_id.'"]/following-sibling::div//button[span[text()="Split Paragraph"]]');
+    $this->assertNotEmpty($button);
+    $button->click();
     $this->assertSession()->assertWaitOnAjaxRequest();
-  }
+}
 
+
+  /**
+   * Set selection to beginning of an element containing a given string.
+   *
+   * @param int $ck_editor_id
+   *   Id of CKEditor field in paragraphs.
+   * @param string $needle
+   *   String contained by element.
+   */
+  protected function setEditorSelection($ck_editor_id, $needle): void {
+    $script = <<<JS
+(function (editorId, needle) {
+  const editor = Drupal.CKEditor5Instances.get(editorId);
+  editor.model.change( writer => {
+    const selection = writer.createSelection(editor.model.document.getRoot(), 'in');
+    let newPosition;
+    for (const range of selection.getRanges()) {
+      for (const item of range.getItems()) {
+        if (item.data?.includes(needle)) {
+          newPosition = writer.createPositionAt(item, 'before');
+          break;
+        }
+      }
+    }
+    const newRange = writer.createRange( newPosition );
+    writer.setSelection( newRange );
+    editor.focus()
+    setTimeout(() => console.log("First"), 20000)
+
+  });
+})('{$ck_editor_id}', '{$needle}')
+JS;
+
+    $this->getSession()->getDriver()->executeScript($script);
+  }
   /**
    * Test split text feature.
    */
@@ -127,26 +165,28 @@ JS;
     $ck_editor_id = $this->createNewTextParagraph(0, $paragraph_content_0 . $paragraph_content_1);
 
     // Make split of created text paragraph.
-    $script = <<<JS
-  (function (editorId) {
-    const editor = Drupal.CKEditor5Instances.get(editorId);
-    editor.model.change( writer => {
-      let newPosition;
-      const selection = writer.createSelection(editor.model.document.getRoot(), 'in');
-      for (const item of selection.getFirstRange().getItems({ direction: 'backward' })) {
-        newPosition = writer.createPositionAt(item, 'before');
-        break;
-      }
-      const newRange = writer.createRange( newPosition );
-      writer.setSelection( newRange );
-      editor.focus()
-    })
-  })('{$ck_editor_id}')
-JS;
-    $driver->executeScript($script);
-
-    $this->getEditorButton("Split Paragraph")->click();
-    $this->assertSession()->assertWaitOnAjaxRequest();
+//    $script = <<<JS
+//  (function (editorId) {
+//    const editor = Drupal.CKEditor5Instances.get(editorId);
+//    editor.model.change( writer => {
+//      let newPosition;
+//      const selection = writer.createSelection(editor.model.document.getRoot(), 'in');
+//      for (const item of selection.getFirstRange().getItems({ direction: 'backward' })) {
+//        newPosition = writer.createPositionAt(item, 'before');
+//        break;
+//      }
+//      const newRange = writer.createRange( newPosition );
+//      writer.setSelection( newRange );
+//      editor.focus()
+//    })
+//  })('{$ck_editor_id}')
+//JS;
+//    $driver->executeScript($script);
+//
+//    $this->getEditorButton("Split Paragraph")->click();
+//    $this->assertSession()->assertWaitOnAjaxRequest();
+    $this->setEditorSelection($ck_editor_id, 'second');
+    $this->clickParagraphSplitButton($ck_editor_id);
 
     // Validate split results.
     $ck_editor_id_0 = $this->getCkEditorId(0);
@@ -186,8 +226,9 @@ JS;
 JS;
     $driver->executeScript($splitinsidescript);
 
-    $this->getEditorButton("Split Paragraph")->click();
-    $this->assertSession()->assertWaitOnAjaxRequest();
+//    $this->getEditorButton("Split Paragraph")->click();
+//    $this->assertSession()->assertWaitOnAjaxRequest();
+    $this->clickParagraphSplitButton($ck_editor_id);
 
     // Validate split results.
     $ck_editor_id_0 = $this->getCkEditorId(0);
@@ -213,26 +254,28 @@ JS;
     $ck_editor_id = $this->createNewTextParagraph(1, $paragraph_content_0 . $paragraph_content_1);
 
     // Make split of text paragraph.
-    $script = <<<JS
-  (function (editorId) {
-    const editor = Drupal.CKEditor5Instances.get(editorId);
-    editor.model.change( writer => {
-      let newPosition;
-      const selection = writer.createSelection(editor.model.document.getRoot(), 'in');
-      for (const item of selection.getFirstRange().getItems({ direction: 'backward' })) {
-        newPosition = writer.createPositionAt(item, 'before');
-        break;
-      }
-      const newRange = writer.createRange( newPosition );
-      writer.setSelection( newRange );
-      editor.focus()
-    })
-  })('{$ck_editor_id}')
-JS;
-    $driver->executeScript($script);
-
-    $this->getEditorButton("Split Paragraph")->click();
-    $this->assertSession()->assertWaitOnAjaxRequest();
+//    $script = <<<JS
+//  (function (editorId) {
+//    const editor = Drupal.CKEditor5Instances.get(editorId);
+//    editor.model.change( writer => {
+//      let newPosition;
+//      const selection = writer.createSelection(editor.model.document.getRoot(), 'in');
+//      for (const item of selection.getFirstRange().getItems({ direction: 'backward' })) {
+//        newPosition = writer.createPositionAt(item, 'before');
+//        break;
+//      }
+//      const newRange = writer.createRange( newPosition );
+//      writer.setSelection( newRange );
+//      editor.focus()
+//    })
+//  })('{$ck_editor_id}')
+//JS;
+//    $driver->executeScript($script);
+//
+//    $this->getEditorButton("Split Paragraph")->click();
+//    $this->assertSession()->assertWaitOnAjaxRequest();
+    $this->setEditorSelection($ck_editor_id, 'second');
+    $this->clickParagraphSplitButton($ck_editor_id);
 
     // Validate split results.
     $ck_editor_id_0 = $this->getCkEditorId(1);
@@ -251,26 +294,29 @@ JS;
     $ck_editor_id = $this->createNewTextParagraph(0, $paragraph_content_0 . $paragraph_content_1);
 
     // Make split of text paragraph.
-    $script = <<<JS
-  (function (editorId) {
-    const editor = Drupal.CKEditor5Instances.get(editorId);
-    editor.model.change( writer => {
-      let newPosition;
-      const selection = writer.createSelection(editor.model.document.getRoot(), 'in');
-      for (const item of selection.getFirstRange().getItems({ direction: 'backward' })) {
-        newPosition = writer.createPositionAt(item, 'before');
-        break;
-      }
-      const newRange = writer.createRange( newPosition );
-      writer.setSelection( newRange );
-      editor.focus()
-    })
-  })('{$ck_editor_id}')
-JS;
-    $driver->executeScript($script);
+//    $script = <<<JS
+//  (function (editorId) {
+//    const editor = Drupal.CKEditor5Instances.get(editorId);
+//    editor.model.change( writer => {
+//      let newPosition;
+//      const selection = writer.createSelection(editor.model.document.getRoot(), 'in');
+//      for (const item of selection.getFirstRange().getItems({ direction: 'backward' })) {
+//        newPosition = writer.createPositionAt(item, 'before');
+//        break;
+//      }
+//      const newRange = writer.createRange( newPosition );
+//      writer.setSelection( newRange );
+//      editor.focus()
+//    })
+//  })('{$ck_editor_id}')
+//JS;
+//    $driver->executeScript($script);
+//
+//    $this->getEditorButton("Split Paragraph")->click();
+//    $this->assertSession()->assertWaitOnAjaxRequest();
 
-    $this->getEditorButton("Split Paragraph")->click();
-    $this->assertSession()->assertWaitOnAjaxRequest();
+    $this->setEditorSelection($ck_editor_id, 'second');
+    $this->clickParagraphSplitButton($ck_editor_id);
 
     // Set new data to both split paragraphs.
     $paragraph_content_0_new = '<p>Content that will be placed into the first paragraph after split.</p>';
@@ -302,27 +348,25 @@ JS;
 
     // Set selection between "bold" and "text".
     $script = <<<JS
-  (function (editorId) {
-    const editor = Drupal.CKEditor5Instances.get(editorId);
-    editor.model.change( writer => {
-      let newPosition;
-      const selection = writer.createSelection(editor.model.document.getRoot(), 'in');
-      for (const item of selection.getFirstRange().getItems({ direction: 'backward' })) {
-        if (item.getAttribute('bold')) {
-          item.offsetInText = 4;
-          newPosition = writer.createPositionAt(item, 'before');
-          break;
-        }
+(function (editorId) {
+  const editor = Drupal.CKEditor5Instances.get(editorId);
+  editor.model.change( writer => {
+    let newPosition;
+    const selection = writer.createSelection(editor.model.document.getRoot(), 'in');
+    for (const item of selection.getFirstRange().getItems({ direction: 'backward' })) {
+      if (item.getAttribute('bold')) {
+        item.offsetInText = 4;
+        newPosition = writer.createPositionAt(item, 'before');
+        break;
       }
-      writer.setSelection( newPosition );
-      editor.focus()
-    })
-  })('{$ck_editor_id}')
+    }
+    writer.setSelection( newPosition );
+    editor.focus()
+  })
+})('{$ck_editor_id}')
 JS;
     $driver->executeScript($script);
-    $this->getEditorButton("Split Paragraph")->click();
-
-    $this->assertSession()->assertWaitOnAjaxRequest();
+    $this->clickParagraphSplitButton($ck_editor_id);
 
     // Check if all texts are correct.
     $ck_editor_id_0 = $this->getCkEditorId(0);
@@ -361,29 +405,31 @@ JS;
     $driver->executeScript("Drupal.CKEditor5Instances.get('$ck_editor_id_2').setData('$paragraph_content_0_text_2');");
 
     // Make split of created text paragraph.
-    $script = <<<JS
-  (function (editorId) {
-    const editor = Drupal.CKEditor5Instances.get(editorId);
-    editor.model.change( writer => {
-      let newPosition;
-      const selection = writer.createSelection(editor.model.document.getRoot(), 'in');
-      for (const item of selection.getFirstRange().getItems({ direction: 'backward' })) {
-        newPosition = writer.createPositionAt(item, 'before');
-        break;
-      }
-      const newRange = writer.createRange( newPosition );
-      writer.setSelection( newRange );
-      editor.focus()
-    })
-  })('{$ck_editor_id_1}')
-JS;
-
-    $driver->executeScript($script);
-
-    $button = $this->assertSession()->waitForElementVisible('xpath', '(//*[@data-drupal-selector="edit-field-paragraphs-0"]//div[contains(@class, "form-textarea-wrapper")])[2]//button[span[text()="Split Paragraph"]]');
-    $this->assertNotEmpty($button);
-    $button->click();
-    $this->assertSession()->assertWaitOnAjaxRequest();
+//    $script = <<<JS
+//  (function (editorId) {
+//    const editor = Drupal.CKEditor5Instances.get(editorId);
+//    editor.model.change( writer => {
+//      let newPosition;
+//      const selection = writer.createSelection(editor.model.document.getRoot(), 'in');
+//      for (const item of selection.getFirstRange().getItems({ direction: 'backward' })) {
+//        newPosition = writer.createPositionAt(item, 'before');
+//        break;
+//      }
+//      const newRange = writer.createRange( newPosition );
+//      writer.setSelection( newRange );
+//      editor.focus()
+//    })
+//  })('{$ck_editor_id_1}')
+//JS;
+//
+//    $driver->executeScript($script);
+//
+//      $button = $this->assertSession()->waitForElementVisible('xpath', '(//*[@data-drupal-selector="edit-field-paragraphs-0"]//div[contains(@class, "form-textarea-wrapper")])[2]//button[span[text()="Split Paragraph"]]');
+//    $this->assertNotEmpty($button);
+//    $button->click();
+//    $this->assertSession()->assertWaitOnAjaxRequest();
+    $this->setEditorSelection($ck_editor_id_1, 'second');
+    $this->clickParagraphSplitButton($ck_editor_id_1);
 
     // Validate split results in all 6 CKEditors in 2 paragraphs.
     $ck_editor_id_para_0_text_0 = $page->find('xpath', '(//*[@data-drupal-selector="edit-field-paragraphs-0"]//textarea)[1]')->getAttribute('data-ckeditor5-id');
@@ -448,26 +494,28 @@ JS;
     $ck_editor_id = $this->createNewTextParagraph(0, $paragraph_content_0 . $paragraph_content_1);
 
     // Make split of created text paragraph.
-    $script = <<<JS
-  (function (editorId) {
-    const editor = Drupal.CKEditor5Instances.get(editorId);
-    editor.model.change( writer => {
-      let newPosition;
-      const selection = writer.createSelection(editor.model.document.getRoot(), 'in');
-      for (const item of selection.getFirstRange().getItems({ direction: 'backward' })) {
-        newPosition = writer.createPositionAt(item, 'before');
-        break;
-      }
-      const newRange = writer.createRange( newPosition );
-      writer.setSelection( newRange );
-      editor.focus()
-    })
-  })('{$ck_editor_id}')
-JS;
-    $driver->executeScript($script);
-
-    $this->getEditorButton("Split Paragraph")->click();
-    $this->assertSession()->assertWaitOnAjaxRequest();
+//    $script = <<<JS
+//  (function (editorId) {
+//    const editor = Drupal.CKEditor5Instances.get(editorId);
+//    editor.model.change( writer => {
+//      let newPosition;
+//      const selection = writer.createSelection(editor.model.document.getRoot(), 'in');
+//      for (const item of selection.getFirstRange().getItems({ direction: 'backward' })) {
+//        newPosition = writer.createPositionAt(item, 'before');
+//        break;
+//      }
+//      const newRange = writer.createRange( newPosition );
+//      writer.setSelection( newRange );
+//      editor.focus()
+//    })
+//  })('{$ck_editor_id}')
+//JS;
+//    $driver->executeScript($script);
+//
+//    $this->getEditorButton("Split Paragraph")->click();
+//    $this->assertSession()->assertWaitOnAjaxRequest();
+    $this->setEditorSelection($ck_editor_id, 'second');
+    $this->clickParagraphSplitButton($ck_editor_id);
 
     // Validate split results. First newly created paragraph.
     $ck_editor_id_1 = $this->getCkEditorId(1);
@@ -525,26 +573,28 @@ JS;
     $driver->executeScript("Drupal.CKEditor5Instances.get('$ck_editor_id').setData('$paragraph_content_0$paragraph_content_1');");
 
     // Make split of created text paragraph.
-    $script = <<<JS
-  (function (editorId) {
-    const editor = Drupal.CKEditor5Instances.get(editorId);
-    editor.model.change( writer => {
-      let newPosition;
-      const selection = writer.createSelection(editor.model.document.getRoot(), 'in');
-      for (const item of selection.getFirstRange().getItems({ direction: 'backward' })) {
-        newPosition = writer.createPositionAt(item, 'before');
-        break;
-      }
-      const newRange = writer.createRange( newPosition );
-      writer.setSelection( newRange );
-      editor.focus()
-    })
-  })('{$ck_editor_id}')
-JS;
-    $driver->executeScript($script);
-
-    $this->getEditorButton("Split Paragraph")->click();
-    $this->assertSession()->assertWaitOnAjaxRequest();
+//    $script = <<<JS
+//  (function (editorId) {
+//    const editor = Drupal.CKEditor5Instances.get(editorId);
+//    editor.model.change( writer => {
+//      let newPosition;
+//      const selection = writer.createSelection(editor.model.document.getRoot(), 'in');
+//      for (const item of selection.getFirstRange().getItems({ direction: 'backward' })) {
+//        newPosition = writer.createPositionAt(item, 'before');
+//        break;
+//      }
+//      const newRange = writer.createRange( newPosition );
+//      writer.setSelection( newRange );
+//      editor.focus()
+//    })
+//  })('{$ck_editor_id}')
+//JS;
+//    $driver->executeScript($script);
+//
+//    $this->getEditorButton("Split Paragraph")->click();
+//    $this->assertSession()->assertWaitOnAjaxRequest();
+    $this->setEditorSelection($ck_editor_id, 'second');
+    $this->clickParagraphSplitButton($ck_editor_id);
 
     // Validate split results. First newly created paragraph.
     $ck_editor_id_1 = $this->getCkEditorId(1);
@@ -560,4 +610,86 @@ JS;
     );
   }
 
+  /**
+   * Test splitting twice.
+   */
+  public function testSplitTwice() {
+
+    // Create paragraph types and content types with required configuration for
+    // testing of split text feature.
+    $content_type = 'test_split_text';
+
+    // Create nested paragraph with addition of one text test paragraph.
+    $this->createTestConfiguration($content_type, 1);
+    $this->createEditor();
+
+    // Test that 3rd party option is available only when modal mode is enabled.
+    $this->drupalGet("admin/structure/types/manage/$content_type/form-display");
+    $session = $this->getSession();
+    $page = $session->getPage();
+    $driver = $session->getDriver();
+
+    // Edit form display settings.
+    $page->pressButton('field_paragraphs_settings_edit');
+    $this->assertSession()->assertWaitOnAjaxRequest();
+
+    // Check that split text option is available for modal add mode.
+    $page->selectFieldOption('fields[field_paragraphs][settings_edit_form][settings][add_mode]', 'modal');
+    $session->executeScript("jQuery('[name=\"fields[field_paragraphs][settings_edit_form][settings][add_mode]\"]').trigger('change');");
+    $this->assertSession()->assertWaitOnAjaxRequest();
+
+    $this->submitForm([], 'Update');
+    $this->assertSession()->assertWaitOnAjaxRequest();
+    $this->submitForm([], 'Save');
+
+    $this->drupalGet('admin/config/content/formats/manage/filtered_html');
+
+    $this->triggerKeyUp('.ckeditor5-toolbar-item-splitParagraph', 'ArrowDown');
+    $this->assertSession()->assertWaitOnAjaxRequest();
+    $page->pressButton('Save configuration');
+
+    // Case 1 - simple text split.
+    $paragraph_content_0 = '<p>Content that will be in the first paragraph after the split.</p>';
+    $paragraph_content_1 = '<p>Content that will be in the second paragraph after the split.</p>';
+    $paragraph_content_2 = '<p>Content that will be in the third paragraph after the split.</p>';
+
+    // Check that split text functionality is used.
+    $this->drupalGet("node/add/$content_type");
+    $ck_editor_id = $this->createNewTextParagraph(0, $paragraph_content_0 . $paragraph_content_1 . $paragraph_content_2);
+
+    // Make split of created text paragraph.
+    $this->setEditorSelection($ck_editor_id, 'second');
+    $this->clickParagraphSplitButton($ck_editor_id);
+
+    // Validate split results.
+    $ck_editor_id_0 = $this->getCkEditorId(0);
+    $ck_editor_id_1 = $this->getCkEditorId(1);
+    static::assertEquals(
+      $paragraph_content_0,
+      $driver->evaluateScript("Drupal.CKEditor5Instances.get('$ck_editor_id_0').getData();")
+    );
+    static::assertEquals(
+      $paragraph_content_1 . $paragraph_content_2,
+      $driver->evaluateScript("Drupal.CKEditor5Instances.get('$ck_editor_id_1').getData();")
+    );
+
+    // Make split of created text paragraph.
+    $this->setEditorSelection($ck_editor_id_1, 'third');
+    $this->clickParagraphSplitButton($ck_editor_id_1);
+    sleep(20);
+    $ck_editor_id_2 = $this->getCkEditorId(2);
+    static::assertEquals(
+      $paragraph_content_0,
+      $driver->evaluateScript("Drupal.CKEditor5Instances.get('$ck_editor_id_0').getData();")
+    );
+    static::assertEquals(
+      $paragraph_content_1,
+      $driver->evaluateScript("Drupal.CKEditor5Instances.get('$ck_editor_id_1').getData();")
+    );
+    static::assertEquals(
+      $paragraph_content_2,
+      $driver->evaluateScript("Drupal.CKEditor5Instances.get('$ck_editor_id_2').getData();")
+    );
+
+  }
 }
