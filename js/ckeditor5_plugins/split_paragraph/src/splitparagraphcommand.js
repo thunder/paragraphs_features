@@ -28,6 +28,7 @@ export default class SplitParagraphCommand extends Command {
     const paragraph = sourceElement.closest('.paragraphs-subform').closest('tr.draggable');
     const paragraphType = paragraph.querySelector('[data-paragraphs-split-text-type]').dataset.paragraphsSplitTextType;
     const paragraphDelta = [...paragraph.parentNode.children].filter(el => el.querySelector('.paragraphs-actions')).indexOf(paragraph) + 1;
+    const originalRowIndex = [...paragraph.parentNode.children].indexOf(paragraph);
 
     // Store the value of the paragraphs.
     window._splitParagraph = {
@@ -36,6 +37,7 @@ export default class SplitParagraphCommand extends Command {
         second: elementAfter.outerHTML,
       },
       selector: sourceElement.dataset.drupalSelector,
+      originalRowIndex: originalRowIndex,
     };
 
     // Add new paragraph after current.

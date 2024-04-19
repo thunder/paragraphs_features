@@ -49,7 +49,7 @@ class SplitParagraph extends Plugin {
         }
 
         if (
-          previousParagraph &&
+          [...paragraph.parentElement.children].indexOf(previousParagraph) === window._splitParagraph.originalRowIndex &&
           this.editor.sourceElement.dataset.drupalSelector.match(window._splitParagraph.selector.replace(/-[0-9]+-?/, '-[0-9]+-'))) {
           // Defer to wait until init is complete.
           setTimeout(() => {
