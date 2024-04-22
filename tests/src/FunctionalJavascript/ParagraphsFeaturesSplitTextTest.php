@@ -110,8 +110,6 @@ JS;
     const newRange = writer.createRange( newPosition );
     writer.setSelection( newRange );
     editor.focus()
-    setTimeout(() => console.log("First"), 20000)
-
   });
 })('{$ck_editor_id}', '{$needle}')
 JS;
@@ -550,6 +548,8 @@ JS;
     $this->setEditorSelection($ck_editor_id_1, 'third');
     $this->clickParagraphSplitButton($ck_editor_id_1);
 
+    $ck_editor_id_0 = $this->getCkEditorId(0);
+    $ck_editor_id_1 = $this->getCkEditorId(1);
     $ck_editor_id_2 = $this->getCkEditorId(2);
     static::assertEquals(
       $paragraph_content_0,
