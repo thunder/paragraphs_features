@@ -33,3 +33,15 @@ scroll_to_element:
     js/paragraphs-features.scroll-to-element.js: {}
   dependencies:
     - core/drupal
+
+splitParagraph:
+  js:
+    js/build/split_paragraph.js: { preprocess: false, minified: true }
+  dependencies:
+    - core/ckeditor5
+    - core/drupal
+
+splitParagraph.admin:
+  css:
+    theme:
+      css/split_paragraph.admin.css: {}

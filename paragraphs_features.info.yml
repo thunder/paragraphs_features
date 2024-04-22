@@ -7,3 +7,4 @@ configure: paragraphs_features.settings_form
 dependencies:
   - paragraphs:paragraphs
   - drupal:field
+  - drupal:ckeditor5

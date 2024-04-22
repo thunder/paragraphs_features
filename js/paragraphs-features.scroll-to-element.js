@@ -19,9 +19,8 @@
    */
   Drupal.AjaxCommands.prototype.scrollToElement = function (ajax, response, status) {
     var resizeObserver = new ResizeObserver(function () {
-      document
-        .querySelector('[data-drupal-selector=' + response.drupalElementSelector + ']')
-        .scrollIntoView({block: 'center'});
+      const elem = document.querySelector('[data-drupal-selector=' + response.drupalElementSelector + ']');
+      if (elem) {elem.scrollIntoView({block: 'center'});}
     });
 
     var parent = document.querySelector('[data-drupal-selector=' + response.drupalParentSelector + ']');
