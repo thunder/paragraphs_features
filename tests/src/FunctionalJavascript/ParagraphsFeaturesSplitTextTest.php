@@ -142,7 +142,6 @@ JS;
     // Check that split text option is available for modal add mode.
     $page->selectFieldOption('fields[field_paragraphs][settings_edit_form][settings][add_mode]', 'modal');
     $session->executeScript("jQuery('[name=\"fields[field_paragraphs][settings_edit_form][settings][add_mode]\"]').trigger('change');");
-    $this->assertSession()->assertWaitOnAjaxRequest();
 
     $this->submitForm([], 'Update');
     $this->assertSession()->assertWaitOnAjaxRequest();
@@ -385,12 +384,10 @@ JS;
     // Set edit mode to closed.
     $page->selectFieldOption('fields[field_paragraphs][settings_edit_form][settings][edit_mode]', 'closed');
     $session->executeScript("jQuery('[name=\"fields[field_paragraphs][settings_edit_form][settings][edit_mode]\"]').trigger('change');");
-    $this->assertSession()->assertWaitOnAjaxRequest();
 
     // Set auto-collapse mode.
     $page->selectFieldOption('fields[field_paragraphs][settings_edit_form][settings][autocollapse]', 'all');
     $session->executeScript("jQuery('[name=\"fields[field_paragraphs][settings_edit_form][settings][autocollapse]\"]').trigger('change');");
-    $this->assertSession()->assertWaitOnAjaxRequest();
 
     $this->submitForm([], 'Update');
     $this->assertSession()->assertWaitOnAjaxRequest();
@@ -439,12 +436,10 @@ JS;
     // Disable auto-collapse.
     $page->selectFieldOption('fields[field_paragraphs][settings_edit_form][settings][autocollapse]', 'none');
     $session->executeScript("jQuery('[name=\"fields[field_paragraphs][settings_edit_form][settings][autocollapse]\"]').trigger('change');");
-    $this->assertSession()->assertWaitOnAjaxRequest();
 
     // Set edit mode to open.
     $page->selectFieldOption('fields[field_paragraphs][settings_edit_form][settings][edit_mode]', 'open');
     $session->executeScript("jQuery('[name=\"fields[field_paragraphs][settings_edit_form][settings][edit_mode]\"]').trigger('change');");
-    $this->assertSession()->assertWaitOnAjaxRequest();
 
     $this->submitForm([], 'Update');
     $this->assertSession()->assertWaitOnAjaxRequest();
@@ -507,7 +502,6 @@ JS;
     // Check that split text option is available for modal add mode.
     $page->selectFieldOption('fields[field_paragraphs][settings_edit_form][settings][add_mode]', 'modal');
     $session->executeScript("jQuery('[name=\"fields[field_paragraphs][settings_edit_form][settings][add_mode]\"]').trigger('change');");
-    $this->assertSession()->assertWaitOnAjaxRequest();
 
     $this->submitForm([], 'Update');
     $this->assertSession()->assertWaitOnAjaxRequest();

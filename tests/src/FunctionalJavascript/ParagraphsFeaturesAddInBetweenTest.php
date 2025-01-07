@@ -37,8 +37,6 @@ class ParagraphsFeaturesAddInBetweenTest extends ParagraphsFeaturesJavascriptTes
     // Check that add in between option is available for modal add mode.
     $page->selectFieldOption('fields[field_paragraphs][settings_edit_form][settings][add_mode]', 'modal');
     $session->executeScript("jQuery('[name=\"fields[field_paragraphs][settings_edit_form][settings][add_mode]\"]').trigger('change');");
-    $this->assertSession()->assertWaitOnAjaxRequest();
-
     $is_option_visible = $session->evaluateScript("Array.from(document.querySelectorAll('.paragraphs-features__add-in-between__option')).filter((item) => { return !item.disabled }).length === 1");
     $this->assertEquals(TRUE, $is_option_visible, 'After modal add mode is selected, "add in between" option should be available.');
     $page->checkField('fields[field_paragraphs][settings_edit_form][third_party_settings][paragraphs_features][add_in_between]');
@@ -49,7 +47,6 @@ class ParagraphsFeaturesAddInBetweenTest extends ParagraphsFeaturesJavascriptTes
     // Check that add in between option is not available for non modal add mode.
     $page->selectFieldOption('fields[field_paragraphs][settings_edit_form][settings][add_mode]', 'dropdown');
     $session->executeScript("jQuery('[name=\"fields[field_paragraphs][settings_edit_form][settings][add_mode]\"]').trigger('change');");
-    $this->assertSession()->assertWaitOnAjaxRequest();
 
     $is_option_visible = $session->evaluateScript("Array.from(document.querySelectorAll('.paragraphs-features__add-in-between__option')).filter((item) => { return item.offsetParent }).length === 0");
     $this->assertEquals(TRUE, $is_option_visible, 'After add mode is change to non modal, "add in between" option should not be visible.');
@@ -59,9 +56,7 @@ class ParagraphsFeaturesAddInBetweenTest extends ParagraphsFeaturesJavascriptTes
     // Set modal add mode without add in between option.
     $page->selectFieldOption('fields[field_paragraphs][settings_edit_form][settings][add_mode]', 'modal');
     $session->executeScript("jQuery('[name=\"fields[field_paragraphs][settings_edit_form][settings][add_mode]\"]').trigger('change');");
-    $this->assertSession()->assertWaitOnAjaxRequest();
     $page->uncheckField('fields[field_paragraphs][settings_edit_form][third_party_settings][paragraphs_features][add_in_between]');
-    $this->assertSession()->assertWaitOnAjaxRequest();
 
     $this->submitForm([], 'Update');
     $this->assertSession()->assertWaitOnAjaxRequest();
@@ -107,21 +102,18 @@ class ParagraphsFeaturesAddInBetweenTest extends ParagraphsFeaturesJavascriptTes
 
     // Check first add in between button.
     $page->find('xpath', '(//*[contains(concat(" ", normalize-space(@class), " "), " paragraphs-features__add-in-between__button ")])[1]')->click();
-    $this->assertSession()->assertWaitOnAjaxRequest();
     $this->assertSession()->hiddenFieldValueEquals('field_paragraphs[add_more][add_more_delta]', '0');
     $page->find('xpath', '//*[contains(@class, "paragraphs-add-dialog") and contains(@class, "ui-dialog-content")]//*[contains(@name, "test_1")]')->click();
     $this->assertSession()->assertWaitOnAjaxRequest();
 
     // Check last add in between button.
     $this->scrollClick('xpath', '(//*[contains(@class, "paragraphs-features__add-in-between__button ")])[last()]');
-    $this->assertSession()->assertWaitOnAjaxRequest();
     $this->assertSession()->hiddenFieldValueEquals('field_paragraphs[add_more][add_more_delta]', '2');
     $page->find('xpath', '//*[contains(@class, "paragraphs-add-dialog") and contains(@class, "ui-dialog-content")]//*[contains(@name, "test_1")]')->click();
     $this->assertSession()->assertWaitOnAjaxRequest();
 
     // Check add in between button between existing paragraphs.
     $page->find('xpath', '(//*[contains(@class, "paragraphs-features__add-in-between__button ")])[3]')->click();
-    $this->assertSession()->assertWaitOnAjaxRequest();
     $this->assertSession()->hiddenFieldValueEquals('field_paragraphs[add_more][add_more_delta]', '2');
     $page->find('xpath', '//*[contains(@class, "paragraphs-add-dialog") and contains(@class, "ui-dialog-content")]//*[contains(@name, "test_1")]')->click();
     $this->assertSession()->assertWaitOnAjaxRequest();
@@ -151,7 +143,6 @@ class ParagraphsFeaturesAddInBetweenTest extends ParagraphsFeaturesJavascriptTes
     $this->assertSession()->assertWaitOnAjaxRequest();
     $page->selectFieldOption('fields[field_paragraphs][settings_edit_form][settings][add_mode]', 'modal');
     $session->executeScript("jQuery('[name=\"fields[field_paragraphs][settings_edit_form][settings][add_mode]\"]').trigger('change');");
-    $this->assertSession()->assertWaitOnAjaxRequest();
     $page->checkField('fields[field_paragraphs][settings_edit_form][third_party_settings][paragraphs_features][add_in_between]');
     $page->fillField('fields[field_paragraphs][settings_edit_form][third_party_settings][paragraphs_features][add_in_between_link_count]', '0');
     $this->submitForm([], 'Update');
@@ -178,21 +169,18 @@ class ParagraphsFeaturesAddInBetweenTest extends ParagraphsFeaturesJavascriptTes
 
     // Check first add in between button.
     $page->find('xpath', '(//*[contains(concat(" ", normalize-space(@class), " "), " paragraphs-features__add-in-between__button ")])[1]')->click();
-    $this->assertSession()->assertWaitOnAjaxRequest();
     $this->assertSession()->hiddenFieldValueEquals('field_paragraphs[0][subform][field_paragraphs][add_more][add_more_delta]', '0');
     $page->find('xpath', '//*[contains(@class, "paragraphs-add-dialog") and contains(@class, "ui-dialog-content")]//*[contains(@name, "test_1")]')->click();
     $this->assertSession()->assertWaitOnAjaxRequest();
 
     // Check last add in between button.
     $this->scrollClick('xpath', '(//*[contains(concat(" ", normalize-space(@class), " "), " paragraphs-features__add-in-between__button ")])[last()]');
-    $this->assertSession()->assertWaitOnAjaxRequest();
     $this->assertSession()->hiddenFieldValueEquals('field_paragraphs[0][subform][field_paragraphs][add_more][add_more_delta]', '1');
     $page->find('xpath', '//*[contains(@class, "paragraphs-add-dialog") and contains(@class, "ui-dialog-content")]//*[contains(@name, "test_1")]')->click();
     $this->assertSession()->assertWaitOnAjaxRequest();
 
     // Check add in between button between existing paragraphs.
     $page->find('xpath', '(//*[contains(concat(" ", normalize-space(@class), " "), " paragraphs-features__add-in-between__button ")])[2]')->click();
-    $this->assertSession()->assertWaitOnAjaxRequest();
     $this->assertSession()->hiddenFieldValueEquals('field_paragraphs[0][subform][field_paragraphs][add_more][add_more_delta]', '1');
     $page->find('xpath', '//*[contains(@class, "paragraphs-add-dialog") and contains(@class, "ui-dialog-content")]//*[contains(@name, "test_1")]')->click();
     $this->assertSession()->assertWaitOnAjaxRequest();
@@ -209,7 +197,6 @@ class ParagraphsFeaturesAddInBetweenTest extends ParagraphsFeaturesJavascriptTes
 
     // Check status after cardinality is exceeded.
     $page->find('xpath', '(//*[contains(concat(" ", normalize-space(@class), " "), " paragraphs-features__add-in-between__button ")])[2]')->click();
-    $this->assertSession()->assertWaitOnAjaxRequest();
     $page->find('xpath', '//*[contains(@class, "paragraphs-add-dialog") and contains(@class, "ui-dialog-content")]//*[contains(@name, "test_1")]')->click();
     $this->assertSession()->assertWaitOnAjaxRequest();
 
