@@ -9,6 +9,4 @@ paragraphs_features_split_paragraph:
     toolbar_items:
       splitParagraph:
         label: Split paragraph
-    elements:
-      - <p>
-      - <div>
+    elements: false
